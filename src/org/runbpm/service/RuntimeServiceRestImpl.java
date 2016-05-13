@@ -336,4 +336,11 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 		
 	}
 
+
+	@Override
+	public List<ProcessModel> loadProcessModels(boolean reload){
+		return null;
+		
+	}
+
 }

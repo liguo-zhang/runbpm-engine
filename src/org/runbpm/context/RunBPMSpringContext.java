@@ -40,12 +40,12 @@ public class RunBPMSpringContext implements ContextInterface {
 		
 		try{
 			if(entityManager!=null){ 
-				logger.warn("Spring正在加载并覆盖之前的RunBPMEntityManager。之前RunBPMEntityManager不为空，有可能是调用了getEntityManager()方法，默认内存形式的entityManager加载的数据全部数作废");
+				logger.warn("Spring正在加载并覆盖之前的entityManager。之前entityManager不为空，有可能是调用了getEntityManager()方法，默认内存形式的entityManager加载的数据将全部作废");
 			}
 			entityManager = (EntityManager) appContext.getBean("entityManager");
 		}catch(NoSuchBeanDefinitionException e){
 			entityManager = MemoryEntityManagerImpl.getInstance();
-			logger.warn("Spring正在加载RunBPMEntityManager，但是加载失败了。后续调用getEntityManager()方法可加载默认内存形式的RunBPMEntityManager",e);
+			logger.warn("没有在Spring配置文件中配置entityManager，出现NoSuchBeanDefinitionException。");
 		}
 		
 		try{
@@ -55,18 +55,18 @@ public class RunBPMSpringContext implements ContextInterface {
 			globalResourceHandler= (GlobalResourceHandler)appContext.getBean("globalResourceHandler");
 		}catch(NoSuchBeanDefinitionException e){
 			globalResourceHandler = new GlobalResourceHandlerSample();
-			logger.warn("Spring正在加载GlobalResourceHandler，但是加载失败了。后续调用getGlobalResourceHandler()方法可加载默认内存形式的GlobalResourceHandler",e);
+			logger.warn("没有在Spring配置文件中配置globalResourceHandler，出现NoSuchBeanDefinitionException。");
 		}
 		
 		
 		try{
 			if(globalListener!=null){
-				logger.warn("Spring正在加载并覆盖之前globalListener。之前globalListener不为空，有可能是调用了getgetglobalListener()方法。");
+				logger.warn("Spring正在加载并覆盖之前globalListener。之前globalListener不为空，有可能是调用了getGlobalListener()方法。");
 			}
 			globalListener = (GlobalListener)appContext.getBean("globalListener");
 		}catch(NoSuchBeanDefinitionException e){
 			globalListener = new GlobalListener();
-			logger.warn("Spring正在加载globalListener，但是加载失败了。后续调用getglobalListener()方法可加载默认的globalListener",e);
+			logger.warn("没有在Spring配置文件中配置globalListener，出现NoSuchBeanDefinitionException。");
 		}
 		
 		try{

@@ -20,6 +20,8 @@ import org.runbpm.entity.VariableInstance;
 
 public interface EntityManager {
 	
+	List<ProcessModel> loadProcessModels(boolean reload);
+	
 	ProcessModel initProcessDefinition(ProcessDefinition processDefinition);
 	
 	ProcessModel initProcessDefinitionFromFile(File file);

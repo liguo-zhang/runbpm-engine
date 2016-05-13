@@ -38,7 +38,7 @@
 * [流程引擎]支持基于Java POJO模型的流程建模
 
 2016年5月11日
-* [设计器]基于bpmn.io完成初版
+* [设计器]基于bpmn.io完成初版设计器
 * [流程引擎]BPMN Schema 
 * [流程引擎]用户自定义的扩展属性SCHEMA 
 * [流程引擎]特定流程、活动、userTask的监听
@@ -78,7 +78,7 @@ h5ai
 *.着手流程监控工具
 * 网站
 * GO语言版本
-* PaaS平台发布 AppDirect Cloudfoundry Bluemix
+* PaaS平台发布 AppDirect Cloudfoundry OpenShift
 
 ------------------------------------------------------------------------
 

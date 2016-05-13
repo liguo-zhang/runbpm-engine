@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.runbpm.context.Configuration;
 import org.runbpm.context.RunBPMSpringContext;
+import org.runbpm.service.RuntimeService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
@@ -24,6 +25,8 @@ public class InitRunBPMSpringContextServlet extends HttpServlet {
 			RunBPMSpringContext springAppContext = new RunBPMSpringContext(appContext);
 			Configuration.setContext(springAppContext);
 	        
-	    }   
+			RuntimeService runtimeService = Configuration.getContext().getRuntimeService();
+			runtimeService.loadProcessModels(true);
+	    } 
 	 
 }

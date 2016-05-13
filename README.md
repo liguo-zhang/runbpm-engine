@@ -7,10 +7,19 @@
 
 3. 工业级别的稳定性，强调性能。除了内嵌，流程引擎可以集群部署在IBM WAS/Oracle WLS之上；针对并发冲突的任务列表，在数据库模式设计方面适当的考虑了用空间换取时间；实例运行库可以选择关系型数据库，同时支持Redis。
 
-#入门
+#下载
 
 * 流程设计器：<https://github.com/liguo-zhang/runbpm-engine>
+  目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>
+  直接打开index.html在浏览器器中使用。
+  
 * 流程引擎：<https://github.com/liguo-zhang/runbpm-modeler>
+  已经基本可用。
+
 * 流程工作台：<https://github.com/liguo-zhang/runbpm-workspace>
+  开发中。。。
+
+
+# RunBPM v1.0发布筹备中 2016-05-13
 
 

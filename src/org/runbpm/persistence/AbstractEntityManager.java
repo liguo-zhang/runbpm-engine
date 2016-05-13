@@ -105,7 +105,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	
 	
 	
-	private void parseProcessListener(ProcessDefinition process) {
+	protected void parseProcessListener(ProcessDefinition process) {
 		//---listener
 		ExtensionElements extensionElements = process.getExtensionElements();
 		List<ExtensionExecutionListener> processlistenerList = extensionElements.getListenerList();

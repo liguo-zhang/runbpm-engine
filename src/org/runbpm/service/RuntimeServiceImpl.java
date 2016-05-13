@@ -32,12 +32,6 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 		entityManager.initProcessDefinitionFromFile(file);
 	}
 	
-
-
-	public ProcessModel getLatestProcessDefinition(String processDefinitionId) {
-		return entityManager.loadLatestProcessModel(processDefinitionId);
-	}
-
 	@Override
 	public ProcessInstance startProcessInstance(long processInstanceId) {
 		ProcessInstance processInstance = entityManager.getProcessInstance(processInstanceId);
@@ -291,8 +285,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 	@Override
 	public ProcessModel loadLatestProcessModel(String processDefinitionId) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.loadLatestProcessModel(processDefinitionId);
 	}
 
 
@@ -313,6 +306,13 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public void removeUserTask(long userTaskId, boolean autoCommit) {
 		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<ProcessModel> loadProcessModels(boolean reload) {
+		return this.entityManager.loadProcessModels(reload);
 		
 	}
 

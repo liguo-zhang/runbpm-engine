@@ -274,5 +274,11 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 		return null;
 	}
 
+	@Override
+	public List<ProcessModel> loadProcessModels(boolean reload){
+		return null;
+		
+	}
+	
 
 }

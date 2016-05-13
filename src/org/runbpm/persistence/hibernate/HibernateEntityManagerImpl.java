@@ -1,14 +1,20 @@
 package org.runbpm.persistence.hibernate;
 
 import java.io.File;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
 import org.hibernate.Session;
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.CallActivity;
+import org.runbpm.bpmn.definition.Definitions;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityHistoryImpl;
@@ -36,6 +42,43 @@ import org.runbpm.persistence.TransactionObjectHolder;
 import org.springframework.beans.BeanUtils;
 
 public class HibernateEntityManagerImpl extends AbstractEntityManager{
+	
+	public List<ProcessModel> loadProcessModels(boolean reload){
+		List<ProcessModel> processModelList = new ArrayList<ProcessModel>();
+		if(reload){
+			processModelMap.clear();
+		}
+		
+		
+		String hsql = "select p from ProcessModelImpl p";
+		Session session = TransactionObjectHolder.get().getSession();
+		@SuppressWarnings("unchecked")
+		List<ProcessModel> queryList = session.createQuery(hsql).list();
+		
+		for(ProcessModel processModel:queryList){
+			String xmlContent = processModel.getXmlcontent();
+			
+			JAXBContext jaxbContext;
+			ProcessDefinition process =null;
+			try {
+				jaxbContext = JAXBContext.newInstance("org.runbpm.bpmn.definition");
+				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				
+				Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(new StringReader(xmlContent));
+				process = definitions.getProcess();
+				
+				processModel.setProcessDefinition(process);
+				processModelList.add(processModel);
+			} catch (JAXBException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			
+			parseProcessListener(process);
+			processModelMap.put(processModel.getId(), processModel);
+		}
+		return processModelList;
+	}
 
 	@Override
 	public ProcessModel initProcessDefinitionFromFile(File file) {

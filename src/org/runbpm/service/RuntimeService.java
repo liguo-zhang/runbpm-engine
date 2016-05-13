@@ -25,6 +25,15 @@ public interface RuntimeService {
 	 */
 	void setEntityManager(EntityManager entityManager);
 	
+	
+	/**
+	 * 从持久库中加载流程模板到流程引擎
+	 * @param reload 是否从持久库中重新加载
+	 * @return 流程模板列表
+	 */
+	List<ProcessModel> loadProcessModels(boolean reload);
+	
+	
 	/**
 	 * 根据文件对象导入流程定义。<br>
 	 * 例如：<br>

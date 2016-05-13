@@ -954,5 +954,10 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		mapKey.append(processModelId);
 		return mapKey.toString();
 	}
+
+	@Override
+	public List<ProcessModel> loadProcessModels(boolean reload){
+		return null;
+	}
 	
 }

@@ -27,7 +27,7 @@ import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.hibernate.HibernateEntityManagerImpl;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
 import org.runbpm.service.RuntimeService;
-import org.runbpm.spring.persistence.ParallelGateway;
+import org.runbpm.spring.persistence.PersistenceTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +46,7 @@ public class ParallelGateway_Hibernate extends RunBPMTestCase{
 	@Test
 	public void ParallelGateway_Hibernate() throws Exception{
 		
-		ParallelGateway.test();
+		PersistenceTest.test();
 		
 	}
 	

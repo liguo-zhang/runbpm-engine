@@ -9,7 +9,7 @@ import org.runbpm.context.RunBPMSpringContext;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.EntityConstants.PROCESS_STATE;
 import org.runbpm.service.RuntimeService;
-import org.runbpm.spring.persistence.ParallelGateway;
+import org.runbpm.spring.persistence.PersistenceTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
