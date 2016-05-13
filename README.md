@@ -9,10 +9,6 @@
 
 #下载
 
-* 流程设计器：<https://github.com/liguo-zhang/runbpm-engine>
-
-  目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>
-  直接打开index.html在浏览器器中使用。
   
 * 流程引擎：<https://github.com/liguo-zhang/runbpm-modeler>
   已经基本可用。
@@ -20,7 +16,15 @@
 * 流程工作台：<https://github.com/liguo-zhang/runbpm-workspace>
   开发中。。。
 
+* 流程设计器：<https://github.com/liguo-zhang/runbpm-engine>
+
+  目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>
+  直接打开index.html在浏览器器中使用。
+  
+![sreenshot](https://raw.githubusercontent.com/liguo-zhang/runbpm-modeler/master/docs/screenshot.png)
 
 # RunBPM v1.0发布筹备中 2016-05-13
+
+欢迎加我微信或者QQ进行技术交流: 914454333
 
 
