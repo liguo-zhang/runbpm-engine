@@ -11,15 +11,12 @@
 
   
 * 流程引擎：<https://github.com/liguo-zhang/runbpm-modeler>
-  已经基本可用。
+  已经基本可用,基于JAVA
 
 * 流程工作台：<https://github.com/liguo-zhang/runbpm-workspace>
   开发中。。。
 
-* 流程设计器：<https://github.com/liguo-zhang/runbpm-engine>
-
-  目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>
-  直接打开index.html在浏览器器中使用。
+* 流程设计器：<https://github.com/liguo-zhang/runbpm-engine> 基于Node.js,目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>,直接打开index.html在浏览器器中使用。
   
 ![sreenshot](https://raw.githubusercontent.com/liguo-zhang/runbpm-modeler/master/docs/screenshot.png)
 
