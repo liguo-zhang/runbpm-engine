@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="ExtensionAttributesTest.xml" name="SimpleUserTask">
+		<callActivity id="callCheckCreditProcess" name="Check credit" calledElement="checkCreditProcess" >
+			<extensionElements>
+				 <runbpm:extensionProps>
+		          <runbpm:extensionProp name="testList">
+		            <runbpm:list>
+		              <runbpm:value>11</runbpm:value>
+		              <runbpm:value>22</runbpm:value>
+		              <runbpm:value>33</runbpm:value>
+		            </runbpm:list>
+		          </runbpm:extensionProp>
+		          <runbpm:extensionProp name="testPropValue" value="text"></runbpm:extensionProp>
+		          <runbpm:extensionProp name="testMap">
+		            <runbpm:map>
+		              <runbpm:entry key="11">22</runbpm:entry>
+		            </runbpm:map>
+		          </runbpm:extensionProp>
+		        </runbpm:extensionProps>
+  			</extensionElements>
+		</callActivity>
+	</process>
+</definitions>

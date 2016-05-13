@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="SubprocessNestedContainerTest.xml" name="Subprocess">
+
+	  	<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="subProcess" />
+		
+		<subProcess id="subProcess">
+			  <startEvent id="subProcessStart" />
+			  <sequenceFlow id="subflow1" sourceRef="subProcessStart" targetRef="fork" />
+			  
+			  <parallelGateway id="fork" />
+			  <sequenceFlow id="s1" sourceRef="fork" targetRef="subProcess1" />
+			  <sequenceFlow sourceRef="fork" targetRef="subProcess2" />
+			  
+			  <subProcess id="subProcess1">
+				  <startEvent id="subProcessStart1" />
+				  <sequenceFlow id="subflow1" sourceRef="subProcessStart1" targetRef="subshipOrder1" />
+				  
+				  <userTask id="subshipOrder1" name="Ship Order" />
+				  <sequenceFlow id="subflow2" sourceRef="subshipOrder1" targetRef="subProcess11" />
+			  
+			  	  <subProcess id="subProcess11">
+					  <startEvent id="subProcessStart" />
+					  <sequenceFlow id="subflow1" sourceRef="subProcessStart" targetRef="subshipOrder11" />
+					  
+					  <userTask id="subshipOrder11" name="Ship Order" />
+					  <sequenceFlow id="subflow2" sourceRef="subshipOrder11" targetRef="subProcessEnd" />
+				  
+			  		<endEvent id="subProcessEnd" />
+ 			  	 </subProcess>	
+ 			  	 <sequenceFlow id="subflow2" sourceRef="subProcess11" targetRef="subProcessEnd" />
+			  
+			  	<endEvent id="subProcessEnd" />
+ 			  </subProcess>
+ 			  <sequenceFlow sourceRef="subProcess1" targetRef="join" />
+ 			  
+ 			  <subProcess id="subProcess2">
+				  <startEvent id="subProcessStart2" />
+				  <sequenceFlow id="subflow1" sourceRef="subProcessStart2" targetRef="subshipOrder2" />
+				  
+				  <userTask id="subshipOrder2" name="Ship Order" />
+				  <sequenceFlow id="subflow2" sourceRef="subshipOrder2" targetRef="subProcessEnd" />
+			  
+			  	  <endEvent id="subProcessEnd" />
+ 			  </subProcess>
+			  <sequenceFlow sourceRef="subProcess2" targetRef="join" />
+			  
+			  <parallelGateway id="join" />
+			  <sequenceFlow sourceRef="join" targetRef="subProcessEnd" />
+			  
+			  <endEvent id="subProcessEnd" />
+ 		</subProcess>
+ 		
+		<sequenceFlow id="flow3" sourceRef="subProcess" targetRef="prepareAndShipTask" />
+		
+		<userTask id="prepareAndShipTask" name="Prepare and Ship" />
+		<sequenceFlow id="flow4" sourceRef="prepareAndShipTask" targetRef="end" />
+		
+		<endEvent id="end" />
+	</process>
+
+</definitions>

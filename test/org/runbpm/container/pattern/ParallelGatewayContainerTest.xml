@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="parallelGatewayExample"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="ParallelGatewayContainerTest.xml" name="Process creating and handling loan request">
+
+		<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="fork" />
+
+		<parallelGateway id="fork" />
+			<sequenceFlow id="s1" sourceRef="fork" targetRef="receivePayment" />
+			<sequenceFlow sourceRef="fork" targetRef="shipOrder" />
+	
+			<userTask id="receivePayment" name="Receive Payment" >
+				<potentialOwner>
+				   <resourceAssignmentExpression>
+						<formalExpression></formalExpression>
+					</resourceAssignmentExpression>
+				</potentialOwner>
+				<extensionElements></extensionElements>
+			</userTask>
+			<sequenceFlow id="s2" sourceRef="receivePayment"
+				targetRef="join" />
+	
+			<userTask id="shipOrder" name="Ship Order" />
+			<sequenceFlow id="s3" sourceRef="shipOrder" targetRef="join" />
+
+		<parallelGateway id="join" />
+		<sequenceFlow id="s4" sourceRef="join" targetRef="archiveOrder" />
+
+		<userTask id="archiveOrder" name="Archive Order" />
+		<sequenceFlow id="s5" sourceRef="archiveOrder" targetRef="theEnd" />
+
+		<endEvent id="theEnd" />
+	</process>
+</definitions>

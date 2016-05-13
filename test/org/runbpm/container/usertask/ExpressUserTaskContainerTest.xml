@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="ExpressUserTaskContainerTest.xml" name="SimpleUserTask">
+
+	  <startEvent id="theStart" />
+	  <sequenceFlow id='flow1' sourceRef='theStart' targetRef='u1' />
+
+	  <userTask id="u1" name="u1" >
+	    <extensionElements>
+		    <runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="user">user9</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+	  	</extensionElements>
+	  </userTask>
+	  <sequenceFlow id='flow2' sourceRef='u1' targetRef='u2' />
+	  
+	  <userTask id="u2" name="u2" >
+	 	 <extensionElements>
+		    <runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="user_variable">userid</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+	  	</extensionElements>
+	  </userTask>
+	  <sequenceFlow id='flow3' sourceRef='u2' targetRef='u3' />
+	  
+	  <userTask id="u3" name="u3" >
+	    <extensionElements>
+	    	<runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="group_variable">groupid</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+	  		</runbpm:resource>
+		  	</extensionElements>
+	  </userTask>
+	  <sequenceFlow id='flow3' sourceRef='u3' targetRef='u4' />
+	  
+	  <userTask id="u4" name="u4" >
+	    <extensionElements>
+		    <runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="handler_bean_class">org.runbpm.spring.usertask.SpecialResourceHandlerSample</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+	  	</extensionElements>
+	  </userTask>
+
+	  <sequenceFlow id='flow3' sourceRef='u4' targetRef='theEnd' />
+	  <endEvent id="theEnd" />
+
+	</process>
+
+</definitions>

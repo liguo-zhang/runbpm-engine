@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+       	http://www.springframework.org/schema/aop/spring-aop.xsd
+       	http://www.springframework.org/schema/util
+       	http://www.springframework.org/schema/util/spring-util.xsd">
+     
+   <bean id="userTaskListener_sample" class="org.runbpm.spring.listener.usertask.UserTaskListenerSample">
+	</bean>
+	
+	<util:set id="taskListenerSampleSet" set-class="java.util.HashSet">
+		<ref bean="userTaskListener_sample" />
+	</util:set>
+	
+	<bean id="globalListener" class="org.runbpm.listener.GlobalListener">
+		<property name="userTaskMap">
+	        <map> 
+	        	<entry key="beforeUserTaskStart" value-ref="taskListenerSampleSet"></entry> 
+	        	<entry key="afterUserTaskStart" value-ref="taskListenerSampleSet"></entry> 
+	        	<entry key="beforeUserTaskClaim" value-ref="taskListenerSampleSet"></entry> 
+	        	<entry key="afterUserTaskClaim" value-ref="taskListenerSampleSet"></entry>
+	        </map>
+		</property>
+	</bean>
+	
+</beans>

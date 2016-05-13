@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<hibernate-mapping package="org.runbpm.entity">
+
+    <class name="VariableHistoryImpl">
+        <id name="id" type="long">
+            <generator class="assigned" />
+        </id>
+        
+        <property name="createDate" type="timestamp"/>
+        
+        <property name="modifyDate" type="timestamp"/>
+        
+        <property name="processDefinitionId" type="string"/>
+        
+        <property name="processInstanceId" type="long"/>
+        
+        <property name="name" type="string"/>
+        
+        <property name="description" type="string"/>
+        
+        
+        <property name="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.runbpm.entity.EntityConstants$VARIABLE_TYPE</param>
+            </type>
+        </property>
+        
+        <property name="valueString" type="string"/>
+        
+    </class>
+
+</hibernate-mapping>

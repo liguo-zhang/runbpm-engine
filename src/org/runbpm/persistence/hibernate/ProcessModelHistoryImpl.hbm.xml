@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<hibernate-mapping package="org.runbpm.entity">
+
+    <class name="ProcessModelHistoryImpl">
+        <id name="id" type="long">
+            <generator class="native" />
+        </id>
+        
+        <property name="createDate" type="timestamp"/>
+        
+        <property name="modifyDate" type="timestamp"/>
+        
+        <property name="processDefinitionId" type="string"/>
+        
+        <property name="xmlcontent" type="materialized_clob"/>
+        
+    </class>
+
+</hibernate-mapping>

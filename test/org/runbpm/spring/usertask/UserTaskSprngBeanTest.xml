@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="UserTaskSprngBeanTest.xml" name="SimpleUserTask">
+
+	  <startEvent id="theStart" />
+	  <sequenceFlow id='flow1' sourceRef='theStart' targetRef='u1' />
+
+	  <userTask id="u1" name="u1" >
+		  <extensionElements>
+		    <runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="user">user9</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+		  </extensionElements>
+	  </userTask>
+	  <sequenceFlow id='flow2' sourceRef='u1' targetRef='u2' />
+	  
+	  <userTask id="u2" name="u2" >
+	    <extensionElements>
+		    <runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="handler_bean_id">resourceAssignmentHandlerSample_for_unittest</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+	  	</extensionElements>
+	  </userTask>
+	  
+	  <sequenceFlow id='flow2' sourceRef='u2' targetRef='theEnd' />
+	  <endEvent id="theEnd" />
+
+	</process>
+
+</definitions>

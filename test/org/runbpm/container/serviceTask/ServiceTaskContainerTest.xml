@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="ServiceTaskContainerTest.xml" name="ServiceTask">
+
+	  	<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="receiveOrder" />
+		
+		<serviceTask id="receiveOrder" name="Receive Order">
+			<extensionElements>
+				<runbpm:extensionProps>
+		          <runbpm:extensionProp name="RunBPM_ServiceTask_Extension">
+		            <runbpm:map>
+		              <runbpm:entry key="type">handler_bean_class</runbpm:entry>
+		              <runbpm:entry key="value">org.runbpm.container.serviceTask.ServiceTaskHandlerSample</runbpm:entry>
+		            </runbpm:map>
+		          </runbpm:extensionProp>
+		        </runbpm:extensionProps>
+  			</extensionElements>
+  		</serviceTask>	
+		<sequenceFlow id="flow2" sourceRef="receiveOrder" targetRef="prepareAndShipTask" />
+		
+		<serviceTask id="prepareAndShipTask" name="Prepare and Ship" >
+			<extensionElements>
+				<runbpm:extensionProps>
+		          <runbpm:extensionProp name="RunBPM_ServiceTask_Extension">
+		            <runbpm:map>
+		              <runbpm:entry key="type">handler_bean_class</runbpm:entry>
+		              <runbpm:entry key="value">org.runbpm.container.serviceTask.ServiceTaskHandlerSample</runbpm:entry>
+		            </runbpm:map>
+		          </runbpm:extensionProp>
+		        </runbpm:extensionProps>
+  			</extensionElements>
+  			</serviceTask>
+		<sequenceFlow id="flow4" sourceRef="prepareAndShipTask" targetRef="end" />
+		
+		<endEvent id="end" />
+	</process>
+
+</definitions>

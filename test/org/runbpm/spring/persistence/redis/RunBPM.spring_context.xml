@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+       	http://www.springframework.org/schema/aop/spring-aop.xsd
+        ">
+        
+     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="2048" />
+		<property name="maxIdle" value="200" />
+		<property name="numTestsPerEvictionRun" value="1024" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+		<property name="minEvictableIdleTimeMillis" value="-1" />
+		<property name="softMinEvictableIdleTimeMillis" value="10000" />
+		<property name="maxWaitMillis" value="1500" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnReturn" value="false" />
+		<property name="jmxEnabled" value="true" />
+		<property name="jmxNamePrefix" value="youyuan" />
+		<property name="blockWhenExhausted" value="false" />
+	</bean>
+
+	<bean id="jedisShardInfo" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" value="localhost" />
+		<constructor-arg index="1" value="6379" type="int" />
+	</bean>
+	
+	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool"
+		scope="singleton">
+		<constructor-arg index="0" ref="jedisPoolConfig" />
+		<constructor-arg index="1">
+			<list>
+				<ref bean="jedisShardInfo" />
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	
+	<!-- JDBC参数配置 -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" lazy-init="true">
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:/RunBPM.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 
+	<bean id="entityManager" class="org.runbpm.persistence.memory.MemoryEntityManagerImpl">
+	</bean>
+	
+	<bean id="entityManager" class="org.runbpm.persistence.hibernate.HibernateEntityManagerImpl">
+	</bean>
+	-->
+	 
+	<bean id="entityManager" class="org.runbpm.persistence.redis.RedisEntityManagerImpl">
+	</bean>
+
+	<bean id="runtimeService" class="org.runbpm.service.RuntimeServiceImpl">
+		<property name="entityManager" ref="entityManager" />
+	</bean>
+	
+	<!-- 针对对RuntimeService的截获器，主要为设置service接口的每一次线程调用初始化Hibernate session，设置到rumBPMThreadContext中
+		RunBPM内部如果配置为使用Hibernate，将使用rumBPMThreadContext中的Hibernate session-->
+    <bean id="serviceInterceptor" class="org.runbpm.persistence.redis.RedisInterceptor">
+    	<property name="shardedJedisPool" ref="shardedJedisPool" />
+    </bean>
+
+	<!-- 截获器配置 -->
+    <aop:config>
+        <aop:aspect ref="serviceInterceptor">
+
+            <aop:pointcut id="theExecutionOfServiceMethod"
+                        expression="execution(* org.runbpm.service.RuntimeServiceImpl.*(..))；"/>
+
+            <aop:around pointcut-ref="theExecutionOfServiceMethod" method="interceptor"/>
+
+        </aop:aspect>
+    </aop:config>
+	
+</beans>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop 
+       	http://www.springframework.org/schema/aop/spring-aop.xsd
+        ">
+    
+    <bean id="entityManager" class="org.runbpm.persistence.memory.MemoryEntityManagerImpl">
+	</bean>
+	
+	<bean id="runtimeService" class="org.runbpm.service.RuntimeServiceImpl">
+		<property name="entityManager" ref="entityManager" />
+	</bean>
+	
+	<bean id="globalResourceHandler" class="org.runbpm.handler.resource.GlobalResourceHandlerSample">
+	</bean>
+	 
+	<bean id="processInstanceListener_sample" class="org.runbpm.listener.ProcessInstanceListenerSample">
+	</bean>
+	
+	<bean id="activityInstanceListener_sample" class="org.runbpm.listener.ActivityInstanceListenerSample">
+	</bean>
+	
+	<bean id="usertaskListener_sample" class="org.runbpm.listener.TaskListenerSample">
+	</bean>
+	
+	<bean id="globalListenerSet" class="org.runbpm.event.GlobalListenerSet">
+		<property name="globalProcessInstanceListenerSet">
+	        <set>
+	           <ref bean="processInstanceListener_sample" />
+	        </set>
+		</property>
+		
+		<property name="globalActivityInstanceListenerSet">
+	        <set>
+	           <ref bean="activityInstanceListener_sample" />
+	        </set>
+		</property>
+		<property name="globalUserTaskListenerSet">
+	        <set>
+	           <ref bean="usertaskListener_sample" />
+	        </set>
+		</property>
+	</bean>
+	
+</beans>

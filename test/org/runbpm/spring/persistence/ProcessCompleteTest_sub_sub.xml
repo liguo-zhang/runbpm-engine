@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="checkCreditProcess_sub_sub" name="checkCreditProcess_sub_sub">
+
+	  	<startEvent id="theStart" />
+		<sequenceFlow id="flow1" sourceRef="theStart" targetRef="m1" />
+		
+		<manualTask id="m1" name="m1" />
+		<sequenceFlow id="flow2" sourceRef="m1" targetRef="end" />
+		
+		<endEvent id="end" />
+	</process>
+
+</definitions>

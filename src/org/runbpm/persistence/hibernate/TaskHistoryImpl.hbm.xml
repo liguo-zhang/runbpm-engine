@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<hibernate-mapping package="org.runbpm.entity">
+
+    <class name="TaskHistoryImpl">
+        <id name="id" type="long">
+            <generator class="assigned" />
+        </id>
+        
+        <property name="createDate" type="timestamp"/>
+        
+        <property name="modifyDate" type="timestamp"/>
+        
+        <property name="completeDate" type="timestamp"/>
+        
+        <property name="userId" type="string"/>
+        
+        <property name="processModelId" type="long"/>
+        
+        <property name="processDefinitionId" type="string"/>
+        
+        <property name="activityDefinitionId" type="string"/>
+        
+        <property name="processInstanceId" type="long"/>
+        
+        <property name="activityInstanceId" type="long"/>
+        
+        <property name="name" type="string"/>
+        
+        <property name="description" type="string"/>
+        
+        
+        <property name="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.runbpm.entity.EntityConstants$TASK_TYPE</param>
+            </type>
+        </property>
+        
+        <property name="keyA" type="string"/>
+        <property name="keyB" type="string"/>
+        <property name="keyC" type="string"/>
+        <property name="keyD" type="string"/>
+        
+        <property name="state">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.runbpm.entity.EntityConstants$TASK_STATE</param>
+            </type>
+        </property>
+        
+        <property name="stateBeforeSuspend">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.runbpm.entity.EntityConstants$TASK_STATE</param>
+            </type>
+        </property>
+        
+    </class>
+
+</hibernate-mapping>
