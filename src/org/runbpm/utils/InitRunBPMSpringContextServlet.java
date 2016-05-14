@@ -26,6 +26,7 @@ public class InitRunBPMSpringContextServlet extends HttpServlet {
 			Configuration.setContext(springAppContext);
 	        
 			RuntimeService runtimeService = Configuration.getContext().getRuntimeService();
+			//从数据库中重新加载流程模板到内存
 			runtimeService.loadProcessModels(true);
 	    } 
 	 

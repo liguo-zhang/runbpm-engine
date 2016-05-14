@@ -26,7 +26,7 @@
     </appender>
     <!--这里指定logger name  -->
     <logger name="org.runbpm">
-        <level value="INFO" />
+        <level value="WARN" />
         <appender-ref ref="STDOUT" />
         
     </logger>

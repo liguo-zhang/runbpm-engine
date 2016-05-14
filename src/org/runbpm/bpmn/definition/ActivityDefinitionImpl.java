@@ -3,15 +3,21 @@ package org.runbpm.bpmn.definition;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 public class ActivityDefinitionImpl extends FlowElement implements ActivityDefinition{
 
 	//以下属性在process类分析得到
+	
 	private List<SequenceFlow> incomingSequenceFlowList = new ArrayList<SequenceFlow>();
+	
 	private List<SequenceFlow> outgoingSequenceFlowList = new ArrayList<SequenceFlow>();
+	
 	
 	public List<SequenceFlow> getIncomingSequenceFlowList() {
 		return incomingSequenceFlowList;
 	}
+	
 	public List<SequenceFlow> getOutgoingSequenceFlowList() {
 		return outgoingSequenceFlowList;
 	}

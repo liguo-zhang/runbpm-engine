@@ -1,6 +1,8 @@
 package org.runbpm.bpmn.definition.build;
 
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,14 +19,11 @@ public class SimpleBuildTest {
 
 	private MemoryEntityManagerImpl entityManager;
 	
-	@Before
-	public void before(){
-		entityManager = (MemoryEntityManagerImpl) Configuration.getContext().getEntityManager();
-		entityManager.clearMemory();
-	}	
-	
 	@Test
 	public void test(){
+		entityManager = (MemoryEntityManagerImpl) Configuration.getContext().getEntityManager();
+		entityManager.clearMemory();
+		
 		ProcessDefinition processDefinition = new ProcessDefinition("simple_process");
 		StartEvent startEvent = new StartEvent("s");
 		EndEvent endEvent = new EndEvent("e");
@@ -34,8 +33,7 @@ public class SimpleBuildTest {
 		processDefinition.addFlowNode(startEvent);
 		processDefinition.addFlowNode(endEvent);
 		
-		
-		entityManager.initProcessDefinition(processDefinition);
+		entityManager.deployProcessDefinition(processDefinition);
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel("simple_process");
 		
@@ -49,6 +47,35 @@ public class SimpleBuildTest {
 		ActivityDefinition activityDefinition = getProcessDefinition.getActivity("s");
 		ProcessDefinition  getProcessDefinitionFromA = activityDefinition.getProcessDefinition();
 		Assert.assertEquals(getProcessDefinitionFromA.getId(),"simple_process");
+		Assert.assertTrue(processModel.getXmlcontent().trim().length()>20);
+		
+	}
+	
+	@Test
+	public void testImportFromString(){
+		entityManager = (MemoryEntityManagerImpl) Configuration.getContext().getEntityManager();
+		entityManager.clearMemory();
+		
+		ProcessDefinition processDefinition = new ProcessDefinition("simple_process");
+		StartEvent startEvent = new StartEvent("s");
+		EndEvent endEvent = new EndEvent("e");
+		SequenceFlow sequenceFlow = new SequenceFlow(startEvent,endEvent);
+		
+		processDefinition.addSequenceFlow(sequenceFlow);
+		processDefinition.addFlowNode(startEvent);
+		processDefinition.addFlowNode(endEvent);
+		
+		
+		entityManager.deployProcessDefinition(processDefinition);
+		
+		ProcessModel processModel = entityManager.loadLatestProcessModel("simple_process");
+		
+		String xmlContent = processModel.getXmlcontent();
+		entityManager.deployProcessDefinitionFromString(xmlContent);
+		
+		List<ProcessModel> pmList = entityManager.loadProcessModels(true);
+		Assert.assertEquals(pmList.size(),2);
+		
 		
 	}
 	

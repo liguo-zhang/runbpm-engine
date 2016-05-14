@@ -28,8 +28,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	}
 
 
-	public void deployProcessDefinitionFromFile(File file) {
-		entityManager.deployProcessDefinitionFromFile(file);
+	public ProcessModel deployProcessDefinitionFromFile(File file) {
+		return entityManager.deployProcessDefinitionFromFile(file);
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public ProcessModel initProcessDefinition(
+	public ProcessModel deployProcessDefinition(
 			ProcessDefinition processDefinition) {
 		// TODO Auto-generated method stub
 		return null;
@@ -314,6 +314,12 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public List<ProcessModel> loadProcessModels(boolean reload) {
 		return this.entityManager.loadProcessModels(reload);
 		
+	}
+
+
+	@Override
+	public ProcessModel deployProcessDefinitionFromString(String string) {
+		return this.entityManager.deployProcessDefinitionFromString(string);
 	}
 
 

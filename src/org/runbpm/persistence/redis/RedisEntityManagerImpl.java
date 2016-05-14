@@ -165,21 +165,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		return shardedJedis; 
 	}
 	
-	@Override
-	public ProcessModel deployProcessDefinitionFromFile(File file) {
-		
-		ProcessModel processModel = deployProcessDefinitionFromFile_(file);
-		
-		return saveProcess(processModel);
-	}
-	
-	@Override
-	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition) {
-		ProcessModel processModel = deployProcessDefinition_(processDefinition);
-		return saveProcess(processModel);
-	}	
-	
-	private ProcessModel saveProcess(ProcessModel processModel) {
+	protected ProcessModel saveProcessModel(ProcessModel processModel) {
 		ShardedJedis shardedJedis = getSharedJedis();
 		Long processModelId = shardedJedis.incr(domain_procmodel);
 		

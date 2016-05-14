@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
@@ -38,19 +42,96 @@ public abstract class AbstractEntityManager implements EntityManager{
 	
 	protected Map<Long,ProcessModel> processModelMap = new HashMap<Long,ProcessModel>();
 	
-	public ProcessModel deployProcessDefinition_(ProcessDefinition processDefinition){
+	@Override
+	public ProcessModel deployProcessDefinitionFromFile(File file) {
+		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
 		//解析流程监听器
-		parseProcessListener(processDefinition);
-		
+		parseProcessListener(processModel.getProcessDefinition());
+	    return saveProcessModel(processModel);
+	}
+	
+	@Override
+	public ProcessModel deployProcessDefinitionFromString(String string) {
+		ProcessModel processModel = this.deployProcessDefinitionFromString_(string);
+		//解析流程监听器
+		parseProcessListener(processModel.getProcessDefinition());
+	    return saveProcessModel(processModel);
+	}
+	
+	@Override
+	public ProcessModel deployProcessDefinition(ProcessDefinition processDefinition){
+		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
+		//解析流程监听器
+		parseProcessListener(processModel.getProcessDefinition());
+		return saveProcessModel(processModel);
+	}
+	
+	private ProcessModel deployProcessDefinition_(ProcessDefinition processDefinition){
 		ProcessModel processModel = new  ProcessModelImpl();
 		processModel.setProcessDefinition(processDefinition);
 		processModel.setProcessDefinitionId(processDefinition.getId());
+		  
+        Marshaller marshaller;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance("org.runbpm.bpmn.definition");
+			marshaller = jaxbContext.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);  
+	        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");  
+	        StringWriter writer = new StringWriter();  
+	        
+	        //虚拟化出一个Definitions
+	        Definitions definitions = new Definitions();
+	        definitions.setId(processDefinition.getId());
+	        definitions.setName(processDefinition.getName());
+	        definitions.setProcess(processDefinition);
+	        
+	        marshaller.marshal(definitions, writer);
+	        String result = writer.toString();
+	        processModel.setXmlcontent(result);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}  
 		
 	    return processModel; 
 	}
 	
+	private ProcessModel deployProcessDefinitionFromString_(String contentString){
+		InputStream is = null;
+		StringReader stringReader = null;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance("org.runbpm.bpmn.definition");
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			
+			stringReader = new StringReader(contentString);
+			Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(stringReader);
+			ProcessDefinition process = definitions.getProcess();
+			
+			ProcessModel processModel = new  ProcessModelImpl();
+			processModel.setProcessDefinition(process);
+			processModel.setProcessDefinitionId(process.getId());
+	        processModel.setXmlcontent(contentString);
+			
+			return processModel;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}finally{
+			if(stringReader!=null){
+				stringReader.close();
+			}
+			if(is!=null){
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+	        
+		}
+	}
 	
-	protected ProcessModel deployProcessDefinitionFromFile_(File file){
+	private ProcessModel deployProcessDefinitionFromFile_(File file){
 		InputStream is = null;
 		BufferedReader reader = null;
 		try {
@@ -60,9 +141,6 @@ public abstract class AbstractEntityManager implements EntityManager{
 			Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(file);
 			
 			ProcessDefinition process = definitions.getProcess();
-			
-			//解析流程监听器
-			parseProcessListener(process);
 			
 			ProcessModel processModel = new  ProcessModelImpl();
 			processModel.setProcessDefinition(process);
@@ -103,7 +181,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 		}
 	}
 	
-	
+	protected abstract ProcessModel saveProcessModel(ProcessModel processModel);
 	
 	protected void parseProcessListener(ProcessDefinition process) {
 		//---listener
@@ -139,7 +217,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 					}
 			}
 			 
-			 //快活动SubProcess嵌套调动
+			 //块活动SubProcess嵌套调动
 			 if(activityDefinition instanceof SubProcessDefinition){
 				 SubProcessDefinition processDefinition = (SubProcessDefinition)activityDefinition;
 				 registerListeners(processDefinition);

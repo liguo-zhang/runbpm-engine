@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 对外公开REST服务接口。
- * 例如通过该种方式启动一个流程：<br>
+ * 例如通过该种方式启动一个流程(已经测试通过)：<br>
  * http://localhost:9080/RunBPMWeb/createProcessInstance?processDefinitionId=Payment
  *
  */
@@ -45,9 +45,8 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public void deployProcessDefinitionFromFile(File file) {
-		// TODO Auto-generated method stub
-		
+	public ProcessModel deployProcessDefinitionFromFile(File file) {
+		return null;
 	}
 
 
@@ -59,7 +58,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public ProcessModel initProcessDefinition(
+	public ProcessModel deployProcessDefinition(
 			ProcessDefinition processDefinition) {
 		// TODO Auto-generated method stub
 		return null;
@@ -341,6 +340,13 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 	public List<ProcessModel> loadProcessModels(boolean reload){
 		return null;
 		
+	}
+
+
+	@Override
+	public ProcessModel deployProcessDefinitionFromString(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

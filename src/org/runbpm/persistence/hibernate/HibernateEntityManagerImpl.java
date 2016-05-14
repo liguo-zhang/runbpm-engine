@@ -80,18 +80,8 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		return processModelList;
 	}
 
-	@Override
-	public ProcessModel deployProcessDefinitionFromFile(File file) {
-		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
-	    return saveProcessModel(processModel);
-	}
 	
-	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition){
-		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
-		return saveProcessModel(processModel);
-	}
-	
-	private ProcessModel saveProcessModel(ProcessModel processModel) {
+	protected ProcessModel saveProcessModel(ProcessModel processModel) {
 		Session session = TransactionObjectHolder.get().getSession();
 	    
 	    long processModelId =  (Long) session.save(processModel);

@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.hibernate.Session;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.ActivityInstanceImpl;
@@ -21,6 +23,7 @@ import org.runbpm.entity.TaskInstanceImpl;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.entity.VariableInstanceImpl;
 import org.runbpm.persistence.AbstractEntityManager;
+import org.runbpm.persistence.TransactionObjectHolder;
 
 
 public class MemoryEntityManagerImpl extends AbstractEntityManager{
@@ -47,24 +50,12 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 		return memoeryEntityManager;
 	}
 	
-	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition){
-		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
-		
+	protected ProcessModel saveProcessModel(ProcessModel processModel) {
 		long processModelId = processModelIdCounter.getAndIncrement();
 		processModel.setId(processModelId);
 	    processModelMap.put(processModelId, processModel);
 	    return processModel; 
 	}
-	
-	
-	public ProcessModel deployProcessDefinitionFromFile(File file){
-		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
-		long processModelId = processModelIdCounter.getAndIncrement();
-		processModel.setId(processModelId);
-	    processModelMap.put(processModelId, processModel);
-	    return processModel; 
-	}
-	
 	
 	public ProcessInstance getProcessInstance(long processInstanceId){
 		ProcessInstance processInstance = processInstanceMap.get(processInstanceId);
@@ -276,9 +267,13 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 
 	@Override
 	public List<ProcessModel> loadProcessModels(boolean reload){
-		return null;
-		
+		List<ProcessModel> processModelList = new ArrayList<ProcessModel>();
+		Set<Long> set = processModelMap.keySet();
+		for(Long key:set){
+			ProcessModel ProcessModel = processModelMap.get(key);
+			processModelList.add(ProcessModel);
+		}
+		return processModelList;
 	}
-	
 
 }

@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.utils.RunBPMUtils;
@@ -161,19 +162,25 @@ public class ProcessDefinition extends Element{
 
 	//------------------------------------------------------------------------------------------JAXB Mapping END
 	
+	
 	protected List<ActivityDefinition> activityList = new ArrayList<ActivityDefinition>();
+	
 	
 	public List<ActivityDefinition> getActivityList() {
 		return activityList;
 	}
-
+	
+	
 	protected Map<String,ActivityDefinition> activityMap = new HashMap<String,ActivityDefinition>();
+	
 	
 	public Map<String, ActivityDefinition> getActivityMap() {
 		return activityMap;
 	}
 	
+	
 	protected Map<String,SequenceFlow> sequenceFlowMap = new HashMap<String,SequenceFlow>();
+	
 	
 	public Map<String, SequenceFlow> getSequenceFlowMap() {
 		return sequenceFlowMap;
@@ -183,6 +190,7 @@ public class ProcessDefinition extends Element{
 		return this.activityMap.get(activityId);
 	}   
 
+	
     public SequenceFlow getSequenceFlow(String sequenceFlowId){
 		return this.sequenceFlowMap.get(sequenceFlowId);
 	}
@@ -190,7 +198,6 @@ public class ProcessDefinition extends Element{
 	public void afterUnmarshal(Unmarshaller u, Object parent) {
 		build();
 	}
-	
 
 	public ProcessDefinition build() {
 		//clear
@@ -262,6 +269,7 @@ public class ProcessDefinition extends Element{
 		}
 	}
 
+	
 	public Set<ActivityDefinition> getReachableActivitySet(ActivityDefinition activity) {
 		// 初始化访问列表 
         Map<ActivityDefinition,Boolean> activityVisitMap = new HashMap<ActivityDefinition,Boolean>();
@@ -298,8 +306,7 @@ public class ProcessDefinition extends Element{
     	return searchSubProcessDefinition(this.activityMap,sequenceBlockId);
     }
     
-	
-	private SubProcessDefinition searchSubProcessDefinition( Map<String,ActivityDefinition> searchActivityMap ,String sequenceBlockId) {
+    private SubProcessDefinition searchSubProcessDefinition( Map<String,ActivityDefinition> searchActivityMap ,String sequenceBlockId) {
 		StringTokenizer st = new StringTokenizer(sequenceBlockId,",");
     	
 		if(st.countTokens()<1){

@@ -33,7 +33,7 @@ public class POJOBuildLineTest {
 		SequenceFlow sequenceFlow = new SequenceFlow(startEvent,endEvent);
 		processDefinition.addSequenceFlow(sequenceFlow);
 		
-		entityManager.initProcessDefinition(processDefinition);
+		entityManager.deployProcessDefinition(processDefinition);
 		
 		executeTest();
 	}
@@ -47,7 +47,7 @@ public class POJOBuildLineTest {
 				"simple_process").addFlowNode(new StartEvent("s"))
 				.flowTo(new EndEvent("e"));
 		
-		entityManager.initProcessDefinition(processDefinition);
+		entityManager.deployProcessDefinition(processDefinition);
 		
 		executeTest();
 	}

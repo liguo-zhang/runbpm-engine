@@ -2,6 +2,7 @@ package org.runbpm.bpmn.definition;
 
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 public class FlowElement extends Element{
@@ -58,6 +59,9 @@ public class FlowElement extends Element{
 	
 	protected ProcessDefinition processDefinition;  // parent pointer
 	
+	//不追加该属性， 在 bean->xml 时候将导致异常：
+	//Caused by: com.sun.istack.internal.SAXException2: A cycle is detected in the object graph. This will cause infinitely deep XML: 
+	@XmlTransient
 	public ProcessDefinition getProcessDefinition() {
 		return processDefinition;
 	}

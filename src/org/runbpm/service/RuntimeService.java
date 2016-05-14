@@ -27,8 +27,18 @@ public interface RuntimeService {
 	
 	
 	/**
-	 * 从持久库中加载流程模板到流程引擎
-	 * @param reload 是否从持久库中重新加载
+	 * 从持久库中加载“流程模板”到“流程引擎”。
+	 * @param reload 是否从持久库中重新加载。<br>
+	 * 使用部署流程API会自动将“流程模板”同步到“流程引擎内存”。
+	 * <ul>
+	 * 		<li>
+	 * 		如果是第一次初始化流程引擎，而且流程引擎使用的是持久化存储，例如数据库或者NoSQL,则设置该参数为true,使用该方法会读取存放在持久化存储中的XML字段，通过JAXB序列化为流程定义对象。<br>
+	 * 		例如Web方式启动插件 {@link org.runbpm.utils.InitRunBPMSpringContextServlet()}
+	 * 		</li>
+	 * 		<li>
+	 * 		初始化完毕后，该参数设置为false，即读取流程引擎内存的模板。
+	 * 		</li>
+	 * </ul>
 	 * @return 流程模板列表
 	 */
 	List<ProcessModel> loadProcessModels(boolean reload);
@@ -43,14 +53,21 @@ public interface RuntimeService {
 	</pre>
 	 * @param file 操作系统文件对象
 	 */
-	void deployProcessDefinitionFromFile(File file);
+	ProcessModel deployProcessDefinitionFromFile(File file);
+	
+	/**
+	 * 根据字符串导入流程定义，当然该字符串必须为bpmn格式，例如从web页面上传流程定义文件，读取到的XML字符串。
+	 * @param string 流程定义字符串
+	 * @return
+	 */
+	ProcessModel deployProcessDefinitionFromString(String string);
 	
 	/**
 	 * 根据流程定义对象导入流程定义
 	 * @param processDefinition 流程定义对象
 	 * @return
 	 */
-	ProcessModel initProcessDefinition(ProcessDefinition processDefinition);
+	ProcessModel deployProcessDefinition(ProcessDefinition processDefinition);
 	
 	/**
 	 * 该方法使用根据模板ID加载指定的流程模板对象。具体的流程定义导入与流程模板的机制参照 {@link #getLatestProcessMode(String)}

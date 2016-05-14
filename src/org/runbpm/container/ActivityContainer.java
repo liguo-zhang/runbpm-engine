@@ -157,10 +157,10 @@ public abstract class ActivityContainer {
             set.add(EntityConstants.TASK_STATE.RUNNING);
 			List<TaskInstance> notCompleteTaskInstanceList = entityManager.getTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
 	        if(notCompleteTaskInstanceList.size()>0){
+	        	//最后一个uc会自动调用活动终止
 	        	commit_internal = false;
 	    		for (TaskInstance taskInstance : notCompleteTaskInstanceList) {
 	    			UserTaskContainer uc = new UserTaskContainer(taskInstance);
-	    			//最有一个uc会自动调用活动终止
 	    			uc.terminate();
 				}
 	        }

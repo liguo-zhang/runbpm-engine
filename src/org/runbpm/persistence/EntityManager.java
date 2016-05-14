@@ -22,9 +22,11 @@ public interface EntityManager {
 	
 	List<ProcessModel> loadProcessModels(boolean reload);
 	
-	ProcessModel initProcessDefinition(ProcessDefinition processDefinition);
+	ProcessModel deployProcessDefinition(ProcessDefinition processDefinition);
 	
 	ProcessModel deployProcessDefinitionFromFile(File file);
+	
+	ProcessModel deployProcessDefinitionFromString(String string);
 	
 	ProcessModel loadLatestProcessModel(String processDefinitionId);	
 	
