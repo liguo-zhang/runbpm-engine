@@ -20,7 +20,7 @@ public class PersistenceTest {
 
 		String fileName = "PersistenceTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,PersistenceTest.class);
-		runtimeService.initProcessDefinitionFromFile(classPathResource.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessInstance processInstance = runtimeService.createProcessInstance("PersistenceTest.xml",null);
 		

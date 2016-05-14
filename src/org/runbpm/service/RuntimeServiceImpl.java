@@ -28,8 +28,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	}
 
 
-	public void initProcessDefinitionFromFile(File file) {
-		entityManager.initProcessDefinitionFromFile(file);
+	public void deployProcessDefinitionFromFile(File file) {
+		entityManager.deployProcessDefinitionFromFile(file);
 	}
 	
 	@Override

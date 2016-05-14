@@ -45,6 +45,8 @@
 * [流程引擎]放回任务
 
 //TODO
+* [整体架构]自定义节点设计、自定义节点引擎
+* [流程引擎]多租户引擎
 * [流程引擎]统一类加载机制的模型与视图：连接弧判断、人员判断、servicetask、事件监听
 * [流程引擎]send task 与 receive task
 * [流程引擎]追回任务
@@ -69,28 +71,21 @@
 * [流程引擎]bpmn.io & NVD3 & d3 图形监控接口
 * [流程引擎]事件、异常等众多BPMN2.0模型
 * [流程引擎]定时任务、调度支持
+* [设计器]Node.js离线版，需要配置electron工具进行编译
+* [教程示例]简单的演示demo
+* [教程示例]基于bootstrap的流程运行与演示框架
+* [教程示例]着手流程监控工具
+* [教程示例]网站
+* [PaaS]PaaS平台发布 AppDirect Cloudfoundry OpenShift
 * [设计器]离线版，需要配置electron工具进行编译
-h5ai
+*.[设计器]研究Eclipse Che
+* [流程引擎] WebService 引擎API
 
-* 简单的演示demo
-*.基于bootstrap的流程运行与演示框架
-*.设计器
-*.着手流程监控工具
-* 网站
-* GO语言版本
-* PaaS平台发布 AppDirect Cloudfoundry OpenShift
+* [流程仿真]流程仿真
+* [流程分析]流程分析
+* [BAM扩展]IBM BPM / Oracle BPM / Activiti BPM / JBPM 
+* [扩展]Docker
 
-------------------------------------------------------------------------
-
-----------------------------------------
-*.着手Eclipse流程设计器
-* WebService接口
-----------------------------------------
-* 仿真
-* 分析
-* BAM 功能 - IBM BPM / Oracle BPM / Activiti BPM /
-* Docker
-REST服务
 
 src/redis-server
 src/redis-cli 

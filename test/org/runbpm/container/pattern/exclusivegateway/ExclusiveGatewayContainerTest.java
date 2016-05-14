@@ -34,7 +34,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		entityManager.clearMemory();
 		
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel(processDefId);
 		ProcessDefinition processDefinition = processModel.getProcessDefinition();
@@ -103,7 +103,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 
 
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		
@@ -166,7 +166,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		

@@ -34,7 +34,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		String fileName = this.getBPMNXMLName();
 		
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
@@ -141,7 +141,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		String fileName = this.getBPMNXMLName();
 		
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		

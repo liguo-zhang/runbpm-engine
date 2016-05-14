@@ -166,16 +166,16 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	}
 	
 	@Override
-	public ProcessModel initProcessDefinitionFromFile(File file) {
+	public ProcessModel deployProcessDefinitionFromFile(File file) {
 		
-		ProcessModel processModel = initProcessDefinitionFromFile_(file);
+		ProcessModel processModel = deployProcessDefinitionFromFile_(file);
 		
 		return saveProcess(processModel);
 	}
 	
 	@Override
 	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition) {
-		ProcessModel processModel = initProcessDefinition_(processDefinition);
+		ProcessModel processModel = deployProcessDefinition_(processDefinition);
 		return saveProcess(processModel);
 	}	
 	

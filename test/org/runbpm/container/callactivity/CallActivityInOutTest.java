@@ -31,10 +31,10 @@ public class CallActivityInOutTest extends RunBPMTestCase{
 
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource1 = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource1.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource1.getFile());
 		
 		ClassPathResource classPathResource2 = new ClassPathResource("CallActivityTest_sub.xml",this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource2.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource2.getFile());
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance = processInstanceContainer.createInstance(fileName);

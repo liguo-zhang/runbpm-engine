@@ -48,7 +48,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	}
 	
 	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition){
-		ProcessModel processModel = this.initProcessDefinition_(processDefinition);
+		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
 		
 		long processModelId = processModelIdCounter.getAndIncrement();
 		processModel.setId(processModelId);
@@ -57,8 +57,8 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	}
 	
 	
-	public ProcessModel initProcessDefinitionFromFile(File file){
-		ProcessModel processModel = this.initProcessDefinitionFromFile_(file);
+	public ProcessModel deployProcessDefinitionFromFile(File file){
+		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
 		long processModelId = processModelIdCounter.getAndIncrement();
 		processModel.setId(processModelId);
 	    processModelMap.put(processModelId, processModel);

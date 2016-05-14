@@ -24,7 +24,7 @@ public interface EntityManager {
 	
 	ProcessModel initProcessDefinition(ProcessDefinition processDefinition);
 	
-	ProcessModel initProcessDefinitionFromFile(File file);
+	ProcessModel deployProcessDefinitionFromFile(File file);
 	
 	ProcessModel loadLatestProcessModel(String processDefinitionId);	
 	

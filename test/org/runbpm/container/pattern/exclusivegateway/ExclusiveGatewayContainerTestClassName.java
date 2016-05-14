@@ -28,7 +28,7 @@ public class ExclusiveGatewayContainerTestClassName extends RunBPMTestCase{
 		
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel(fileName);
 		ProcessDefinition processDefinition = processModel.getProcessDefinition();

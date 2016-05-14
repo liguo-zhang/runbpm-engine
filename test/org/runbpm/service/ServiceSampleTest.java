@@ -28,7 +28,7 @@ public class ServiceSampleTest extends RunBPMTestCase{
 
 		String fileName = "ServiceSampleTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,ServiceSampleTest.class);
-		runtimeService.initProcessDefinitionFromFile(classPathResource.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessInstance processInstance = runtimeService.createProcessInstance(fileName,null);
 		

@@ -39,7 +39,7 @@ public class UserTaskListener_WithoutSpring extends RunBPMTestCase{
 		
 		String fileName = "UserTaskListener.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance = processInstanceContainer.createInstance(fileName);

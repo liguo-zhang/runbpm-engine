@@ -31,7 +31,7 @@ public class InitProcessModel_Hibernate extends RunBPMTestCase{
 
 		String fileName = "PersistenceTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,PersistenceTest.class);
-		runtimeService.initProcessDefinitionFromFile(classPathResource.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		runtimeService.loadProcessModels(true);
 		

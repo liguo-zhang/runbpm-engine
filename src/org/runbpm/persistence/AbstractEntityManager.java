@@ -38,7 +38,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	
 	protected Map<Long,ProcessModel> processModelMap = new HashMap<Long,ProcessModel>();
 	
-	public ProcessModel initProcessDefinition_(ProcessDefinition processDefinition){
+	public ProcessModel deployProcessDefinition_(ProcessDefinition processDefinition){
 		//½âÎöÁ÷³Ì¼àÌýÆ÷
 		parseProcessListener(processDefinition);
 		
@@ -50,7 +50,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	}
 	
 	
-	protected ProcessModel initProcessDefinitionFromFile_(File file){
+	protected ProcessModel deployProcessDefinitionFromFile_(File file){
 		InputStream is = null;
 		BufferedReader reader = null;
 		try {

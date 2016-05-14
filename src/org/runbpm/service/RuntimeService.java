@@ -43,7 +43,7 @@ public interface RuntimeService {
 	</pre>
 	 * @param file 操作系统文件对象
 	 */
-	void initProcessDefinitionFromFile(File file);
+	void deployProcessDefinitionFromFile(File file);
 	
 	/**
 	 * 根据流程定义对象导入流程定义

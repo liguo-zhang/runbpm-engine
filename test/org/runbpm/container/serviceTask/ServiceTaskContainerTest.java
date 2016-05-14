@@ -30,7 +30,7 @@ public class ServiceTaskContainerTest extends RunBPMTestCase{
 		
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();

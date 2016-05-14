@@ -33,7 +33,7 @@ public class SimpleUserTaskContainerTest extends RunBPMTestCase{
 		
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		process(entityManager,fileName);
 		
@@ -47,7 +47,7 @@ public class SimpleUserTaskContainerTest extends RunBPMTestCase{
 		
 		String fileName = "SimpleUserTaskContainerTest_single.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		process(entityManager,fileName);
 		

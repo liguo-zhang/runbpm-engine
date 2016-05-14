@@ -26,7 +26,7 @@ public class InclusiveGatewayContainerTest extends RunBPMTestCase{
 
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
@@ -68,7 +68,7 @@ public class InclusiveGatewayContainerTest extends RunBPMTestCase{
 
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel(fileName);

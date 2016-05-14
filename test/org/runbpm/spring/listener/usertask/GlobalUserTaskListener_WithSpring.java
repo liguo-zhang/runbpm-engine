@@ -41,7 +41,7 @@ public class GlobalUserTaskListener_WithSpring extends RunBPMTestCase{
 
 		String fileName = "GlobalUserTaskListener.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();

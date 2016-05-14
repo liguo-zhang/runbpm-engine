@@ -45,7 +45,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public void initProcessDefinitionFromFile(File file) {
+	public void deployProcessDefinitionFromFile(File file) {
 		// TODO Auto-generated method stub
 		
 	}

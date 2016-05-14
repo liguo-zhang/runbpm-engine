@@ -36,7 +36,7 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance = processInstanceContainer.createInstance(fileName);

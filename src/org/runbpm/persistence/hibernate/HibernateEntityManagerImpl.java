@@ -81,13 +81,13 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public ProcessModel initProcessDefinitionFromFile(File file) {
-		ProcessModel processModel = this.initProcessDefinitionFromFile_(file);
+	public ProcessModel deployProcessDefinitionFromFile(File file) {
+		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
 	    return saveProcessModel(processModel);
 	}
 	
 	public ProcessModel initProcessDefinition(ProcessDefinition processDefinition){
-		ProcessModel processModel = this.initProcessDefinition_(processDefinition);
+		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
 		return saveProcessModel(processModel);
 	}
 	

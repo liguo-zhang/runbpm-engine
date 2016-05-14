@@ -25,7 +25,7 @@ public class ActivityListenerTest_WithoutSpring extends RunBPMTestCase{
 		Configuration.getContext().getGlobalListener().clearGlobalListenerSet();
 		
 		ClassPathResource classPathResource = new ClassPathResource("ActivityListenerTest.xml",this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance = processInstanceContainer.createInstance("ActivityListenerTest.xml");

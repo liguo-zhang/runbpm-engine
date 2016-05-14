@@ -39,9 +39,9 @@ public class ProcessComplete extends RunBPMTestCase{
 		ClassPathResource classPathResource = new ClassPathResource(fileName,ProcessComplete.class);
 		ClassPathResource classPathResource1 = new ClassPathResource("ProcessCompleteTest_sub.xml",ProcessComplete.class);
 		ClassPathResource classPathResource2 = new ClassPathResource("ProcessCompleteTest_sub_sub.xml",ProcessComplete.class);
-		runtimeService.initProcessDefinitionFromFile(classPathResource.getFile());
-		runtimeService.initProcessDefinitionFromFile(classPathResource1.getFile());
-		runtimeService.initProcessDefinitionFromFile(classPathResource2.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource1.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource2.getFile());
 		
 		ProcessInstance processInstance = runtimeService.createProcessInstance("ProcessComplete",null);
 		

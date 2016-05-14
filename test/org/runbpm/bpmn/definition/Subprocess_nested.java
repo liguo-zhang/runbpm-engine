@@ -21,7 +21,7 @@ public class Subprocess_nested extends RunBPMTestCase{
 		
 		String fileName = this.getBPMNXMLName();
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
-		entityManager.initProcessDefinitionFromFile(classPathResource.getFile());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel("Subprocess_nested.xml");
 		
