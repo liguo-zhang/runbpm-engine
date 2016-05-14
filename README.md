@@ -6,21 +6,6 @@
 
 3. **开源**。遵从Apache License 2.0协议的BPM产品，微信技术群随时讨论新功能，联系到作者,分分钟增加到产品中。
 
-#下载
+#文档介绍
 
-  
-* 流程引擎：<https://github.com/liguo-zhang/runbpm-modeler>
-  已经基本可用,基于JAVA
-
-* 流程工作台：<https://github.com/liguo-zhang/runbpm-workspace>
-  开发中。。。
-
-* 流程设计器：<https://github.com/liguo-zhang/runbpm-engine> 基于Node.js,目前有一个可用的版本：<http://pan.baidu.com/s/1jH7mZTO>,直接打开index.html在浏览器器中使用。
-  
-![sreenshot](https://raw.githubusercontent.com/liguo-zhang/runbpm-modeler/master/docs/screenshot.png)
-
-# RunBPM v1.0发布筹备中 2016-05-13
-
-微信/QQ: 914454333
-
-
+<https://github.com/liguo-zhang/runbpm-docs>
