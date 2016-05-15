@@ -66,7 +66,7 @@ public class RunBPMSpringContext implements ContextInterface {
 			globalListener = (GlobalListener)appContext.getBean("globalListener");
 		}catch(NoSuchBeanDefinitionException e){
 			globalListener = new GlobalListener();
-			logger.warn("初始化流程引擎上下文时，由于没有在Spring配置文件中配置globalListener，出现NoSuchBeanDefinitionException。如果使用编码方式设置globalListener或者不需要事件功能,则可以忽略该异常。");
+			logger.warn("初始化流程引擎上下文时，没有在Spring配置文件中配置globalListener。如果使用编码方式设置globalListener或者不需要事件功能,则可以忽略该异常。");
 		}
 		
 		try{

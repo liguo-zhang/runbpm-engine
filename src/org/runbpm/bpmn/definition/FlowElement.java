@@ -2,6 +2,7 @@ package org.runbpm.bpmn.definition;
 
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 
@@ -11,6 +12,8 @@ public class FlowElement extends Element{
 	protected String id;
 	
 	protected String name;
+	
+	protected String documentation;
 	
 	
 
@@ -30,6 +33,16 @@ public class FlowElement extends Element{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+
+	@XmlElement
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
 	}
 	
 	

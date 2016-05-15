@@ -67,9 +67,6 @@ public abstract class AbstractEntityManager implements EntityManager{
 	}
 	
 	private ProcessModel deployProcessDefinition_(ProcessDefinition processDefinition){
-		ProcessModel processModel = new  ProcessModelImpl();
-		processModel.setProcessDefinition(processDefinition);
-		processModel.setProcessDefinitionId(processDefinition.getId());
 		  
         Marshaller marshaller;
 		try {
@@ -87,13 +84,13 @@ public abstract class AbstractEntityManager implements EntityManager{
 	        
 	        marshaller.marshal(definitions, writer);
 	        String result = writer.toString();
-	        processModel.setXmlcontent(result);
+	        
+	        ProcessModel processModel = newProcessModel(processDefinition,result);
+	        return processModel; 
 		} catch (JAXBException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}  
-		
-	    return processModel; 
+		}
 	}
 	
 	private ProcessModel deployProcessDefinitionFromString_(String contentString){
@@ -106,12 +103,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 			stringReader = new StringReader(contentString);
 			Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(stringReader);
 			ProcessDefinition process = definitions.getProcess();
-			
-			ProcessModel processModel = new  ProcessModelImpl();
-			processModel.setProcessDefinition(process);
-			processModel.setProcessDefinitionId(process.getId());
-	        processModel.setXmlcontent(contentString);
-			
+	        ProcessModel processModel = newProcessModel(process,contentString);
 			return processModel;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,13 +131,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			
 			Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(file);
-			
 			ProcessDefinition process = definitions.getProcess();
-			
-			ProcessModel processModel = new  ProcessModelImpl();
-			processModel.setProcessDefinition(process);
-			processModel.setProcessDefinitionId(process.getId());
-			
 			StringBuffer buffer = new StringBuffer();
 	        is = new FileInputStream(file);
 	        String line; // 用来保存每行读取的内容
@@ -156,8 +142,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	            buffer.append("\n"); // 添加换行符
 	            line = reader.readLine(); // 读取下一行
 	        }
-	        processModel.setXmlcontent(buffer.toString());
-			
+	        ProcessModel processModel = newProcessModel(process,buffer.toString());
 			return processModel;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -179,6 +164,15 @@ public abstract class AbstractEntityManager implements EntityManager{
 			}
 	        
 		}
+	}
+	
+	protected ProcessModel newProcessModel(ProcessDefinition process,String xmlString){
+		ProcessModel processModel = new  ProcessModelImpl();
+		processModel.setName(process.getName());
+		processModel.setProcessDefinition(process);
+		processModel.setProcessDefinitionId(process.getId());
+		processModel.setXmlcontent(xmlString);
+		return processModel;
 	}
 	
 	protected abstract ProcessModel saveProcessModel(ProcessModel processModel);

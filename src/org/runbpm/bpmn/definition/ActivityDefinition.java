@@ -41,6 +41,12 @@ public interface ActivityDefinition {
 	 */
 	ExtensionElements getExtensionElements(); 
 	
+	/**
+	 * 获取活动的描述
+	 * @return 获取活动的描述
+	 */
+	String getDocumentation();
+	
 	//---domain 用于流程POJO形式的构建
 	void setProcessDefinition(ProcessDefinition processDefinition);
 	ProcessDefinition flowTo(ActivityDefinition activityDefinition);

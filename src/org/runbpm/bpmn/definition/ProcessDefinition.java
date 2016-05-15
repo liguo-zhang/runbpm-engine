@@ -22,6 +22,7 @@ public class ProcessDefinition extends Element{
 	
 	protected String id;
 	protected String name;
+	protected String documentation;
 	
 	@XmlAttribute
 	public String getId() {
@@ -41,6 +42,17 @@ public class ProcessDefinition extends Element{
 		this.name = name;
 	}
 	
+	@XmlElement
+	public String getDocumentation() {
+		return documentation;
+	}
+
+	public void setDocumentation(String documentation) {
+		this.documentation = documentation;
+	}
+
+
+
 	//-----Activity start
 	protected StartEvent startEvent;
 	protected EndEvent endEvent;

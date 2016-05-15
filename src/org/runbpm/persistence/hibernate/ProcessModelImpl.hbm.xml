@@ -6,6 +6,8 @@
             <generator class="native" />
         </id>
         
+        <property name="name" type="string"/>
+        
         <property name="createDate" type="timestamp"/>
         
         <property name="modifyDate" type="timestamp"/>
