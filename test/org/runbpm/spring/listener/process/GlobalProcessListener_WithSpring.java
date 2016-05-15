@@ -33,9 +33,6 @@ public class GlobalProcessListener_WithSpring extends RunBPMTestCase{
 		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
 		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
-		ProcessModel processModel = entityManager.loadLatestProcessModel(fileName);
-		ProcessDefinition processDefinition = processModel.getProcessDefinition();
-		
 		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance = processInstanceContainer.createInstance(fileName);
 		

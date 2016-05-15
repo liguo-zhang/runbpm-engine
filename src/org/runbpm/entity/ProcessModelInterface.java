@@ -39,5 +39,17 @@ public interface ProcessModelInterface extends EntityInterface {
 	 * @param 
 	 */
 	public void setProcessDefinitionId(String processDefinitionId) ;
+	
+	/**
+	 * 获取流程模板的版本
+	 * @return
+	 */
+	public int getVersion() ;
+	
+	/**
+	 * 该方法为流程引擎内部使用的方法
+	 * @return
+	 */
+	public void setVersion(int version) ;
 
 }

@@ -45,7 +45,7 @@ public class ProcessContainer extends FlowContainer {
 		}
 		//event begin
 		//获取流程定义方式与下面不一样
-		if(ListenerManager.getListenerManager().haveProcessEvent(processDefinitionId,ListenerManager.Event_Type.beforeProcessInstanceStarted)){
+		if(ListenerManager.getListenerManager().haveProcessEvent(processModel.getId()+"",ListenerManager.Event_Type.beforeProcessInstanceStarted)){
 			Execution handlerContext = new Execution();
 			handlerContext.setProcessDefinition(this.processDefinition);
 			handlerContext.setProcessInstance(this.processInstance);
@@ -215,7 +215,7 @@ public class ProcessContainer extends FlowContainer {
 	}
 	
 	private void invokelistener(ListenerManager.Event_Type listenerType) {
-		if(ListenerManager.getListenerManager().haveProcessEvent(this.processDefinition.getId(),listenerType)){
+		if(ListenerManager.getListenerManager().haveProcessEvent(this.processInstance.getProcessModelId()+"",listenerType)){
 			Execution handlerContext = new Execution();
 			handlerContext.setProcessDefinition(this.processDefinition);
 			handlerContext.setProcessInstance(this.processInstance);

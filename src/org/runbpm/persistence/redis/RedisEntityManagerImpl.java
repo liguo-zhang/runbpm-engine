@@ -59,6 +59,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	
 	public static final String procmodel_id = "id";
 	public static final String procmodel_name = "name";
+	public static final String procmodel_version = "version";
 	public static final String procmodel_crdate = "crdate";
 	public static final String procmodel_mddate = "mddate";
 	public static final String procmodel_proddefid = "proddefid";
@@ -753,6 +754,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		ProcessModel_ processModel_ = new ProcessModel_();
 		processModel_.setId(processModelId);
 		processModel_.setName(valueMap.get(procmodel_name));
+		processModel_.setVersion(Integer.parseInt(valueMap.get(procmodel_version)));
 		
 		processModel_.setCreateDate(RunBPMUtils.convertLongToDate(valueMap.get(procmodel_crdate)));
 		processModel_.setModifyDate(RunBPMUtils.convertLongToDate(valueMap.get(procmodel_mddate)));

@@ -11,6 +11,8 @@ public class ProcessModel_ extends EntityBase {
 	
 	private ProcessDefinition processDefinition;
 	
+	private int version;
+	
 	public String getXmlcontent() {
 		return xmlcontent;
 	}
@@ -34,6 +36,15 @@ public class ProcessModel_ extends EntityBase {
 
 	public void setProcessDefinitionId(String processDefinitionId) {
 		this.processDefinitionId = processDefinitionId;
+	}
+	
+	
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	public String toString(){

@@ -127,7 +127,7 @@ public abstract class ActivityContainer {
 		
     	commit_internal(null,ACTIVITY_STATE.COMPLETED);
 
-		//after event begin
+		//after event begin 此时可能流程已经到历史库。
 		invokelistener(ListenerManager.Event_Type.afterActivityInstanceCompleted);
 		//after event end
 	}
@@ -244,13 +244,17 @@ public abstract class ActivityContainer {
 	
 	private void invokelistener(ListenerManager.Event_Type eventType) {
 		Execution handlerContext = null;
-		String pid = activityDefinition.getProcessDefinition().getId();
+		String pid = this.activityInstance.getProcessModelId()+"";
 		String aid = activityDefinition.getId();
 		if(ListenerManager.getListenerManager().haveActivityEvent(pid+":"+aid,eventType)){
 			handlerContext = new Execution();
+			
+			//如果是afterActivityInstanceCompleted类型，此时可能已经到历史库，processInstance为null
 			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
-			Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
-			handlerContext.setVariableMap(variableMap);
+			if(processInstance!=null){
+				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
+				handlerContext.setVariableMap(variableMap);
+			}
 			handlerContext.setProcessInstance(processInstance);
 			handlerContext.setProcessDefinition(activityDefinition.getProcessDefinition());
 			handlerContext.setActivityDefinition(activityDefinition);

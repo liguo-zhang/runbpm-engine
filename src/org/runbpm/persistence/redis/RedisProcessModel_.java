@@ -44,4 +44,10 @@ public class RedisProcessModel_ extends ProcessModel_ {
 		shardedJedis.hset(domain, RedisEntityManagerImpl.procmodel_proddefid, processDefinitionId);
 	}
 	
+	public void setVersion(int version) {
+		super.setVersion(version);
+		ShardedJedis shardedJedis = TransactionObjectHolder.get().getShardedJedis();
+		shardedJedis.hset(domain, RedisEntityManagerImpl.procmodel_version, version+"");
+	}
+	
 }

@@ -20,7 +20,7 @@ import org.runbpm.entity.VariableInstance;
 
 public interface EntityManager {
 	
-	List<ProcessModel> loadProcessModels(boolean reload);
+	List<ProcessModel> loadProcessModels(boolean onlyLatestVersion);
 	
 	ProcessModel deployProcessDefinition(ProcessDefinition processDefinition);
 	

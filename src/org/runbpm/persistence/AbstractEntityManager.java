@@ -45,25 +45,32 @@ public abstract class AbstractEntityManager implements EntityManager{
 	@Override
 	public ProcessModel deployProcessDefinitionFromFile(File file) {
 		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
+		
+		saveProcessModel(processModel);
 		//解析流程监听器
-		parseProcessListener(processModel.getProcessDefinition());
-	    return saveProcessModel(processModel);
+		parseProcessListener(processModel);
+		return processModel;
+		
 	}
 	
 	@Override
 	public ProcessModel deployProcessDefinitionFromString(String string) {
 		ProcessModel processModel = this.deployProcessDefinitionFromString_(string);
+		
+		saveProcessModel(processModel);
 		//解析流程监听器
-		parseProcessListener(processModel.getProcessDefinition());
-	    return saveProcessModel(processModel);
+		parseProcessListener(processModel);
+		return processModel;
 	}
 	
 	@Override
 	public ProcessModel deployProcessDefinition(ProcessDefinition processDefinition){
 		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
+		
+		saveProcessModel(processModel);
 		//解析流程监听器
-		parseProcessListener(processModel.getProcessDefinition());
-		return saveProcessModel(processModel);
+		parseProcessListener(processModel);
+		return processModel;
 	}
 	
 	private ProcessModel deployProcessDefinition_(ProcessDefinition processDefinition){
@@ -172,28 +179,47 @@ public abstract class AbstractEntityManager implements EntityManager{
 		processModel.setProcessDefinition(process);
 		processModel.setProcessDefinitionId(process.getId());
 		processModel.setXmlcontent(xmlString);
+		//set version
+		ProcessModel savedModel = null;
+		for(Map.Entry<Long, ProcessModel> entry:processModelMap.entrySet()){
+			ProcessModel processModelObject = entry.getValue();
+			if(processModelObject.getProcessDefinitionId().equals(process.getId())){
+				if(savedModel==null || savedModel.getId()<processModelObject.getId()){
+					savedModel = processModelObject;
+				}
+			}
+		}
+		if(savedModel==null){
+			processModel.setVersion(1);
+		}else{
+			int newVersion = savedModel.getVersion()+1;
+			processModel.setVersion(newVersion);
+		}
+		
 		return processModel;
 	}
 	
 	protected abstract ProcessModel saveProcessModel(ProcessModel processModel);
 	
-	protected void parseProcessListener(ProcessDefinition process) {
+	protected void parseProcessListener(ProcessModel processModel) {
 		//---listener
+		ProcessDefinition process = processModel.getProcessDefinition();
 		ExtensionElements extensionElements = process.getExtensionElements();
 		List<ExtensionExecutionListener> processlistenerList = extensionElements.getListenerList();
 		for(ExtensionExecutionListener processListener:processlistenerList){
 			Event_Type eventType = processListener.getEvent();
 			String classValue = processListener.getClassValue();
-			ListenerManager.getListenerManager().registerProcessInstanceListener(process.getId(), classValue, eventType);
+			ListenerManager.getListenerManager().registerProcessInstanceListener(processModel.getId()+"", classValue, eventType);
 		}
 		
 		//注册活动以及UserTask的监听
-		registerListeners(process);
+		registerListeners(processModel,process);
 		//---//listener
 		
 	}
 
-	private void registerListeners(ProcessDefinition process) {
+	//参数process有可能是块活动SubProcess
+	private void registerListeners(ProcessModel processModel,ProcessDefinition process) {
 		List<ActivityDefinition> activityList = process.getActivityList();
 		for (ActivityDefinition activityDefinition : activityList) {
 			String pid = process.getId();
@@ -205,16 +231,16 @@ public abstract class AbstractEntityManager implements EntityManager{
 					Event_Type eventType = extensionExecutionListener.getEvent();
 					String classValue = extensionExecutionListener.getClassValue();
 					if(eventType.toString().indexOf("Activity")!=-1){
-						ListenerManager.getListenerManager().registerActivityInstanceListener(pid+":"+aid, classValue, eventType);
+						ListenerManager.getListenerManager().registerActivityInstanceListener(processModel.getId()+":"+aid, classValue, eventType);
 					}else if(eventType.toString().indexOf("UserTask")!=-1){
-						ListenerManager.getListenerManager().registerUserTaskListener(pid+":"+aid, classValue, eventType);
+						ListenerManager.getListenerManager().registerUserTaskListener(processModel.getId()+":"+aid, classValue, eventType);
 					}
 			}
 			 
 			 //块活动SubProcess嵌套调动
 			 if(activityDefinition instanceof SubProcessDefinition){
 				 SubProcessDefinition processDefinition = (SubProcessDefinition)activityDefinition;
-				 registerListeners(processDefinition);
+				 registerListeners(processModel,processDefinition);
 			 }
 		}
 			

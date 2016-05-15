@@ -1,5 +1,7 @@
 package org.runbpm.spring.persistence.hibernate;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -32,8 +34,13 @@ public class InitProcessModel_Hibernate extends RunBPMTestCase{
 		String fileName = "PersistenceTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,PersistenceTest.class);
 		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
+		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
-		runtimeService.loadProcessModels(true);
+		List<ProcessModel> onlyNewList = runtimeService.loadProcessModels(true);
+		Assert.assertEquals(onlyNewList.size(), 1);
+		
+		List<ProcessModel> allList = runtimeService.loadProcessModels(false);
+		Assert.assertEquals(allList.size(), 2);
 		
 		ProcessModel processModel = runtimeService.loadLatestProcessModel("PersistenceTest.xml");
 		Assert.assertNotNull(processModel.getId());

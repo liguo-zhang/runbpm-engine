@@ -61,28 +61,36 @@ public class ListenerManager {
 		return listenerManager;
 	}
 	
+	public void clearListener(){
+		getListenerManager().processListenerMap.clear();
+		getListenerManager().activityListenerMap.clear();
+		getListenerManager().taskListenerMap.clear();
+		Configuration.getContext().getGlobalListener().clearGlobalListenerSet();
+	}
+
+	//key是 "流程模板ID"
 	private Map<String,HashMap<String,Set<ListenerInterface>>> processListenerMap = new HashMap<String,HashMap<String,Set<ListenerInterface>>>();
-	//key是 "流程定义ID:活动定义ID"
+	//key是 "流程模板ID:活动定义ID"
 	private Map<String,HashMap<String,Set<ListenerInterface>>> activityListenerMap = new HashMap<String,HashMap<String,Set<ListenerInterface>>>();
-	//key是 "流程定义ID:活动定义ID(UserTask ID)"
+	//key是 "流程模板ID:活动定义ID(UserTask ID)"
 	private Map<String,HashMap<String,Set<ListenerInterface>>> taskListenerMap = new HashMap<String,HashMap<String,Set<ListenerInterface>>>();
 	
 	//供局部的流程定义调用
-	public void registerProcessInstanceListener(String definitionId,String listenerClassName,Event_Type listenerType){
+	public void registerProcessInstanceListener(String processModelId,String listenerClassName,Event_Type listenerType){
 		ListenerInterface processInstanceListener = null;
 		try {
 			processInstanceListener = (ListenerInterface) Class.forName(listenerClassName).newInstance();
 		} catch (Exception e) {
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020303_INVALID_LISTENER_CLASSNAME,e);
 		} 
-		registerProcess(definitionId,processInstanceListener,listenerType);
+		registerProcess(processModelId,processInstanceListener,listenerType);
 	}
 	
-	private void registerProcess(String definitionId,ListenerInterface processInstanceListener,Event_Type listenerType){
-		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(definitionId);
+	private void registerProcess(String processModelId,ListenerInterface processInstanceListener,Event_Type listenerType){
+		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(processModelId);
 		if(map==null){
 			map = new HashMap<String,Set<ListenerInterface>>();
-			processListenerMap.put(definitionId, map);
+			processListenerMap.put(processModelId, map);
 		}
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		if(listenerSet==null){
@@ -141,11 +149,11 @@ public class ListenerManager {
 		listenerSet.add(userTaskListener);
 	}
 	
-	public boolean haveProcessEvent(String processDefinitionId,Event_Type listenerType){
-		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(processDefinitionId);
+	public boolean haveProcessEvent(String processModelId,Event_Type listenerType){
+		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(processModelId);
 		if(map==null){
 			map = new HashMap<String,Set<ListenerInterface>>();
-			processListenerMap.put(processDefinitionId, map);
+			processListenerMap.put(processModelId, map);
 		}
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		if(listenerSet==null){
@@ -161,12 +169,12 @@ public class ListenerManager {
 		return listenerSet.size()>0 || gobalProcessInstanceEventSet.size()>0;
 	}
 	
-	public boolean haveActivityEvent(String processDefinitionIdAndActivityId,Event_Type listenerType){
+	public boolean haveActivityEvent(String processModelIdAndActivityId,Event_Type listenerType){
 		
-		HashMap<String,Set<ListenerInterface>> map = activityListenerMap.get(processDefinitionIdAndActivityId);
+		HashMap<String,Set<ListenerInterface>> map = activityListenerMap.get(processModelIdAndActivityId);
 		if(map==null){
 			map = new HashMap<String,Set<ListenerInterface>>();
-			activityListenerMap.put(processDefinitionIdAndActivityId, map);
+			activityListenerMap.put(processModelIdAndActivityId, map);
 		}
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		if(listenerSet==null){
@@ -182,12 +190,12 @@ public class ListenerManager {
 		return listenerSet.size()>0 || gobalActivityInstanceEventSet.size()>0;
 	}
 	
-	public boolean haveTaskEvent(String processDefinitionIdAndActivityId,Event_Type listenerType){
+	public boolean haveTaskEvent(String processModelIdAndActivityId,Event_Type listenerType){
 		//special
-		HashMap<String,Set<ListenerInterface>> map = taskListenerMap.get(processDefinitionIdAndActivityId);
+		HashMap<String,Set<ListenerInterface>> map = taskListenerMap.get(processModelIdAndActivityId);
 		if(map==null){
 			map = new HashMap<String,Set<ListenerInterface>>();
-			taskListenerMap.put(processDefinitionIdAndActivityId, map);
+			taskListenerMap.put(processModelIdAndActivityId, map);
 		}
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		if(listenerSet==null){
@@ -206,8 +214,8 @@ public class ListenerManager {
 	}
 	
 	public void invokeProcessListener(Execution handlerContext,Event_Type listenerType){
-		String processDefinitionId = handlerContext.getProcessDefinition().getId();
-		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(processDefinitionId);
+		long pid = handlerContext.getProcessInstance().getProcessModelId();
+		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(pid+"");
 		Set<ListenerInterface> processInstanceListenerSet = map.get(listenerType.name());
 		this.invoke(handlerContext, processInstanceListenerSet, listenerType);
 		
@@ -216,9 +224,9 @@ public class ListenerManager {
 	}
 	
 	public void invokeActivityListener(Execution handlerContext,Event_Type listenerType){
-		String processDefinitionId = handlerContext.getActivityDefinition().getProcessDefinition().getId();
+		long pid = handlerContext.getActivityInstance().getProcessModelId();
 		String activityId = handlerContext.getActivityDefinition().getId();
-		HashMap<String,Set<ListenerInterface>> map = activityListenerMap.get(processDefinitionId+":"+activityId);
+		HashMap<String,Set<ListenerInterface>> map = activityListenerMap.get(pid+":"+activityId);
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		//触发
 		this.invoke(handlerContext, listenerSet, listenerType);
@@ -229,9 +237,9 @@ public class ListenerManager {
 	}
 	
 	public void invokeTaskListener(Execution handlerContext,Event_Type listenerType){
-		String processDefinitionId = handlerContext.getActivityDefinition().getProcessDefinition().getId();
+		long pid = handlerContext.getActivityInstance().getProcessModelId();
 		String activityId = handlerContext.getActivityDefinition().getId();
-		HashMap<String,Set<ListenerInterface>> map = taskListenerMap.get(processDefinitionId+":"+activityId);
+		HashMap<String,Set<ListenerInterface>> map = taskListenerMap.get(pid+":"+activityId);
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		//触发
 		this.invoke(handlerContext, listenerSet, listenerType);

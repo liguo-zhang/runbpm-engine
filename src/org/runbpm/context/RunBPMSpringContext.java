@@ -4,6 +4,7 @@ import org.runbpm.exception.RunBPMException;
 import org.runbpm.handler.resource.GlobalResourceHandler;
 import org.runbpm.handler.resource.GlobalResourceHandlerSample;
 import org.runbpm.listener.GlobalListener;
+import org.runbpm.listener.ListenerManager;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
 import org.runbpm.service.RuntimeService;
@@ -34,6 +35,11 @@ public class RunBPMSpringContext implements ContextInterface {
 	
 	
 	private  void setApplicationContext_(ApplicationContext appContext){
+		logger.info("初始化RunBPM上下文开始");
+		logger.info("清空所有的事件监听器");
+		ListenerManager.getListenerManager().clearListener();
+		
+		
 		if(appContext==null){
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_000000_NO_INIT_RunBPM,"输入的appContext为空");
 		}
@@ -72,7 +78,7 @@ public class RunBPMSpringContext implements ContextInterface {
 		try{
 			runtimeService = (RuntimeService) appContext.getBean("runtimeService");
 		}catch(NoSuchBeanDefinitionException e){
-			logger.warn("Spring正在加载RuntimeService，但是加载失败了。有可能后续不需要runtimeService",e);
+			logger.warn("Spring正在加载RuntimeService，但是加载失败了。有可能后续不需要runtimeService，例如内部方法的单元测试。");
 		}
 		this.appContext = appContext;
 	}

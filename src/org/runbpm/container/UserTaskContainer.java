@@ -193,11 +193,16 @@ public class UserTaskContainer {
 	}
 	
 	private void invokelistener(ListenerManager.Event_Type listenerType) {
-		if(ListenerManager.getListenerManager().haveTaskEvent(userTask.getProcessDefinition().getId()+":"+userTask.getId(),listenerType)){
+		String pid = this.taskInstance.getProcessModelId()+"";
+		String uid = userTask.getId();
+		if(ListenerManager.getListenerManager().haveTaskEvent(pid+":"+uid,listenerType)){
 			Execution handlerContext = new Execution();
 			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
-			Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
-			handlerContext.setVariableMap(variableMap);
+			//对于afterComplete事件，有可能到历史库中
+			if(processInstance!=null){
+				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
+				handlerContext.setVariableMap(variableMap);
+			}
 			handlerContext.setUserTask(userTask);
 			handlerContext.setTaskInstance(taskInstance);
 			handlerContext.setActivityDefinition(userTask);

@@ -28,20 +28,20 @@ public interface RuntimeService {
 	
 	/**
 	 * 从持久库中加载“流程模板”到“流程引擎”。
-	 * @param reload 是否从持久库中重新加载。<br>
+	 * @param onlyLatestVersion 是否只返回最新版本的流程模板，如果只需要做初始化加载无需返回值，则该参数设置为true或者false均可。<br>
 	 * 使用部署流程API会自动将“流程模板”同步到“流程引擎内存”。
 	 * <ul>
 	 * 		<li>
-	 * 		如果是第一次初始化流程引擎，而且流程引擎使用的是持久化存储，例如数据库或者NoSQL,则设置该参数为true,使用该方法会读取存放在持久化存储中的XML字段，通过JAXB序列化为流程定义对象。<br>
-	 * 		例如Web方式启动插件 {@link org.runbpm.utils.InitRunBPMSpringContextServlet()}
+	 * 		如果是第一次调用此方法（例如当初始化流程引擎时），而且流程引擎使用的是持久化存储，例如数据库或者NoSQL,使用该方法会读取存放在持久化存储中的XML字段，通过JAXB序列化为流程定义对象。<br>
+	 * 		初始化流程引擎的Web方式启动插件参照：{@link org.runbpm.utils.InitRunBPMSpringContextServlet()}
 	 * 		</li>
 	 * 		<li>
-	 * 		初始化完毕后，该参数设置为false，即读取流程引擎内存的模板。
+	 * 		初始化完毕后，每一次流程导入都会同步流程引擎的模板内存。每次此方法只会读取流程引擎内存的模板。
 	 * 		</li>
 	 * </ul>
 	 * @return 流程模板列表
 	 */
-	List<ProcessModel> loadProcessModels(boolean reload);
+	List<ProcessModel> loadProcessModels(boolean onlyLatestVersion);
 	
 	
 	/**

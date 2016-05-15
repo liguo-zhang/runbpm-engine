@@ -311,8 +311,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ProcessModel> loadProcessModels(boolean reload) {
-		return this.entityManager.loadProcessModels(reload);
+	public List<ProcessModel> loadProcessModels(boolean onlyLatestVersion) {
+		return this.entityManager.loadProcessModels(onlyLatestVersion);
 		
 	}
 

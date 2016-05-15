@@ -1,6 +1,5 @@
 package org.runbpm.persistence.hibernate;
 
-import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,43 +42,97 @@ import org.springframework.beans.BeanUtils;
 
 public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	
-	public List<ProcessModel> loadProcessModels(boolean reload){
-		List<ProcessModel> processModelList = new ArrayList<ProcessModel>();
-		if(reload){
-			processModelMap.clear();
-		}
-		
-		
-		String hsql = "select p from ProcessModelImpl p";
-		Session session = TransactionObjectHolder.get().getSession();
-		@SuppressWarnings("unchecked")
-		List<ProcessModel> queryList = session.createQuery(hsql).list();
-		
-		for(ProcessModel processModel:queryList){
-			String xmlContent = processModel.getXmlcontent();
-			
-			JAXBContext jaxbContext;
-			ProcessDefinition process =null;
+	//TODO 线程优化
+	public static boolean isInit = false;
+	
+	private static JAXBContext jaxbContext = null;
+	
+	private static JAXBContext getJaxbContext(){
+		if(jaxbContext==null){
 			try {
 				jaxbContext = JAXBContext.newInstance("org.runbpm.bpmn.definition");
-				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-				
-				Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(new StringReader(xmlContent));
-				process = definitions.getProcess();
-				
-				processModel.setProcessDefinition(process);
-				processModelList.add(processModel);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+		}
+		return jaxbContext;		
+	}
+	
+	private ProcessDefinition assignProcessDefinition(ProcessModel processModel){
+		String xmlContent = processModel.getXmlcontent();
+		Unmarshaller jaxbUnmarshaller;
+		try {
+			jaxbUnmarshaller = getJaxbContext().createUnmarshaller();
+			Definitions definitions = (Definitions) jaxbUnmarshaller.unmarshal(new StringReader(xmlContent));
+			ProcessDefinition process = definitions.getProcess();
+			processModel.setProcessDefinition(process);
+			return process;
+		} catch (JAXBException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+	}
+	
+	private void compareProcessModelVersion(List<ProcessModel> processModelList,ProcessModel processModel){
+		//---当前列表中有没有相同流程定义的模板--开始
+		ProcessModel savedModel = null;
+		for(ProcessModel processModelObject:processModelList){
+			if(processModelObject.getProcessDefinitionId().equals(processModel.getProcessDefinitionId())){
+				savedModel = processModelObject;
+			}
+		}
+		//---当前列表中有没有相同流程定义的模板---结束
+
+		if(savedModel==null){
+			processModelList.add(processModel);
+		}else{
+			//数据库查询得到的id比当前列表的新
+			if(processModel.getId()>savedModel.getId()){
+				processModelList.remove(savedModel);
+				processModelList.add(processModel);
+			}
+		}
+	}
+	
+	public List<ProcessModel> loadProcessModels(boolean onlyReturnNewVersion){
+		List<ProcessModel> processModelList = new ArrayList<ProcessModel>();
+		if(!isInit){
+			isInit = true;
 			
-			parseProcessListener(process);
-			processModelMap.put(processModel.getId(), processModel);
+			String hsql = "select p from ProcessModelImpl p";
+			Session session = TransactionObjectHolder.get().getSession();
+			@SuppressWarnings("unchecked")
+			List<ProcessModel> queryList = session.createQuery(hsql).list();
+			
+			for(ProcessModel processModel:queryList){
+				//转换XML内容为流程定义对象
+				ProcessDefinition process = assignProcessDefinition(processModel);
+				//注册监听器
+				parseProcessListener(processModel);
+				//如果只返回最新版本
+				if(onlyReturnNewVersion){
+					compareProcessModelVersion(processModelList,processModel);
+				}else{
+					processModelList.add(processModel);
+				}
+				processModelMap.put(processModel.getId(), processModel);
+			}
+		}else{
+			for(Map.Entry<Long, ProcessModel> entry:processModelMap.entrySet()){
+				ProcessModel processModelObjectInMap = entry.getValue();
+				if(onlyReturnNewVersion){
+					compareProcessModelVersion(processModelList,processModelObjectInMap);
+				}else{
+					processModelList.add(processModelObjectInMap);
+				}
+			}
 		}
 		return processModelList;
 	}
-
+	
+	
 	
 	protected ProcessModel saveProcessModel(ProcessModel processModel) {
 		Session session = TransactionObjectHolder.get().getSession();
