@@ -143,7 +143,7 @@ public class UserTaskContainer {
         set.add(EntityConstants.TASK_STATE.RUNNING);
         
         //如果该活动下没有活跃的工作项，则结束
-        List<TaskInstance> notCompleteTaskInstanceList = entityManager.getTaskInstanceByActivityInstIdAndState(taskInstance.getActivityInstanceId(), set);
+        List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(taskInstance.getActivityInstanceId(), set);
         if(notCompleteTaskInstanceList.size()==0){
         	ActivityInstance activityInstance = entityManager.getActivityInstance(taskInstance.getActivityInstanceId());
         	ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);

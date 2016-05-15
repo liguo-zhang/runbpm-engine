@@ -80,18 +80,18 @@ public class GlobalUserTaskListener_WithoutSpring extends RunBPMTestCase{
 		// 开始节点1结束后，   有 theStart（完成状态） u1（运行状态） 
 		processInstanceContainer.start();
 		
-		ActivityInstance u1_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
+		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
 		
 		
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u1 = entityManager.getTaskInstanceByActivityInstId(u1_instance.getId());
+		List<TaskInstance> taskInstance_u1 = entityManager.listTaskInstanceByActivityInstId(u1_instance.getId());
 		Assert.assertEquals("" , taskInstance_u1.size(),3);
 		Assert.assertEquals("" , taskInstance_u1.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		Assert.assertEquals("" , taskInstance_u1.get(1).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		Assert.assertEquals("" , taskInstance_u1.get(2).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
-		List<TaskInstance> taskInstance_user1 = entityManager.getTaskInstanceByUserIdAndState("user1", null);
+		List<TaskInstance> taskInstance_user1 = entityManager.listTaskInstanceByUserIdAndState("user1", null);
 		Assert.assertEquals("" , taskInstance_user1.size(),1);
 		Assert.assertEquals("" , taskInstance_user1.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		

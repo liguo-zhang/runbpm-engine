@@ -86,7 +86,7 @@ public class RedisHibernateEntityManagerImpl extends RedisEntityManagerImpl {
 		//-------------Hibernate copy ProcessHistory
 		
 		//copy ActivityInstance
-		List<ActivityInstance> activityInstanceList = this.getActivityInstanceByProcessInstId(processInstance.getId());
+		List<ActivityInstance> activityInstanceList = this.listActivityInstanceByProcessInstId(processInstance.getId());
 		for(ActivityInstance activityInstance : activityInstanceList){
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
@@ -117,7 +117,7 @@ public class RedisHibernateEntityManagerImpl extends RedisEntityManagerImpl {
 		
 		
 		//copy TaskInstance
-		List<TaskInstance> taskInstanceList = this.getTaskInstanceByProcessInstId(processInstance.getId());
+		List<TaskInstance> taskInstanceList = this.listTaskInstanceByProcessInstId(processInstance.getId());
 		for(TaskInstance taskInstance:taskInstanceList){
 			TaskHistory taskHistory = new RedisTaskHistory();
 			taskHistory.setId(taskInstance.getId());

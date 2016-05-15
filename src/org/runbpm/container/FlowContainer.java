@@ -129,7 +129,7 @@ public abstract class FlowContainer{
 		        set.add(ACTIVITY_STATE.SUSPENDED);
 				//没有终止的活动
 		        //没有才创建出来
-				List<ActivityInstance> sameActivityInstance = Configuration.getContext().getEntityManager().getActivityInstanceByActivityDefIdAndState(processInstance.getId(), outgoingActivity.getId(),set);
+				List<ActivityInstance> sameActivityInstance = Configuration.getContext().getEntityManager().listActivityInstanceByActivityDefIdAndState(processInstance.getId(), outgoingActivity.getId(),set);
 				if(evalEmptyInContainer(sameActivityInstance)){
 					ActivityInstance newActivityInstance = createNewActivityInstance(outgoingActivity);
 					

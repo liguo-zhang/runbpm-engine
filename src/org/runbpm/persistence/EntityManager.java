@@ -35,25 +35,26 @@ public interface EntityManager {
 	ProcessModelHistory loadProcessModelHistoryByModelId(long processModelId);
 	
 	ProcessInstance getProcessInstance(long processInstanceId);
+	List<ProcessInstance> listProcessInstanceByCreator(String creator);
 	
 	ActivityInstance getActivityInstance(long activityInstanceId);
-	List<ActivityInstance>  getActivityInstanceByProcessInstId(long processInstanceId);
-	List<ActivityInstance> getActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet);
-	List<ActivityInstance> getActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet);
-	List<ActivityInstance>  getActivityInstanceByActivityDefId(long processInstanceId,String activityDefinitionId);
-	List<ActivityInstance> getActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance>  listActivityInstanceByProcessInstId(long processInstanceId);
+	List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance>  listActivityInstanceByActivityDefId(long processInstanceId,String activityDefinitionId);
+	List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet);
 
 	TaskInstance getTaskInstance(long taskInstanceId);
 	
-	List<TaskInstance> getTaskInstanceByActivityInstId(long activityInstanceId);
+	List<TaskInstance> listTaskInstanceByActivityInstId(long activityInstanceId);
 	
-	List<TaskInstance> getTaskInstanceByProcessInstId(long processInstanceId);
+	List<TaskInstance> listTaskInstanceByProcessInstId(long processInstanceId);
 	
-	List<TaskInstance> getTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet);
+	List<TaskInstance> listTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet);
 	
-	List<TaskInstance> getTaskInstanceByUserIdAndState(String userId,EnumSet<TASK_STATE> stateSet);
+	List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,EnumSet<TASK_STATE> stateSet);
 	
-	List<TaskInstance> getTaskInstanceByUserId(String userId) ;
+	List<TaskInstance> listTaskInstanceByUserId(String userId) ;
 	
 	void removeTaskInstanceExceptClaimInstance(TaskInstance claimTaskInstance);
 	

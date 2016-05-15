@@ -283,9 +283,9 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return processModel; 
 	}
 	
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet) {
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
-		List<ActivityInstance> parentList = getActivityInstanceByProcessInstId(processInstanceId);
+		List<ActivityInstance> parentList = listActivityInstanceByProcessInstId(processInstanceId);
 		for(ActivityInstance activityInstance:parentList){
 			if(stateSet==null){
 				activityList.add(activityInstance);
@@ -297,9 +297,9 @@ public abstract class AbstractEntityManager implements EntityManager{
 	}
 	
 
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet){
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet){
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
-		List<ActivityInstance> parentList = getActivityInstanceByProcessInstId(processInstanceId);
+		List<ActivityInstance> parentList = listActivityInstanceByProcessInstId(processInstanceId);
 		for(ActivityInstance activityInstance:parentList){
 			if(subProcessId.equals(activityInstance.getSubProcessBlockId())){
 				if(stateSet==null){
@@ -312,10 +312,10 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return activityList;
 	}
 	
-	public List<ActivityInstance> getActivityInstanceByActivityDefId(
+	public List<ActivityInstance> listActivityInstanceByActivityDefId(
 			long processInstanceId, String activityDefinitionId) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
-		List<ActivityInstance> parentList = getActivityInstanceByProcessInstId(processInstanceId);
+		List<ActivityInstance> parentList = listActivityInstanceByProcessInstId(processInstanceId);
 		for(ActivityInstance activityInstance:parentList){
 			
 			if(activityInstance.getActivityDefinitionId().equals(activityDefinitionId)){
@@ -326,9 +326,9 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return activityList;
 	}
 	
-	public List<ActivityInstance> getActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet) {
+	public List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
-		List<ActivityInstance> parentList = getActivityInstanceByProcessInstId(processInstanceId);
+		List<ActivityInstance> parentList = listActivityInstanceByProcessInstId(processInstanceId);
 		for(ActivityInstance activityInstance:parentList){
 			
 			//符合流程定义
@@ -344,9 +344,9 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return activityList;
 	}
 	
-	public List<TaskInstance> getTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet){
+	public List<TaskInstance> listTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet){
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
-		List<TaskInstance> parentList = this.getTaskInstanceByActivityInstId(activityInstanceId);
+		List<TaskInstance> parentList = this.listTaskInstanceByActivityInstId(activityInstanceId);
 		for(TaskInstance taskInstance:parentList){
 			if(taskInstance.getActivityInstanceId()==activityInstanceId){
 				if(stateSet==null){
@@ -360,22 +360,22 @@ public abstract class AbstractEntityManager implements EntityManager{
 	}
 	
 	@Override
-	public List<TaskInstance> getTaskInstanceByProcessInstId(
+	public List<TaskInstance> listTaskInstanceByProcessInstId(
 			long processInstanceId) {
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
-		List<ActivityInstance> activityList = this.getActivityInstanceByProcessInstId(processInstanceId);
+		List<ActivityInstance> activityList = this.listActivityInstanceByProcessInstId(processInstanceId);
 		
 		for(ActivityInstance activityInstance:activityList){
-			taskInstanceList.addAll(this.getTaskInstanceByActivityInstId(activityInstance.getId()));
+			taskInstanceList.addAll(this.listTaskInstanceByActivityInstId(activityInstance.getId()));
 		}
 		return taskInstanceList;
 	}
 	
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserIdAndState(String userId,
+	public List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,
 			EnumSet<TASK_STATE> stateSet) {
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
-		List<TaskInstance> parentList = this.getTaskInstanceByUserId(userId);
+		List<TaskInstance> parentList = this.listTaskInstanceByUserId(userId);
 		for(TaskInstance taskInstance:parentList){
 			if(stateSet==null){
 				taskInstanceList.add(taskInstance);

@@ -46,10 +46,10 @@ public class SubprocessNestedContainerTest extends RunBPMTestCase{
 		//
 		processInstanceContainer.start();
 		
-		List<ActivityInstance> userTaskList1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder1");
+		List<ActivityInstance> userTaskList1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder1");
 		Assert.assertEquals("",userTaskList1.size(),1);
 		
-		List<ActivityInstance> userTaskList2 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder2");
+		List<ActivityInstance> userTaskList2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder2");
 		Assert.assertEquals("",userTaskList2.size(),1);
 		
 		
@@ -60,12 +60,12 @@ public class SubprocessNestedContainerTest extends RunBPMTestCase{
 		activityContainer2.complete();
 		
 		
-		List<ActivityInstance> userTaskList3 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
+		List<ActivityInstance> userTaskList3 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
 		Assert.assertEquals("",userTaskList3.size(),1);
 		ActivityContainer.getActivityContainer(userTaskList3.get(0)).complete();
 		
 		
-		List<ActivityInstance> userTaskList4 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");
+		List<ActivityInstance> userTaskList4 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");
 		Assert.assertEquals("",userTaskList4.size(),1);
 		
 		ActivityContainer.getActivityContainer(userTaskList4.get(0)).complete();

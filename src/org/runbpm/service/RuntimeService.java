@@ -105,6 +105,14 @@ public interface RuntimeService {
 	ProcessInstance createProcessInstance(String processDefinitionId,String creator);
 	
 	/**
+	 * 与 {@link #createProcessInstance(String, String)}类似，但参数为指定的流程模板ID，通过此方法可以根据老版本的流程定义创建流程实例。
+	 * @param processModelId 指定的流程模板ID，不能为空
+	 * @param creator 工作流引擎根据此记录流程实例创建者,允许为空
+	 * @return  新创建的流程实例
+	 */
+	ProcessInstance createProcessInstance(long processModelId,String creator);
+	
+	/**
 	 * 根据指定的流程实例ID，启动流程实例。<br>
 	 * 流程实例启动后的状态为运行状态,状态常量为：{@link org.runbpm.entity.EntityConstants.PROCESS_STATE#RUNNING}。<br>
 	 * 但是，如果流程实例中间不包含UserTask(人工任务),流程将自动运行至结束状态。<br>
@@ -127,6 +135,14 @@ public interface RuntimeService {
 	ProcessInstance createAndStartProcessInstance(String processDefinitionId,String creator);
 	
 	/**
+	 * 与 {@link #createAndStartProcessInstance(String, String)}类似，但参数为指定的流程模板ID，通过此方法可以根据老版本的流程定义创建流程实例。
+	 * @param processModelId 指定的流程模板ID，不能为空
+	 * @param creator 工作流引擎根据此记录流程实例创建者,允许为空
+	 * @return  新创建的流程实例
+	 */
+	ProcessInstance createAndStartProcessInstance(long processModelId,String creator);
+	
+	/**
 	 * 该方法同 {@link #createAndStartProcessInstance(String)},但在流程实例前设置流程变量
 	 * @param processDefinitionId
 	 *          需要运行启动的流程定义ID
@@ -137,7 +153,17 @@ public interface RuntimeService {
 	 */
 	ProcessInstance createAndStartProcessInstance(String processDefinitionId,String creator,Map<String,Object> variableMap);
 	
-	List<ProcessInstance> getProcessInstanceByQueryString(String queryString);
+	
+	/**
+	 * 该方法同 {@link #createAndStartProcessInstance(String, String, Map)},但参数为指定的流程模板ID，通过此方法可以根据老版本的流程定义创建流程实例。
+	 * @param processModelId
+	 * @param creator
+	 * @param variableMap
+	 * @return
+	 */
+	ProcessInstance createAndStartProcessInstance(long processModelId,String creator,Map<String,Object> variableMap);
+	
+	List<ProcessInstance> listProcessInstanceByQueryString(String queryString);
 	
 	/**
 	 * 正常完成指定的活动实例。该API一般用于 ManualTask {@link org.runbpm.bpmn.definition.ManualTask} 类型的活动。<br>
@@ -263,7 +289,7 @@ public interface RuntimeService {
 	 * @param processInstId 指定的流程实例ID。
 	 * @return 活动实例对象
 	 */
-	List<ActivityInstance>  getActivityInstanceByProcessInstId(long processInstId);
+	List<ActivityInstance>  listActivityInstanceByProcessInstId(long processInstId);
 
 	
 	/**
@@ -279,7 +305,7 @@ public interface RuntimeService {
 		</pre>
 	 * @return 活动实例列表
 	 */
-	List<ActivityInstance> getActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(long processInstanceId,EnumSet<ACTIVITY_STATE> stateSet);
 	/**
 	 * 获取指定流程实例下，指定的SubProcess下的，指定的活动定义的活动实例列表。<br>
 	 * @param processInstanceId 指定的流程实例ID。
@@ -294,7 +320,7 @@ public interface RuntimeService {
 		</pre>
 	 * @return 活动实例列表
 	 */
-	List<ActivityInstance> getActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(long processInstanceId,String subProcessId,EnumSet<ACTIVITY_STATE> stateSet);
 	
 	/**
 	 * 获取指定流程实例下，指定的活动定义的活动实例列表。
@@ -302,7 +328,7 @@ public interface RuntimeService {
 	 * @param activityDefinitionId 指定的活动定义ID。
 	 * @return 活动实例列表
 	 */
-	List<ActivityInstance>  getActivityInstanceByActivityDefId(long processInstanceId,String activityDefinitionId);
+	List<ActivityInstance>  listActivityInstanceByActivityDefId(long processInstanceId,String activityDefinitionId);
 	/**
 	 * 获取指定流程实例下，指定的活动定义，指定的活动状态的活动实例列表。
 	 * 
@@ -318,29 +344,29 @@ public interface RuntimeService {
 		</pre>
 	 * @return 活动实例列表
 	 */
-	List<ActivityInstance> getActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet);
+	List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet);
 	
 	/**
 	 * 获取指定活动实例下的所有任务项列表。
 	 * @param activityInstanceId 指定的活动实例ID
 	 * @return 任务对象列表
 	 */
-	List<TaskInstance> getTaskInstanceByActivityInstId(long activityInstanceId);
+	List<TaskInstance> listTaskInstanceByActivityInstId(long activityInstanceId);
 	
 	/**
 	 * 获取指定流程实例下的的所有任务项列表。
 	 * @param processInstanceId 指定流程
 	 * @return 任务项列表
 	 */
-	List<TaskInstance> getTaskInstanceByProcessInstId(long processInstanceId);
+	List<TaskInstance> listTaskInstanceByProcessInstId(long processInstanceId);
 	
 	/**
 	 * 获取指定用户的，指定活动实例的，且符合指定状态的任务项列表。<br>
 	 * @param activityInstanceId 指定的活动实例ID
-	 * @param stateSet 该参数的输入样例，可参照： {@link #getTaskInstanceByUserIdAndState(String, EnumSet)}
+	 * @param stateSet 该参数的输入样例，可参照： {@link #listTaskInstanceByUserIdAndState(String, EnumSet)}
 	 * @return 任务项列表
 	 */
-	List<TaskInstance> getTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet);
+	List<TaskInstance> listTaskInstanceByActivityInstIdAndState(long activityInstanceId,EnumSet<TASK_STATE> stateSet);
 	
 	/**
 	 * 获取指定用户的，指定状态的任务项列表。使用该API获取的工作项所在的流程都在运行之中，还没有转移到历史库中。
@@ -366,14 +392,14 @@ public interface RuntimeService {
 			</pre>
 	 * @return 任务项列表
 	 */
-	List<TaskInstance> getTaskInstanceByUserIdAndState(String userId,EnumSet<TASK_STATE> stateSet);
+	List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,EnumSet<TASK_STATE> stateSet);
 	
 	/**
 	 * 获取指定用户的所有的任务项。
 	 * @param userId 用户ID
 	 * @return 任务项列表
 	 */
-	List<TaskInstance> getTaskInstanceByUserId(String userId) ;
+	List<TaskInstance> listTaskInstanceByUserId(String userId) ;
 	
 	/**
 	 * 删除指定的任务项。
@@ -406,5 +432,13 @@ public interface RuntimeService {
 	 * @return 最终的变量值，使用 {@link org.runbpm.entity.VariableInstance#getValue()}获得
 	 */
 	Map<String,VariableInstance> getVariableMap(long processInstanceId);
+	
+	/**
+	 * 查询根据指定创建者，所创建的流程实例列表。<br>
+	 * 流程实例的创建者字段，根据创建流程API时的输入赋值。
+	 * @param creator 创建者
+	 * @return 流程实例列表
+	 */
+	List<ProcessInstance> listProcessInstanceByCreator(String creator);
 	
 }

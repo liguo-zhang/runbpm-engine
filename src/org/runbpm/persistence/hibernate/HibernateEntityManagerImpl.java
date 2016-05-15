@@ -157,7 +157,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		return activityInstance;
 	}
 	
-	public List<ActivityInstance> getActivityInstanceByProcessInstId(
+	public List<ActivityInstance> listActivityInstanceByProcessInstId(
 			long processInstanceId) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
 		String hsql = "select a from ActivityInstanceImpl a where a.processInstanceId = :processInstanceId";
@@ -180,7 +180,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		return taskInstance;
 	}
 
-	public List<TaskInstance> getTaskInstanceByActivityInstId(long activityInstanceId){
+	public List<TaskInstance> listTaskInstanceByActivityInstId(long activityInstanceId){
 		String hsql = "select t from TaskInstanceImpl t where t.activityInstanceId = :activityInstanceId";
 		Session session = TransactionObjectHolder.get().getSession();
 		@SuppressWarnings("unchecked")
@@ -190,7 +190,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		return queryList;
 	}
 	
-	public List<TaskInstance> getTaskInstanceByUserId(String userId){
+	public List<TaskInstance> listTaskInstanceByUserId(String userId){
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
 		
 		String hsql = "select t from TaskInstanceImpl t where t.userId = :userId";
@@ -361,7 +361,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		session.save(processHistory);
 		
 		//copy ActivityInstance
-		List<ActivityInstance> activityInstanceList = this.getActivityInstanceByProcessInstId(processInstance.getId());
+		List<ActivityInstance> activityInstanceList = this.listActivityInstanceByProcessInstId(processInstance.getId());
 		for(ActivityInstance activityInstance : activityInstanceList){
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
@@ -376,7 +376,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		
 		
 		//copy TaskInstance
-		List<TaskInstance> taskInstanceList = this.getTaskInstanceByProcessInstId(processInstance.getId());
+		List<TaskInstance> taskInstanceList = this.listTaskInstanceByProcessInstId(processInstance.getId());
 		for(TaskInstance taskInstance:taskInstanceList){
 			TaskHistory taskHistory = new TaskHistoryImpl();
 			BeanUtils.copyProperties(taskInstance, taskHistory);
@@ -422,6 +422,21 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		Session session = TransactionObjectHolder.get().getSession();
 		ProcessModelHistory processModelHistory= session.get(ProcessModelHistoryImpl.class, processModelId);
 		return processModelHistory;
+	}
+
+	@Override
+	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
+		List<ProcessInstance> processlist = new ArrayList<ProcessInstance>();
+		String hsql = "select p from ProcessInstanceImpl p where p.creator = :creator";
+
+		Session session = TransactionObjectHolder.get().getSession();
+	    @SuppressWarnings("unchecked")
+		List<ProcessInstance> queryList = session.createQuery(hsql).setParameter("creator",creator).list();
+		
+		for(ProcessInstance processInstance:queryList){
+			processlist.add(processInstance);
+		}
+		return processlist;
 	}
 		
 }

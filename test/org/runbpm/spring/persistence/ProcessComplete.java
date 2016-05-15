@@ -50,17 +50,17 @@ public class ProcessComplete extends RunBPMTestCase{
 		runtimeService.startProcessInstance(processInstanceId);
 		
 		newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
-		ActivityInstance activityInstance_Instance_2_0 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "callCheckCreditProcess").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "callCheckCreditProcess").iterator().next();
 		long subProcessInstanceId = activityInstance_Instance_2_0.getCallActivityProcessInstanceId();
 		
 		ProcessInstance subProcessInstance = runtimeService.getProcessInstance(subProcessInstanceId);
 		
 		//提交子流程
-		ActivityInstance u1_instance = runtimeService.getActivityInstanceByActivityDefId(subProcessInstanceId, "u1").iterator().next();
+		ActivityInstance u1_instance = runtimeService.listActivityInstanceByActivityDefId(subProcessInstanceId, "u1").iterator().next();
 		runtimeService.completeActivityInstance(u1_instance.getId());
 		
 		//提交父流程
-		ActivityInstance prepareAndShipTask_instance = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
+		ActivityInstance prepareAndShipTask_instance = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
 		runtimeService.completeActivityInstance(prepareAndShipTask_instance.getId());
 		
 		ProcessInstance newProcessInstance1 = runtimeService.getProcessInstance(processInstanceId);

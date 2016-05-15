@@ -45,11 +45,11 @@ public class InclusiveGatewayContainerTest extends RunBPMTestCase{
 		// 开始节点1结束后，   有 theStart（完成状态）exclusiveGw（完成状态） shipOrder（运行状态） receivePayment（运行状态） 
 		processInstanceContainer.start();
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstance.getId()).size(),4);
-		ActivityInstance activityInstance_Instance_1_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
-		ActivityInstance activityInstance_Instance_3_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
-		ActivityInstance activityInstance_Instance_4_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),4);
+		ActivityInstance activityInstance_Instance_1_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_4_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
 		
 		Assert.assertEquals("" , activityInstance_Instance_1_0.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_0.getState(),ACTIVITY_STATE.COMPLETED);
@@ -90,10 +90,10 @@ public class InclusiveGatewayContainerTest extends RunBPMTestCase{
 		// 开始节点1结束后，   有 theStart（完成状态）exclusiveGw（完成状态） receivePayment（运行状态） 
 		processInstanceContainer.start();
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstance.getId()).size(),3);
-		ActivityInstance activityInstance_Instance_1_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
-		ActivityInstance activityInstance_Instance_4_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),3);
+		ActivityInstance activityInstance_Instance_1_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_4_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
 		
 		Assert.assertEquals("" , activityInstance_Instance_1_0.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_0.getState(),ACTIVITY_STATE.COMPLETED);

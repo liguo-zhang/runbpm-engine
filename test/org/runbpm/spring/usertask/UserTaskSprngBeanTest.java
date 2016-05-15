@@ -54,16 +54,16 @@ public class UserTaskSprngBeanTest extends RunBPMTestCase{
 		// 开始节点1结束后，   有 theStart（完成状态） u1（运行状态） 
 		processInstanceContainer.start();
 		
-		ActivityInstance u1_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
+		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
 		
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u1 = entityManager.getTaskInstanceByActivityInstId(u1_instance.getId());
+		List<TaskInstance> taskInstance_u1 = entityManager.listTaskInstanceByActivityInstId(u1_instance.getId());
 		Assert.assertEquals("" , taskInstance_u1.size(),1);
 		Assert.assertEquals("" , taskInstance_u1.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
 		
-		List<TaskInstance> taskInstance_user9 = entityManager.getTaskInstanceByUserIdAndState("user9", null);
+		List<TaskInstance> taskInstance_user9 = entityManager.listTaskInstanceByUserIdAndState("user9", null);
 		Assert.assertEquals("" , taskInstance_user9.size(),1);
 		Assert.assertEquals("" , taskInstance_user9.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
@@ -71,7 +71,7 @@ public class UserTaskSprngBeanTest extends RunBPMTestCase{
 		userTaskContainer.claim();
 		
 		//状态改变
-		List<TaskInstance> taskInstance_user9_after_claim = entityManager.getTaskInstanceByUserIdAndState("user9", null);
+		List<TaskInstance> taskInstance_user9_after_claim = entityManager.listTaskInstanceByUserIdAndState("user9", null);
 		Assert.assertEquals("" , taskInstance_user9_after_claim.size(),1);
 		Assert.assertEquals("" , taskInstance_user9_after_claim.get(0).getState(),EntityConstants.TASK_STATE.RUNNING);
 		
@@ -79,10 +79,10 @@ public class UserTaskSprngBeanTest extends RunBPMTestCase{
 		userTaskContainer_after_claim.complete();
 		
 		//开始节点1结束后，有 theStart（完成状态） u1（完成状态）u2（运行状态）
-		ActivityInstance u2_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u2").iterator().next();
+		ActivityInstance u2_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u2").iterator().next();
 		Assert.assertEquals("" , u2_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u2 = entityManager.getTaskInstanceByActivityInstId(u2_instance.getId());
+		List<TaskInstance> taskInstance_u2 = entityManager.listTaskInstanceByActivityInstId(u2_instance.getId());
 		//user5 共有1个任务
 		Assert.assertEquals("" , taskInstance_u2.size(),2);
 		Assert.assertEquals("" , taskInstance_u2.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);

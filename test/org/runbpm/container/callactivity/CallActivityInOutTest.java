@@ -53,7 +53,7 @@ public class CallActivityInOutTest extends RunBPMTestCase{
 		
 		
 		ProcessInstance subProcessInstance = entityManager.getProcessInstance(new Long(2));
-		ActivityInstance u1_instance = entityManager.getActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();
+		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
 		Assert.assertEquals("" , entityManager.getVariableInstance(subProcessInstance.getId(), "y").getValue(),"1");

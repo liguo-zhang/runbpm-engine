@@ -276,7 +276,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstId(long processInstanceId) {
+	public List<ActivityInstance> listActivityInstanceByProcessInstId(long processInstanceId) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
 		ShardedJedis shardedJedis = getSharedJedis();
 		
@@ -341,7 +341,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByActivityInstId(
+	public List<TaskInstance> listTaskInstanceByActivityInstId(
 			long activityInstanceId) {
 		List<TaskInstance> taskList = new ArrayList<TaskInstance>();
 		ShardedJedis shardedJedis = getSharedJedis();
@@ -355,7 +355,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserId(String userId) {
+	public List<TaskInstance> listTaskInstanceByUserId(String userId) {
 		List<TaskInstance> taskList = new ArrayList<TaskInstance>();
 		ShardedJedis shardedJedis = getSharedJedis();
 		
@@ -374,7 +374,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		ShardedJedis shardedJedis = getSharedJedis();
 		
 		
-		List<TaskInstance> list = getTaskInstanceByActivityInstId(claimTaskInstance.getActivityInstanceId());
+		List<TaskInstance> list = listTaskInstanceByActivityInstId(claimTaskInstance.getActivityInstanceId());
 		for (TaskInstance taskInstance : list) {
 			if(taskInstance.getId()!=claimTaskInstance.getId()){
 				String domain = getDomainTaskInst(taskInstance.getId()+"");
@@ -635,7 +635,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		
 		
 		//copy ActivityInstance
-		List<ActivityInstance> activityInstanceList = getActivityInstanceByProcessInstId(processInstance.getId());
+		List<ActivityInstance> activityInstanceList = listActivityInstanceByProcessInstId(processInstance.getId());
 		for(ActivityInstance activityInstance : activityInstanceList){
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
@@ -660,7 +660,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		
 		
 		//copy TaskInstance
-		List<TaskInstance> taskInstanceList = getTaskInstanceByProcessInstId(processInstance.getId());
+		List<TaskInstance> taskInstanceList = listTaskInstanceByProcessInstId(processInstance.getId());
 		for(TaskInstance taskInstance:taskInstanceList){
 			TaskHistory taskHistory = new RedisTaskHistory();
 			taskHistory.setId(taskInstance.getId());
@@ -945,6 +945,12 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 	@Override
 	public List<ProcessModel> loadProcessModels(boolean reload){
+		return null;
+	}
+
+	@Override
+	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	

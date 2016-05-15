@@ -51,7 +51,7 @@ public class SubProcessContainer extends FlowContainer {
 	@Override
 	protected List<ActivityInstance> getActivityInstanceSetInFlowContainer() {
 		EnumSet<ACTIVITY_STATE> set = EnumSet.of(ACTIVITY_STATE.NOT_STARTED,ACTIVITY_STATE.RUNNING,ACTIVITY_STATE.SUSPENDED);
-		return Configuration.getContext().getEntityManager().getActivityInstanceByProcessInstIdSubrocessIdAndState(processInstance.getId(),subProcessDefinition.getId(),set);
+		return Configuration.getContext().getEntityManager().listActivityInstanceByProcessInstIdSubrocessIdAndState(processInstance.getId(),subProcessDefinition.getId(),set);
 	}
 
 	@Override

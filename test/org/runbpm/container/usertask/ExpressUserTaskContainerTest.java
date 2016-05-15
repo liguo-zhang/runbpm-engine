@@ -50,16 +50,16 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		// 开始节点1结束后，   有 theStart（完成状态） u1（运行状态） 
 		processInstanceContainer.start();
 		
-		ActivityInstance u1_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
+		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u1").iterator().next();
 		
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u1 = entityManager.getTaskInstanceByActivityInstId(u1_instance.getId());
+		List<TaskInstance> taskInstance_u1 = entityManager.listTaskInstanceByActivityInstId(u1_instance.getId());
 		Assert.assertEquals("" , taskInstance_u1.size(),1);
 		Assert.assertEquals("" , taskInstance_u1.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
 		
-		List<TaskInstance> taskInstance_user9 = entityManager.getTaskInstanceByUserIdAndState("user9", null);
+		List<TaskInstance> taskInstance_user9 = entityManager.listTaskInstanceByUserIdAndState("user9", null);
 		Assert.assertEquals("" , taskInstance_user9.size(),1);
 		Assert.assertEquals("" , taskInstance_user9.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
@@ -67,7 +67,7 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		userTaskContainer.claim();
 		
 		//状态改变
-		List<TaskInstance> taskInstance_user9_after_claim = entityManager.getTaskInstanceByUserIdAndState("user9", null);
+		List<TaskInstance> taskInstance_user9_after_claim = entityManager.listTaskInstanceByUserIdAndState("user9", null);
 		Assert.assertEquals("" , taskInstance_user9_after_claim.size(),1);
 		Assert.assertEquals("" , taskInstance_user9_after_claim.get(0).getState(),EntityConstants.TASK_STATE.RUNNING);
 		
@@ -75,10 +75,10 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		userTaskContainer_after_claim.complete();
 		
 		//开始节点1结束后，有 theStart（完成状态） u1（完成状态）u2（运行状态）
-		ActivityInstance u2_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u2").iterator().next();
+		ActivityInstance u2_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u2").iterator().next();
 		Assert.assertEquals("" , u2_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u2 = entityManager.getTaskInstanceByActivityInstId(u2_instance.getId());
+		List<TaskInstance> taskInstance_u2 = entityManager.listTaskInstanceByActivityInstId(u2_instance.getId());
 		//user5 共有1个任务
 		Assert.assertEquals("" , taskInstance_u2.size(),1);
 		Assert.assertEquals("" , taskInstance_u2.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
@@ -88,10 +88,10 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		taskInstance_u2_0.complete();
 		
 		//开始节点2结束后，有 theStart（完成状态） u1（完成状态）u2（完成状态）u3(开始状态) theEnd(完成状态)
-		ActivityInstance u3_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u3").iterator().next();
+		ActivityInstance u3_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u3").iterator().next();
 		Assert.assertEquals("" , u3_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u3 = entityManager.getTaskInstanceByActivityInstId(u3_instance.getId());
+		List<TaskInstance> taskInstance_u3 = entityManager.listTaskInstanceByActivityInstId(u3_instance.getId());
 		//groupC共有1个任务
 		Assert.assertEquals("" , taskInstance_u3.size(),3);
 		Assert.assertEquals("" , taskInstance_u3.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
@@ -103,10 +103,10 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		taskInstance_u3_0.complete();
 		
 		//开始节点3结束后，有 theStart（完成状态） u1（完成状态）u2（完成状态）u3(完成状态) u4(开始状态) theEnd(完成状态)
-		ActivityInstance u4_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "u4").iterator().next();
+		ActivityInstance u4_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "u4").iterator().next();
 		Assert.assertEquals("" , u4_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		List<TaskInstance> taskInstance_u4 = entityManager.getTaskInstanceByActivityInstId(u4_instance.getId());
+		List<TaskInstance> taskInstance_u4 = entityManager.listTaskInstanceByActivityInstId(u4_instance.getId());
 		//user5 共有1个任务
 		Assert.assertEquals("" , taskInstance_u4.size(),2);
 		Assert.assertEquals("" , taskInstance_u4.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
@@ -116,7 +116,7 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		taskInstance_u4_0.claim();
 		taskInstance_u4_0.complete();
 		
-		ActivityInstance ac_theend = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theEnd").iterator().next();
+		ActivityInstance ac_theend = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theEnd").iterator().next();
 		Assert.assertEquals("" , ac_theend.getState(),ACTIVITY_STATE.COMPLETED);
 		
 		//流程完成

@@ -76,7 +76,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	
 	
 	
-	public List<TaskInstance> getTaskInstanceByActivityInstId(long activityInstanceId){
+	public List<TaskInstance> listTaskInstanceByActivityInstId(long activityInstanceId){
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
 		for(Map.Entry<Long, TaskInstance> entry:this.taskInstanceMap.entrySet()){
 			TaskInstance taskInstance = entry.getValue();
@@ -212,7 +212,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 
 	
 	
-	public List<ActivityInstance>  getActivityInstanceByProcessInstId(long processInstanceId) {
+	public List<ActivityInstance>  listActivityInstanceByProcessInstId(long processInstanceId) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
 		for(Map.Entry<Long, ActivityInstance> entry:activityInstanceMap.entrySet()){
 			ActivityInstance activityInstance = entry.getValue();
@@ -247,7 +247,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserId(String userId) {
+	public List<TaskInstance> listTaskInstanceByUserId(String userId) {
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
 		for(Map.Entry<Long, TaskInstance> entry:this.taskInstanceMap.entrySet()){
 			TaskInstance taskInstance = entry.getValue();
@@ -274,6 +274,12 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 			processModelList.add(ProcessModel);
 		}
 		return processModelList;
+	}
+
+	@Override
+	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

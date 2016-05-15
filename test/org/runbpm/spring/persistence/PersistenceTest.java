@@ -37,11 +37,11 @@ public class PersistenceTest {
 		newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
 		
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
-		Assert.assertEquals("" , runtimeService.getActivityInstanceByProcessInstId(processInstance.getId()).size(),4);
-		ActivityInstance activityInstance_Instance_1_0 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_0 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
-		ActivityInstance activityInstance_Instance_3_0 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
-		ActivityInstance activityInstance_Instance_4_0 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		Assert.assertEquals("" , runtimeService.listActivityInstanceByProcessInstId(processInstance.getId()).size(),4);
+		ActivityInstance activityInstance_Instance_1_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
 		
 		Assert.assertEquals("" , activityInstance_Instance_1_0.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_0.getState(),ACTIVITY_STATE.COMPLETED);
@@ -52,12 +52,12 @@ public class PersistenceTest {
 		
 		runtimeService.completeActivityInstance(activityInstance_Instance_3_0.getId());
 		  
-		Assert.assertEquals("" , runtimeService.getActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
-		ActivityInstance activityInstance_Instance_1_1 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_1 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
-		ActivityInstance activityInstance_Instance_3_1 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
-		ActivityInstance activityInstance_Instance_4_1 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
-		ActivityInstance activityInstance_Instance_5_1 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
+		Assert.assertEquals("" , runtimeService.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
+		ActivityInstance activityInstance_Instance_1_1 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_1 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_1 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_1 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_5_1 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
 		Assert.assertEquals("" , activityInstance_Instance_1_1.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_1.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_3_1.getState(),ACTIVITY_STATE.COMPLETED);
@@ -70,14 +70,14 @@ public class PersistenceTest {
 		runtimeService.completeActivityInstance(activityInstance_Instance_4_1.getId());
 		
 		
-		ActivityInstance activityInstance_Instance_1_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
-		ActivityInstance activityInstance_Instance_3_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
-		ActivityInstance activityInstance_Instance_4_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
-		ActivityInstance activityInstance_Instance_5_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
-		ActivityInstance activityInstance_Instance_6_2 = runtimeService.getActivityInstanceByActivityDefId(processInstanceId, "archiveOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_1_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_5_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
+		ActivityInstance activityInstance_Instance_6_2 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "archiveOrder").iterator().next();
 		
-		Assert.assertEquals("" , runtimeService.getActivityInstanceByProcessInstId(processInstance.getId()).size(),6);
+		Assert.assertEquals("" , runtimeService.listActivityInstanceByProcessInstId(processInstance.getId()).size(),6);
 		Assert.assertEquals("" , activityInstance_Instance_1_2.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_2.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_3_2.getState(),ACTIVITY_STATE.COMPLETED);

@@ -58,19 +58,19 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstId(long processInstanceId) {
-		return entityManager.getActivityInstanceByProcessInstId(processInstanceId);
+	public List<ActivityInstance> listActivityInstanceByProcessInstId(long processInstanceId) {
+		return entityManager.listActivityInstanceByProcessInstId(processInstanceId);
 	}
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByActivityDefId(
+	public List<ActivityInstance> listActivityInstanceByActivityDefId(
 			long processInstanceId, String activityDefinitionId) {
-		return entityManager.getActivityInstanceByActivityDefId(processInstanceId, activityDefinitionId);
+		return entityManager.listActivityInstanceByActivityDefId(processInstanceId, activityDefinitionId);
 	}
 
 	@Override
-	public List<ProcessInstance> getProcessInstanceByQueryString(
+	public List<ProcessInstance> listProcessInstanceByQueryString(
 			String queryString) {
 		// TODO Auto-generated method stub
 		return null;
@@ -87,10 +87,10 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 	@Override
 	public ProcessInstance createAndStartProcessInstance(
-			String processDefinitionId,String creator,Map<String, Object> variableMaps) {
+			String processDefinitionId,String creator,Map<String, Object> variableMap) {
 		ProcessContainer processContainer = ProcessContainer.getProcessContainerForNewInstance();
 		ProcessInstance processInstance= processContainer.createInstance(processDefinitionId,creator);
-		this.entityManager.setProcessVariableMap(processInstance.getId(), variableMaps);
+		this.entityManager.setProcessVariableMap(processInstance.getId(), variableMap);
 		processContainer.start();
 		return processInstance;
 	}
@@ -212,7 +212,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdAndState(
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(
 			long processInstanceId, EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -220,7 +220,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdSubrocessIdAndState(
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(
 			long processInstanceId, String subProcessId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
@@ -229,7 +229,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByActivityDefIdAndState(
+	public List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(
 			long processInstanceId, String activityDefinitionId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
@@ -238,7 +238,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByActivityInstId(
+	public List<TaskInstance> listTaskInstanceByActivityInstId(
 			long activityInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -246,7 +246,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByProcessInstId(
+	public List<TaskInstance> listTaskInstanceByProcessInstId(
 			long processInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -254,7 +254,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByActivityInstIdAndState(
+	public List<TaskInstance> listTaskInstanceByActivityInstIdAndState(
 			long activityInstanceId, EnumSet<TASK_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -262,7 +262,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserIdAndState(String userId,
+	public List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,
 			EnumSet<TASK_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -270,7 +270,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserId(String userId) {
+	public List<TaskInstance> listTaskInstanceByUserId(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -320,6 +320,43 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public ProcessModel deployProcessDefinitionFromString(String string) {
 		return this.entityManager.deployProcessDefinitionFromString(string);
+	}
+
+
+	@Override
+	public ProcessInstance createProcessInstance(long processModelId,
+			String creator) {
+		ProcessContainer processContainer = ProcessContainer.getProcessContainerForNewInstance();
+		ProcessInstance processInstance= processContainer.createInstance(processModelId,creator);
+		return processInstance;
+	}
+
+
+	@Override
+	public ProcessInstance createAndStartProcessInstance(long processModelId,
+			String creator) {
+		ProcessContainer processContainer = ProcessContainer.getProcessContainerForNewInstance();
+		ProcessInstance processInstance= processContainer.createInstance(processModelId,creator);
+		processContainer.start();
+		return processInstance;
+	}
+
+
+	@Override
+	public ProcessInstance createAndStartProcessInstance(long processModelId,
+			String creator, Map<String, Object> variableMap) {
+
+		ProcessContainer processContainer = ProcessContainer.getProcessContainerForNewInstance();
+		ProcessInstance processInstance= processContainer.createInstance(processModelId,creator);
+		this.entityManager.setProcessVariableMap(processInstance.getId(), variableMap);
+		processContainer.start();
+		return processInstance;
+	}
+
+
+	@Override
+	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
+		return this.entityManager.listProcessInstanceByCreator(creator);
 	}
 
 

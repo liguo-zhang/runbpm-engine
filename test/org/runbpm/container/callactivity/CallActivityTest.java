@@ -51,13 +51,13 @@ public class CallActivityTest extends RunBPMTestCase{
 		
 		Assert.assertEquals("" , processInstance.getState(),PROCESS_STATE.RUNNING);
 		
-		ActivityInstance receiveOrder_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "receiveOrder").iterator().next();
+		ActivityInstance receiveOrder_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receiveOrder").iterator().next();
 		Assert.assertEquals("" , receiveOrder_instance.getState(),ACTIVITY_STATE.COMPLETED);
 		
 		ProcessInstance subProcessInstance = entityManager.getProcessInstance(new Long(2));
 		Assert.assertEquals("" , subProcessInstance.getState(),PROCESS_STATE.RUNNING);
 		
-		ActivityInstance u1_instance = entityManager.getActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();
+		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
 		ActivityContainer u1Container = ActivityContainer.getActivityContainer(u1_instance);
@@ -67,7 +67,7 @@ public class CallActivityTest extends RunBPMTestCase{
 		Assert.assertEquals("" , subProcessInstance.getState(),PROCESS_STATE.COMPLETED);
 		
 		
-		ActivityInstance prepareAndShipTask_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
+		ActivityInstance prepareAndShipTask_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
 		Assert.assertEquals("" , prepareAndShipTask_instance.getState(),ACTIVITY_STATE.RUNNING);
 		ActivityContainer.getActivityContainer(prepareAndShipTask_instance).complete();;
 		

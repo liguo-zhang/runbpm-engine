@@ -50,10 +50,10 @@ public class ExclusiveGatewayContainerTestClassName extends RunBPMTestCase{
 		
 		processInstanceContainer.start();
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstance.getId()).size(),3);
-		ActivityInstance activityInstance_Instance_1_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw").iterator().next();
-		ActivityInstance activityInstance_Instance_3_0 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theTask1").iterator().next();
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),3);
+		ActivityInstance activityInstance_Instance_1_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw").iterator().next();
+		ActivityInstance activityInstance_Instance_3_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theTask1").iterator().next();
 		
 		
 		Assert.assertEquals("" , activityInstance_Instance_1_0.getState(),ACTIVITY_STATE.COMPLETED);
@@ -65,12 +65,12 @@ public class ExclusiveGatewayContainerTestClassName extends RunBPMTestCase{
 		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance_Instance_3_0);
 		activityContainer.complete();
 		  
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
-		ActivityInstance activityInstance_Instance_1_1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
-		ActivityInstance activityInstance_Instance_2_1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw").iterator().next();
-		ActivityInstance activityInstance_Instance_3_1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theTask1").iterator().next();
-		ActivityInstance activityInstance_Instance_4_1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw_end").iterator().next();
-		ActivityInstance activityInstance_Instance_5_1 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "theEnd").iterator().next();
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
+		ActivityInstance activityInstance_Instance_1_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw").iterator().next();
+		ActivityInstance activityInstance_Instance_3_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theTask1").iterator().next();
+		ActivityInstance activityInstance_Instance_4_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "exclusiveGw_end").iterator().next();
+		ActivityInstance activityInstance_Instance_5_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theEnd").iterator().next();
 		Assert.assertEquals("" , activityInstance_Instance_1_1.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_2_1.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_3_1.getState(),ACTIVITY_STATE.COMPLETED);

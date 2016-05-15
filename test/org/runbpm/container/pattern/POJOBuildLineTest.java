@@ -59,8 +59,8 @@ public class POJOBuildLineTest {
 		
 		long processInstanceId = processInstance.getId();
 		
-		ActivityInstance activityInstance_Instance_s = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "s").iterator().next();
-		ActivityInstance activityInstance_Instance_e = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "e").iterator().next();
+		ActivityInstance activityInstance_Instance_s = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "s").iterator().next();
+		ActivityInstance activityInstance_Instance_e = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "e").iterator().next();
 		
 		Assert.assertEquals("" , activityInstance_Instance_s.getState(),ACTIVITY_STATE.COMPLETED);
 		Assert.assertEquals("" , activityInstance_Instance_e.getState(),ACTIVITY_STATE.COMPLETED);

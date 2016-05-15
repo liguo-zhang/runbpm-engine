@@ -44,7 +44,7 @@ public class SubprocessContainerTest extends RunBPMTestCase{
 		//
 		processInstanceContainer.start();
 		
-		List<ActivityInstance> userTaskList = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder");
+		List<ActivityInstance> userTaskList = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder");
 		Assert.assertEquals("",userTaskList.size(),1);
 		
 		for(ActivityInstance a : userTaskList){
@@ -52,13 +52,13 @@ public class SubprocessContainerTest extends RunBPMTestCase{
 			activityContainer.complete();
 		}
 		
-		List<ActivityInstance> userTaskList2 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
+		List<ActivityInstance> userTaskList2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
 		Assert.assertEquals("",userTaskList2.size(),1);
 		
 		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(userTaskList2.get(0));
 		activityContainer.complete();
 		
-		List<ActivityInstance> userTaskList3 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");
+		List<ActivityInstance> userTaskList3 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");
 		Assert.assertEquals("",userTaskList3.size(),1);
 		
 		

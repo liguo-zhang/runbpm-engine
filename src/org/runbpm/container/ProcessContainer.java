@@ -26,6 +26,8 @@ public class ProcessContainer extends FlowContainer {
 	
 	protected ProcessContainer(){};
 	
+	private EntityManager entityManager = Configuration.getContext().getEntityManager();
+	
 	//创建新的流程使用
 	public static ProcessContainer getProcessContainerForNewInstance(){
 		ProcessContainer processContainer=  new ProcessContainer();
@@ -36,13 +38,24 @@ public class ProcessContainer extends FlowContainer {
 		return this.createInstance(processDefinitionId,null);
 	}
 	
+	public ProcessInstance createInstance(long processModelId,String creator){
+		ProcessModel processModel = entityManager.loadProcessModelByModelId(processModelId);
+		if(processModel==null){
+			throw  new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020000_NoResult_For_Such_DefinitionId,",输入的流程模板ID有误:["+processModelId+"]");
+		}
+		return createInstance(processModel,creator);
+	}
+	
 	public ProcessInstance createInstance(String processDefinitionId,String creator){
-		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		ProcessModel processModel = entityManager.loadLatestProcessModel(processDefinitionId);
-		
 		if(processModel==null){
 			throw  new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020000_NoResult_For_Such_DefinitionId,",输入的流程定义ID有误:["+processDefinitionId+"]");
 		}
+		return createInstance(processModel,creator);
+		
+	}
+	
+	private ProcessInstance createInstance(ProcessModel processModel,String creator){
 		//event begin
 		//获取流程定义方式与下面不一样
 		if(ListenerManager.getListenerManager().haveProcessEvent(processModel.getId()+"",ListenerManager.Event_Type.beforeProcessInstanceStarted)){
@@ -206,7 +219,7 @@ public class ProcessContainer extends FlowContainer {
 	@Override
 	protected List<ActivityInstance> getActivityInstanceSetInFlowContainer() {
 		EnumSet<ACTIVITY_STATE> set = EnumSet.of(ACTIVITY_STATE.NOT_STARTED,ACTIVITY_STATE.RUNNING,ACTIVITY_STATE.SUSPENDED);
-		return Configuration.getContext().getEntityManager().getActivityInstanceByProcessInstIdAndState(processInstance.getId(),set);
+		return Configuration.getContext().getEntityManager().listActivityInstanceByProcessInstIdAndState(processInstance.getId(),set);
 	}
 
 	@Override

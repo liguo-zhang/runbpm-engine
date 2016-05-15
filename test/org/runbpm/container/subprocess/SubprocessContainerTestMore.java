@@ -46,12 +46,12 @@ public class SubprocessContainerTestMore extends RunBPMTestCase{
 		//
 		processInstanceContainer.start();
 		
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstanceId).size(),5);
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstanceId).size(),5);
 		
-		ActivityInstance subProcess_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subProcess").iterator().next();
+		ActivityInstance subProcess_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subProcess").iterator().next();
 		Assert.assertEquals("" , subProcess_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		ActivityInstance subshipOrder_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder").iterator().next();
+		ActivityInstance subshipOrder_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder").iterator().next();
 		Assert.assertEquals("" , subshipOrder_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
 		ActivityContainer subshipOrderActivityContainer = ActivityContainer.getActivityContainer(subshipOrder_instance);
@@ -62,15 +62,15 @@ public class SubprocessContainerTestMore extends RunBPMTestCase{
 		//		startEvent(完成状态) userTask(subshipOrder 完成状态）endEvent(完成状态)
 		//prepareAndShipTask(运行状态)     
 		
-		Assert.assertEquals("" , entityManager.getActivityInstanceByProcessInstId(processInstanceId).size(),7);
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstanceId).size(),7);
 		
-		ActivityInstance subProcess_instance_2 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subProcess").iterator().next();
+		ActivityInstance subProcess_instance_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subProcess").iterator().next();
 		Assert.assertEquals("" , subProcess_instance_2.getState(),ACTIVITY_STATE.COMPLETED);
 		
-		ActivityInstance subshipOrder_instance_2 = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "subshipOrder").iterator().next();
+		ActivityInstance subshipOrder_instance_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder").iterator().next();
 		Assert.assertEquals("" , subshipOrder_instance_2.getState(),ACTIVITY_STATE.COMPLETED);
 		
-		ActivityInstance prepareAndShipTask_instance = entityManager.getActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
+		ActivityInstance prepareAndShipTask_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
 		Assert.assertEquals("" , prepareAndShipTask_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
 	}

@@ -92,7 +92,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ProcessInstance> getProcessInstanceByQueryString(
+	public List<ProcessInstance> listProcessInstanceByQueryString(
 			String queryString) {
 		// TODO Auto-generated method stub
 		return null;
@@ -206,7 +206,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstId(long id) {
+	public List<ActivityInstance> listActivityInstanceByProcessInstId(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -229,7 +229,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdAndState(
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(
 			long processInstanceId, EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -237,7 +237,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByProcessInstIdSubrocessIdAndState(
+	public List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(
 			long processInstanceId, String subProcessId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
@@ -246,7 +246,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByActivityDefId(
+	public List<ActivityInstance> listActivityInstanceByActivityDefId(
 			long processInstanceId, String activityDefinitionId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -254,7 +254,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<ActivityInstance> getActivityInstanceByActivityDefIdAndState(
+	public List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(
 			long processInstanceId, String activityDefinitionId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
 		// TODO Auto-generated method stub
@@ -263,7 +263,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByActivityInstId(
+	public List<TaskInstance> listTaskInstanceByActivityInstId(
 			long activityInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -271,7 +271,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByProcessInstId(
+	public List<TaskInstance> listTaskInstanceByProcessInstId(
 			long processInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
@@ -279,7 +279,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByActivityInstIdAndState(
+	public List<TaskInstance> listTaskInstanceByActivityInstIdAndState(
 			long activityInstanceId, EnumSet<TASK_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -287,7 +287,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserIdAndState(String userId,
+	public List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,
 			EnumSet<TASK_STATE> stateSet) {
 		// TODO Auto-generated method stub
 		return null;
@@ -295,7 +295,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public List<TaskInstance> getTaskInstanceByUserId(String userId) {
+	public List<TaskInstance> listTaskInstanceByUserId(String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -345,6 +345,37 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 	@Override
 	public ProcessModel deployProcessDefinitionFromString(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ProcessInstance createProcessInstance(long processModelId,
+			String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ProcessInstance createAndStartProcessInstance(long processModelId,
+			String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ProcessInstance createAndStartProcessInstance(long processModelId,
+			String creator, Map<String, Object> variableMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
 		// TODO Auto-generated method stub
 		return null;
 	}

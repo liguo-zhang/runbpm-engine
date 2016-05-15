@@ -115,7 +115,7 @@ public abstract class ActivityContainer {
         	EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
             set.add(EntityConstants.TASK_STATE.NOT_STARTED);  
             set.add(EntityConstants.TASK_STATE.RUNNING);
-			List<TaskInstance> notCompleteTaskInstanceList = entityManager.getTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
+			List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
 	        if(notCompleteTaskInstanceList.size()>0){
 	        	throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020016_WORKITEM_NOT_COMPLETE);
 	        }
@@ -155,7 +155,7 @@ public abstract class ActivityContainer {
         	EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
             set.add(EntityConstants.TASK_STATE.NOT_STARTED);  
             set.add(EntityConstants.TASK_STATE.RUNNING);
-			List<TaskInstance> notCompleteTaskInstanceList = entityManager.getTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
+			List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
 	        if(notCompleteTaskInstanceList.size()>0){
 	        	//最后一个uc会自动调用活动终止
 	        	commit_internal = false;
