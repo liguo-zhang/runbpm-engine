@@ -11,6 +11,10 @@ public class ConditionExpression {
 	
 	private String value;
 	
+	/**
+	 * 获取高级类型
+	 * @return
+	 */
 	@XmlAttribute (namespace = "http://runbpm.org/schema/1.0/bpmn")
 	public CONDITION_EXPRESSION_TYPE getAdvancedType() {
 		return advancedType;
@@ -20,6 +24,10 @@ public class ConditionExpression {
 		this.advancedType = advancedType;
 	}
 
+	/**
+	 * 如果是条件表达式或者高级类型（永真类型），条件表达式或者高级类型的值是什么。
+	 * @return
+	 */
 	@XmlValue
 	public String getValue() {
 		return value;

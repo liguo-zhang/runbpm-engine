@@ -16,7 +16,7 @@ public class ConditionEvalManager {
 
 	public Object eval(Execution handlerContext) {
 		Object result = null;
-		SequenceFlow transition = handlerContext.getTransition();
+		SequenceFlow transition = handlerContext.getSequenceFlow();
 		Map<String, VariableInstance> variableMap = handlerContext.getVariableMap();
 		String expressValue = transition.getConditionExpression().getValue();
 		if (RunBPMUtils.notNull(expressValue)) {

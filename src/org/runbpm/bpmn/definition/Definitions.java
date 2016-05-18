@@ -14,6 +14,10 @@ public class Definitions {
 	
 	protected ExtensionElements extensionAttributes = new ExtensionElements();
 
+	/**
+	 * 获取ID
+	 * @return
+	 */
 	@XmlAttribute
 	public String getId() {
 		return id;
@@ -23,6 +27,10 @@ public class Definitions {
 		this.id = id;
 	}
 
+	/**
+	 * 获取名称
+	 * @return
+	 */
 	@XmlAttribute
 	public String getName() {
 		return name;
@@ -32,6 +40,10 @@ public class Definitions {
 		this.name = name;
 	}
 	
+	/**
+	 * 获取扩展属性
+	 * @return
+	 */
 	@XmlElement
 	public ExtensionElements getExtensionAttributes() {
 		return extensionAttributes;
@@ -43,6 +55,10 @@ public class Definitions {
 	
 	private ProcessDefinition process;
 
+	/**
+	 * 获取流程定义对象。目前只允许一个Definitions下只允许定义一个流程定义。
+	 * @return
+	 */
 	@XmlElement(name="process")
 	public ProcessDefinition getProcess() {
 		return process;

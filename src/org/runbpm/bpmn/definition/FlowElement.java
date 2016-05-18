@@ -16,7 +16,10 @@ public class FlowElement extends Element{
 	protected String documentation;
 	
 	
-
+	/**
+	 * 获取ID
+	 * @return
+	 */
 	@XmlAttribute
 	public String getId() {
 		return id;
@@ -26,6 +29,10 @@ public class FlowElement extends Element{
 		this.id = id;
 	}
 
+	/**
+	 * 获取名称
+	 * @return
+	 */
 	@XmlAttribute
 	public String getName() {
 		return name;
@@ -36,6 +43,10 @@ public class FlowElement extends Element{
 	}
 	
 
+	/**
+	 * 获取描述
+	 * @return
+	 */
 	@XmlElement
 	public String getDocumentation() {
 		return documentation;

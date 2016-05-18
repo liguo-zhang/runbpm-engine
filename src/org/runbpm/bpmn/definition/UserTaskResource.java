@@ -8,6 +8,10 @@ public class UserTaskResource {
 	
 	private UserTaskResourcePolicy userTaskResourcePolicy;
 
+	/**
+	 * 获取任务分配人的信息，其下可以定义多组执行人、角色或者表达式。
+	 * @return
+	 */
 	@XmlElement(name="resourceAssignment",namespace = "http://runbpm.org/schema/1.0/bpmn")
 	public UserTaskResourceAssignment getUserTaskResourceAssignment() {
 		return userTaskResourceAssignment;
@@ -18,6 +22,10 @@ public class UserTaskResource {
 		this.userTaskResourceAssignment = userTaskResourceAssignment;
 	}
 
+	/**
+	 * 获取任务分配策略。
+	 * @return
+	 */
 	@XmlElement(name="resourcePolicy",namespace = "http://runbpm.org/schema/1.0/bpmn")
 	public UserTaskResourcePolicy getUserTaskResourcePolicy() {
 		return userTaskResourcePolicy;

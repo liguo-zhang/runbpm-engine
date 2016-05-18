@@ -6,12 +6,14 @@ import org.runbpm.listener.ListenerManager.Event_Type;
 
 public class ExtensionExecutionListener {
 
-	public enum CONDITION_EXPRESSION_TYPE{juel,aviator_el,spring_el,handler_bean_id,handler_bean_class,handler_bean_id_variable,handler_bean_class_variable};
-	
 	private Event_Type event;
 	
 	private String classValue;
 	
+	/* 
+	 * 事件类型
+	 * @return
+	 */
 	@XmlAttribute
 	public Event_Type getEvent() {
 		return event;
@@ -21,6 +23,10 @@ public class ExtensionExecutionListener {
 		this.event = event;
 	}
 
+	/**
+	 * 执行事件类型的内容
+	 * @return
+	 */
 	@XmlAttribute(name="class")
 	public String getClassValue() {
 		return classValue;

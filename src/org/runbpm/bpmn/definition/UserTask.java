@@ -22,7 +22,11 @@ public class UserTask extends ActivityDefinitionImpl{
 		return userTaskResource;
 	}
 	
-	//是否会签
+	
+	/**
+	 * 是否是会签活动，如果是会签活动，则会为所有符合条件的执行人创建任务项，任务项的初始状态就是running状态。
+	 * @return 是否是会签活动
+	 */
 	public boolean isMulti(){
 		boolean isMulti = false;
 	

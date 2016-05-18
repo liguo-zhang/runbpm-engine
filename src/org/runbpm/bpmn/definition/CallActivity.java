@@ -6,6 +6,10 @@ public class CallActivity extends ActivityDefinitionImpl{
 
 	private String calledElement;
 	
+	/**
+	 * 获取调用的子流程ID
+	 * @return
+	 */
 	@XmlAttribute
 	public String getCalledElement() {
 		return calledElement;

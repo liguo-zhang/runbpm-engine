@@ -7,6 +7,10 @@ public class Element {
 	protected ExtensionElements extensionElements = new ExtensionElements();
 	
 
+	/**
+	 * 获取扩展属性
+	 * @return
+	 */
 	@XmlElement
 	public ExtensionElements getExtensionElements() {
 		return extensionElements;

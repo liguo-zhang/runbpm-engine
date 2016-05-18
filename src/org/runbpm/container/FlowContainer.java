@@ -160,7 +160,7 @@ public abstract class FlowContainer{
 			handlerContext.setActivityInstance(activityInstance);
 			handlerContext.setActivityDefinition(activityDefinition);
 			handlerContext.setVariableMap(variableMap);
-			handlerContext.setTransition(transition);
+			handlerContext.setSequenceFlow(transition);
 			
 			String toActivityId = transition.getTargetRef();
 			ActivityDefinition toActivity = this.getAcitityInFlowContaine(toActivityId);

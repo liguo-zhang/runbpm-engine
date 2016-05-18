@@ -8,7 +8,7 @@ import org.runbpm.handler.DecisionHandler;
 public class SpecialConditionHandlerSample implements DecisionHandler{
 
 	public boolean evalConditionContext(Execution handlerContext){
-		SequenceFlow transition = handlerContext.getTransition();
+		SequenceFlow transition = handlerContext.getSequenceFlow();
 		if("flow2".equals(transition.getId())){
 			return true;
 		}else{

@@ -47,8 +47,18 @@ public interface ActivityDefinition {
 	 */
 	String getDocumentation();
 	
-	//---domain 用于流程POJO形式的构建
+	//---domain 
+	/**
+	 * 用于流程POJO形式的构建
+	 * @param processDefinition
+	 */
 	void setProcessDefinition(ProcessDefinition processDefinition);
+	
+	/**
+	 * 用于流程POJO形式的构建
+	 * @param activityDefinition
+	 * @return
+	 */
 	ProcessDefinition flowTo(ActivityDefinition activityDefinition);
 	//---domain 用于流程POJO形式的构建	
 	

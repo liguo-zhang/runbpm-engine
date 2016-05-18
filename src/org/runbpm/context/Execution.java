@@ -11,6 +11,10 @@ import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
 
+/**
+ * 所有流程插件接口的传递对象，包含当前流程执行过程中的所有对象信息。
+ * 对于某次调用，可能获取的对象为空，例如对于一个流程监听事件，其Execution对象不包含活动定义信息。
+ */
 public class Execution {
 	
 	private ProcessDefinition processDefinition;
@@ -33,6 +37,10 @@ public class Execution {
 		this.processInstance = processInstance;
 	}
 
+	/**
+	 * 流程定义对象信息
+	 * @return 流程定义对象信息
+	 */
 	public ProcessDefinition getProcessDefinition() {
 		return processDefinition;
 	}
@@ -41,6 +49,10 @@ public class Execution {
 		this.processDefinition = processDefinition;
 	}
 
+	/**
+	 * 活动实例信息
+	 * @return
+	 */
 	public ActivityInstance getActivityInstance() {
 		return activityInstance;
 	}
@@ -49,6 +61,10 @@ public class Execution {
 		this.activityInstance = activityInstance;
 	}
 
+	/**
+	 * 活动定义信息
+	 * @return
+	 */
 	public ActivityDefinition getActivityDefinition() {
 		return activityDefinition;
 	}
@@ -57,6 +73,10 @@ public class Execution {
 		this.activityDefinition = activityDefinition;
 	}
 
+	/**
+	 * 流程变量信息
+	 * @return
+	 */
 	public Map<String, VariableInstance> getVariableMap() {
 		return variableMap;
 	}
@@ -65,14 +85,22 @@ public class Execution {
 		this.variableMap = variableMap;
 	}
 
-	public SequenceFlow getTransition() {
+	/**
+	 * 连结弧信息
+	 * @return
+	 */
+	public SequenceFlow getSequenceFlow() {
 		return transition;
 	}
 
-	public void setTransition(SequenceFlow transition) {
+	public void setSequenceFlow(SequenceFlow transition) {
 		this.transition = transition;
 	}
 
+	/**
+	 * 任务项定义信息，同 {@link #getActivityDefinition()}。UserTask是ActivityDefinition的一个子类。
+	 * @return
+	 */
 	public UserTask getUserTask() {
 		return userTask;
 	}
@@ -81,6 +109,10 @@ public class Execution {
 		this.userTask = userTask;
 	}
 
+	/**
+	 * 获取任务项实例信息
+	 * @return
+	 */
 	public TaskInstance getTaskInstance() {
 		return taskInstance;
 	}

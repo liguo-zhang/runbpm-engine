@@ -20,6 +20,10 @@ public class Configuration {
 		return applicationContextInterface;
 	}
 
+	/**
+	 * 设置一个系统上下文对象，目前支持 两种： {@link org.runbpm.context.DefaultContext} 和 {@link org.runbpm.context.RunBPMSpringContext}
+	 * @param context
+	 */
 	public static void setContext(
 			ContextInterface context) {
 		applicationContextInterface = context;
