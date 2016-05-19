@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.listener.ListenerInterface;
 import org.runbpm.listener.ListenerManager;
@@ -25,11 +25,11 @@ public class ActListenerSample implements ListenerInterface {
 	}
 
 	@Override
-	public void execute(Execution handlerContext, Enum eventType) {
+	public void execute(ProcessContextBean processContextBean, Enum eventType) {
 		System.out.println("eventType:---["+eventType.toString()+"]");
 		if (ListenerManager.Event_Type.beforeActivityInstanceStarted
 				.equals(eventType)) {
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 
@@ -41,14 +41,14 @@ public class ActListenerSample implements ListenerInterface {
 					.getContext()
 					.getEntityManager()
 					.setProcessVariable(
-							handlerContext.getActivityInstance()
+							processContextBean.getActivityInstance()
 									.getProcessInstanceId(),
 							ListenerManager.Event_Type.beforeActivityInstanceStarted
 									.toString(),
 							bStartCounter.incrementAndGet());
 		} else if (ListenerManager.Event_Type.afterActivityInstanceStarted
 				.equals(eventType)) {
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 
@@ -60,7 +60,7 @@ public class ActListenerSample implements ListenerInterface {
 					.getContext()
 					.getEntityManager()
 					.setProcessVariable(
-							handlerContext.getActivityInstance()
+							processContextBean.getActivityInstance()
 									.getProcessInstanceId(),
 							ListenerManager.Event_Type.afterActivityInstanceStarted
 									.toString(),
@@ -71,7 +71,7 @@ public class ActListenerSample implements ListenerInterface {
 					.getContext()
 					.getEntityManager()
 					.setProcessVariable(
-							handlerContext.getActivityInstance()
+							processContextBean.getActivityInstance()
 									.getProcessInstanceId(),
 							ListenerManager.Event_Type.beforeActivityInstanceCompleted
 									.toString(),
@@ -82,7 +82,7 @@ public class ActListenerSample implements ListenerInterface {
 					.getContext()
 					.getEntityManager()
 					.setProcessVariable(
-							handlerContext.getActivityInstance()
+							processContextBean.getActivityInstance()
 									.getProcessInstanceId(),
 							ListenerManager.Event_Type.afterActivityInstanceCompleted
 									.toString(),

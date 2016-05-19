@@ -18,7 +18,7 @@ import org.runbpm.bpmn.definition.StartEvent;
 import org.runbpm.bpmn.definition.SubProcessDefinition;
 import org.runbpm.bpmn.definition.UserTask;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
@@ -243,23 +243,23 @@ public abstract class ActivityContainer {
 	}
 	
 	private void invokelistener(ListenerManager.Event_Type eventType) {
-		Execution handlerContext = null;
+		ProcessContextBean processContextBean = null;
 		String pid = this.activityInstance.getProcessModelId()+"";
 		String aid = activityDefinition.getId();
 		if(ListenerManager.getListenerManager().haveActivityEvent(pid+":"+aid,eventType)){
-			handlerContext = new Execution();
+			processContextBean = new ProcessContextBean();
 			
 			//如果是afterActivityInstanceCompleted类型，此时可能已经到历史库，processInstance为null
 			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
 			if(processInstance!=null){
 				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
-				handlerContext.setVariableMap(variableMap);
+				processContextBean.setVariableMap(variableMap);
 			}
-			handlerContext.setProcessInstance(processInstance);
-			handlerContext.setProcessDefinition(activityDefinition.getProcessDefinition());
-			handlerContext.setActivityDefinition(activityDefinition);
-			handlerContext.setActivityInstance(activityInstance);
-			ListenerManager.getListenerManager().invokeActivityListener(handlerContext, eventType);
+			processContextBean.setProcessInstance(processInstance);
+			processContextBean.setProcessDefinition(activityDefinition.getProcessDefinition());
+			processContextBean.setActivityDefinition(activityDefinition);
+			processContextBean.setActivityInstance(activityInstance);
+			ListenerManager.getListenerManager().invokeActivityListener(processContextBean, eventType);
 		}
 	}
 }

@@ -13,6 +13,11 @@ public class SubProcessDefinition extends ProcessDefinition implements ActivityD
 	
 	protected String sequenceBlockId;
 	
+	/**
+	 * ProcessDefinition根下的块活动的sequenceBlockId就是自身块活动的id;<br>
+	 * 块活动之内的块活动需要追加所属与的块活动ID。该方法返回一个块活动自ProcessDefinition根之后的完整块活动定义ID。
+	 * @return
+	 */
 	public String getSequenceBlockId() {
 		return sequenceBlockId;
 	}

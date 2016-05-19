@@ -3,7 +3,7 @@ package org.runbpm.container.condition;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.handler.DecisionHandler;
 
@@ -20,7 +20,7 @@ public class HandlerEvalor {
 		return eval;
 	}
 
-	public Object eval(String className,Execution handlerContext){
+	public Object eval(String className,ProcessContextBean processContextBean){
 		Object result = null;
 		
 		DecisionHandler specialConditionHandler = specialConditionHandlerMap.get(className);
@@ -32,7 +32,7 @@ public class HandlerEvalor {
 				throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020111_CANNT_INIT_SpecialConditionHandler_Impl,"class Name :["+className+"]",e);
 			}
 		}
-		result = specialConditionHandler.evalConditionContext(handlerContext);
+		result = specialConditionHandler.evalConditionContext(processContextBean);
 		return result;
 	}
 }

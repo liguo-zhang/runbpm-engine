@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.exception.RunBPMException;
 
 public class ListenerManager {
@@ -213,50 +213,50 @@ public class ListenerManager {
 		return listenerSet.size()>0 || gobalUserTaskInstanceEventSet.size()>0;
 	}
 	
-	public void invokeProcessListener(Execution handlerContext,Event_Type listenerType){
-		long pid = handlerContext.getProcessInstance().getProcessModelId();
+	public void invokeProcessListener(ProcessContextBean processContextBean,Event_Type listenerType){
+		long pid = processContextBean.getProcessInstance().getProcessModelId();
 		HashMap<String,Set<ListenerInterface>> map = processListenerMap.get(pid+"");
 		Set<ListenerInterface> processInstanceListenerSet = map.get(listenerType.name());
-		this.invoke(handlerContext, processInstanceListenerSet, listenerType);
+		this.invoke(processContextBean, processInstanceListenerSet, listenerType);
 		
 		Set<ListenerInterface> gobalProcessInstanceEventSet =  Configuration.getContext().getGlobalListener().getProcessMap().get(listenerType.name());
-		this.invoke(handlerContext, gobalProcessInstanceEventSet, listenerType);
+		this.invoke(processContextBean, gobalProcessInstanceEventSet, listenerType);
 	}
 	
-	public void invokeActivityListener(Execution handlerContext,Event_Type listenerType){
-		long pid = handlerContext.getActivityInstance().getProcessModelId();
-		String activityId = handlerContext.getActivityDefinition().getId();
+	public void invokeActivityListener(ProcessContextBean processContextBean,Event_Type listenerType){
+		long pid = processContextBean.getActivityInstance().getProcessModelId();
+		String activityId = processContextBean.getActivityDefinition().getId();
 		HashMap<String,Set<ListenerInterface>> map = activityListenerMap.get(pid+":"+activityId);
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		//触发
-		this.invoke(handlerContext, listenerSet, listenerType);
+		this.invoke(processContextBean, listenerSet, listenerType);
 		
 		Set<ListenerInterface> gobalActivityInstanceEventSet =  Configuration.getContext().getGlobalListener().getActivityMap().get(listenerType.name());
 		//触发
-		this.invoke(handlerContext, gobalActivityInstanceEventSet, listenerType);
+		this.invoke(processContextBean, gobalActivityInstanceEventSet, listenerType);
 	}
 	
-	public void invokeTaskListener(Execution handlerContext,Event_Type listenerType){
-		long pid = handlerContext.getActivityInstance().getProcessModelId();
-		String activityId = handlerContext.getActivityDefinition().getId();
+	public void invokeTaskListener(ProcessContextBean processContextBean,Event_Type listenerType){
+		long pid = processContextBean.getActivityInstance().getProcessModelId();
+		String activityId = processContextBean.getActivityDefinition().getId();
 		HashMap<String,Set<ListenerInterface>> map = taskListenerMap.get(pid+":"+activityId);
 		Set<ListenerInterface> listenerSet = map.get(listenerType.name());
 		//触发
-		this.invoke(handlerContext, listenerSet, listenerType);
+		this.invoke(processContextBean, listenerSet, listenerType);
 		
 		Set<ListenerInterface> gobalTaskInstanceEventSet =  Configuration.getContext().getGlobalListener().getUserTaskMap().get(listenerType.name());
 		//触发
-		this.invoke(handlerContext, gobalTaskInstanceEventSet, listenerType);
+		this.invoke(processContextBean, gobalTaskInstanceEventSet, listenerType);
 	}
 	
 	@SuppressWarnings(value={"rawtypes"})
-	private void invoke(Execution handlerContext,Set<ListenerInterface> set,Enum listenerType) {
+	private void invoke(ProcessContextBean processContextBean,Set<ListenerInterface> set,Enum listenerType) {
 		for(ListenerInterface instanceListener:set){
 			Method method;
 			try {
 				
-				method = ListenerInterface.class.getMethod("execute", Execution.class,Enum.class);
-				method.invoke(instanceListener, handlerContext,listenerType);
+				method = ListenerInterface.class.getMethod("execute", ProcessContextBean.class,Enum.class);
+				method.invoke(instanceListener, processContextBean,listenerType);
 			} catch (Exception e) {
 				throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020302_INVOKE_LISTENER_EXCEPTION,e);
 			}

@@ -11,7 +11,7 @@ import org.runbpm.bpmn.definition.UserTaskResource;
 import org.runbpm.bpmn.definition.UserTaskResourceAssignment;
 import org.runbpm.container.resource.ResourceEvalManager;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
@@ -52,15 +52,15 @@ public class ActivityOfUserTaskContainer extends ActivityContainer{
 		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
 		
 		if(resourceAssignment!=null){
-				Execution handlerContext = new Execution();
-				handlerContext.setProcessInstance(processInstance);
-				handlerContext.setProcessDefinition(processDefinition);
-				handlerContext.setActivityInstance(activityInstance);
-				handlerContext.setActivityDefinition(activityDefinition);
-				handlerContext.setVariableMap(userTaskContext);
+				ProcessContextBean processContextBean = new ProcessContextBean();
+				processContextBean.setProcessInstance(processInstance);
+				processContextBean.setProcessDefinition(processDefinition);
+				processContextBean.setActivityInstance(activityInstance);
+				processContextBean.setActivityDefinition(activityDefinition);
+				processContextBean.setVariableMap(userTaskContext);
 				
 				ResourceEvalManager rem = new ResourceEvalManager();
-				List<User> userList =rem.getUserList(resourceAssignment, handlerContext);
+				List<User> userList =rem.getUserList(resourceAssignment, processContextBean);
 				//´´½¨TaskInstance
 				for(User user:userList){
 					TaskInstance taskInstance = this.newUserTaskInstance(activityDefinition,state,user);

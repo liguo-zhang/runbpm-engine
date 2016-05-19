@@ -13,7 +13,7 @@ import org.runbpm.bpmn.definition.SequenceFlow;
 import org.runbpm.bpmn.definition.SubProcessDefinition;
 import org.runbpm.container.condition.ConditionEvalManager;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
@@ -155,12 +155,12 @@ public abstract class FlowContainer{
 		List<SequenceFlow> outgoingSequenceFlowList = activityDefinition.getOutgoingSequenceFlowList();
 		
 		for (SequenceFlow transition : outgoingSequenceFlowList) {
-			Execution handlerContext = new Execution();
-			handlerContext.setProcessInstance(processInstance);
-			handlerContext.setActivityInstance(activityInstance);
-			handlerContext.setActivityDefinition(activityDefinition);
-			handlerContext.setVariableMap(variableMap);
-			handlerContext.setSequenceFlow(transition);
+			ProcessContextBean processContextBean = new ProcessContextBean();
+			processContextBean.setProcessInstance(processInstance);
+			processContextBean.setActivityInstance(activityInstance);
+			processContextBean.setActivityDefinition(activityDefinition);
+			processContextBean.setVariableMap(variableMap);
+			processContextBean.setSequenceFlow(transition);
 			
 			String toActivityId = transition.getTargetRef();
 			ActivityDefinition toActivity = this.getAcitityInFlowContaine(toActivityId);
@@ -169,7 +169,7 @@ public abstract class FlowContainer{
 			if (transition.getConditionExpression() != null) {
 				if (RunBPMUtils.notNull(transition.getConditionExpression().getValue())) {
 					ConditionEvalManager em = new ConditionEvalManager();
-					Object result = em.eval(handlerContext);
+					Object result = em.eval(processContextBean);
 					// ½áÊø
 					if (result instanceof Boolean) {
 						if ((Boolean) result == true) {
@@ -178,7 +178,7 @@ public abstract class FlowContainer{
 					} else {
 						throw new RunBPMException(
 								RunBPMException.EXCEPTION_MESSAGE.Code_020002_Invalid_Result_From_EVAL,
-								handlerContext.toString());
+								processContextBean.toString());
 					}
 				} 
 			}else {

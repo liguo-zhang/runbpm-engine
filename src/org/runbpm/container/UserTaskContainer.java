@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.runbpm.bpmn.definition.UserTask;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
@@ -196,18 +196,18 @@ public class UserTaskContainer {
 		String pid = this.taskInstance.getProcessModelId()+"";
 		String uid = userTask.getId();
 		if(ListenerManager.getListenerManager().haveTaskEvent(pid+":"+uid,listenerType)){
-			Execution handlerContext = new Execution();
+			ProcessContextBean processContextBean = new ProcessContextBean();
 			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
 			//对于afterComplete事件，有可能到历史库中
 			if(processInstance!=null){
 				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
-				handlerContext.setVariableMap(variableMap);
+				processContextBean.setVariableMap(variableMap);
 			}
-			handlerContext.setUserTask(userTask);
-			handlerContext.setTaskInstance(taskInstance);
-			handlerContext.setActivityDefinition(userTask);
-			handlerContext.setActivityInstance(activityInstance);
-			ListenerManager.getListenerManager().invokeTaskListener(handlerContext, listenerType);
+			processContextBean.setUserTask(userTask);
+			processContextBean.setTaskInstance(taskInstance);
+			processContextBean.setActivityDefinition(userTask);
+			processContextBean.setActivityInstance(activityInstance);
+			ListenerManager.getListenerManager().invokeTaskListener(processContextBean, listenerType);
 		}
 	}
 	

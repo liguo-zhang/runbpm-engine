@@ -17,6 +17,10 @@ public class UserTask extends ActivityDefinitionImpl{
 		super(id);
 	}
 	
+	/**
+	 * 获取UserTask的组织机构定义信息
+	 * @return
+	 */
 	public UserTaskResource getUserTaskResource() {
 		UserTaskResource userTaskResource = this.getExtensionElements().getUserTaskResource();
 		return userTaskResource;

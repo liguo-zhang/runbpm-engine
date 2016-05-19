@@ -8,7 +8,7 @@ import java.util.Map;
 import org.runbpm.bpmn.definition.UserTaskResourceAssignment;
 import org.runbpm.bpmn.definition.UserTaskResourceExpression;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.handler.resource.GlobalResourceHandler;
@@ -21,11 +21,11 @@ public class ResourceEvalManager {
 	
 	private static Map<String,ResourceHandler> resourceAssignmentHandlerMap = new HashMap<String,ResourceHandler>();
 
-	public List<User> getUserList(UserTaskResourceAssignment resourceAssignment,Execution handlerContext){
+	public List<User> getUserList(UserTaskResourceAssignment resourceAssignment,ProcessContextBean processContextBean){
 		
 		List<User> userList = new ArrayList<User>();
 		
-		Map<String, VariableInstance> userTaskContext = handlerContext.getVariableMap();
+		Map<String, VariableInstance> userTaskContext = processContextBean.getVariableMap();
 		
 		
 		
@@ -41,7 +41,7 @@ public class ResourceEvalManager {
 				}
 				//固定组->resourceAssignmentHandler
 				else if(userTaskResourceExpression.getType().equals(UserTaskResourceExpression.RESOURCE_EXPRESSION_TYPE.group)){
-					userList = identityService.getUsersByGroupIdVariableMap(value, handlerContext);
+					userList = identityService.getUsersByGroupIdVariableMap(value, processContextBean);
 				}
 				//动态人->resourceAssignmentHandler
 				else if(userTaskResourceExpression.getType().equals(UserTaskResourceExpression.RESOURCE_EXPRESSION_TYPE.user_variable)){
@@ -58,14 +58,14 @@ public class ResourceEvalManager {
 					if(v==null){
 						throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020009_GOT_NULL_VAR_FOR_Variable,"variable["+value+"]");
 					}
-					userList = identityService.getUsersByGroupIdVariableMap(v.getValue().toString(), handlerContext);
+					userList = identityService.getUsersByGroupIdVariableMap(v.getValue().toString(), processContextBean);
 				}
 				//spring bean id -> resourceAssignmentHandler
 				else if(userTaskResourceExpression.getType().equals(UserTaskResourceExpression.RESOURCE_EXPRESSION_TYPE.handler_bean_id)){
 					Object springBean = Configuration.getContext().getBean(value);
 					if(springBean instanceof ResourceHandler){
 						ResourceHandler resourceAssignmentHandler = (ResourceHandler)springBean;
-						userList = resourceAssignmentHandler.getUsers(handlerContext);
+						userList = resourceAssignmentHandler.getUsers(processContextBean);
 					}else{
 						throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020100_NO_ResourceAssignmentHandler_Impl,"resource id :["+value+"]");
 					}
@@ -81,7 +81,7 @@ public class ResourceEvalManager {
 							throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020110_CANNT_INIT_resourceAssignmentHandler,"resource id :["+value+"]",e);
 						}
 					}
-					userList = resourceAssignmentHandler.getUsers(handlerContext);
+					userList = resourceAssignmentHandler.getUsers(processContextBean);
 					
 					
 				}//动态spring bean ->resourceAssignmentHandler
@@ -93,7 +93,7 @@ public class ResourceEvalManager {
 					Object springBean = Configuration.getContext().getBean(v.getValue().toString());
 					if(springBean instanceof ResourceHandler){
 						ResourceHandler resourceAssignmentHandler = (ResourceHandler)springBean;
-						userList = resourceAssignmentHandler.getUsers(handlerContext);
+						userList = resourceAssignmentHandler.getUsers(processContextBean);
 					}else{
 						throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020100_NO_ResourceAssignmentHandler_Impl,"value:"+value+",resFORMAL_EXPRESSION_TYPEe id :["+v.getValue()+"]");
 					}
@@ -114,7 +114,7 @@ public class ResourceEvalManager {
 							throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020110_CANNT_INIT_resourceAssignmentHandler,"variable["+value+"],variable's context value resource id :["+variableValue+"]",e);
 						}
 					}
-					userList = resourceAssignmentHandler.getUsers(handlerContext);
+					userList = resourceAssignmentHandler.getUsers(processContextBean);
 				}
 			}
 		}

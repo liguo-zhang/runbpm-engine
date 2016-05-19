@@ -90,3 +90,8 @@
 src/redis-server
 src/redis-cli 
 shutdown
+
+https://github.com/liguo-zhang/runbpm-engine.git
+https://github.com/liguo-zhang/runbpm-docs.git
+https://github.com/liguo-zhang/runbpm-workspace.git
+https://github.com/liguo-zhang/runbpm-modeler.git

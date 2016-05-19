@@ -11,6 +11,10 @@ public class UserTaskResourceExpression {
 	
 	private String value;
 		
+	/**
+	 * 获取人员分配类型：人、组、变量、接口定义等
+	 * @return
+	 */
 	@XmlAttribute
 	public RESOURCE_EXPRESSION_TYPE getType() {
 		return type;
@@ -20,6 +24,10 @@ public class UserTaskResourceExpression {
 		this.type = type;
 	}
 
+	/**
+	 * 对应类型的值
+	 * @return
+	 */
 	@XmlValue
 	public String getValue() {
 		return value;

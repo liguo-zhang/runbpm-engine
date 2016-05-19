@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.exception.RunBPMException;
 
@@ -13,8 +13,8 @@ import com.googlecode.aviator.exception.ExpressionRuntimeException;
 
 public class AviatorELEvalor {
 	
-	public Object eval(String condition, Execution handlerContext){
-		Map<String, VariableInstance> variableMap = handlerContext.getVariableMap();
+	public Object eval(String condition, ProcessContextBean processContextBean){
+		Map<String, VariableInstance> variableMap = processContextBean.getVariableMap();
 		Object result = false;
 		
 		condition = condition.replace("${", "");
@@ -30,7 +30,7 @@ public class AviatorELEvalor {
     	try{
     		result =  AviatorEvaluator.execute(condition, env);
     	}catch(ExpressionRuntimeException e){
-    		throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020003_Runtime_Exception_From_Aviator,handlerContext.toString(),e);
+    		throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020003_Runtime_Exception_From_Aviator,processContextBean.toString(),e);
     	}
 		return result;
 	}

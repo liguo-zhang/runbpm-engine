@@ -265,7 +265,7 @@ public class ProcessDefinition extends Element{
 	}
 
 	//ProcessDefinition根下的块活动的sequenceBlockId就是自身块活动的id;
-	//下面的快活动需要追加所属与的快活动
+	//块活动之内的快活动需要追加所属与的块活动ID
 	private void setSequenceBlockId(
 			List<SubProcessDefinition> searchList,String pre) {
 		

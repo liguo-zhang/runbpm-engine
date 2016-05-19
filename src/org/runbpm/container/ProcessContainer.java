@@ -8,7 +8,7 @@ import java.util.Set;
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.PROCESS_STATE;
@@ -59,10 +59,10 @@ public class ProcessContainer extends FlowContainer {
 		//event begin
 		//获取流程定义方式与下面不一样
 		if(ListenerManager.getListenerManager().haveProcessEvent(processModel.getId()+"",ListenerManager.Event_Type.beforeProcessInstanceStarted)){
-			Execution handlerContext = new Execution();
-			handlerContext.setProcessDefinition(this.processDefinition);
-			handlerContext.setProcessInstance(this.processInstance);
-			ListenerManager.getListenerManager().invokeProcessListener(handlerContext, ListenerManager.Event_Type.beforeProcessInstanceStarted);
+			ProcessContextBean processContextBean = new ProcessContextBean();
+			processContextBean.setProcessDefinition(this.processDefinition);
+			processContextBean.setProcessInstance(this.processInstance);
+			ListenerManager.getListenerManager().invokeProcessListener(processContextBean, ListenerManager.Event_Type.beforeProcessInstanceStarted);
 		}
 		//event end		
 		
@@ -229,10 +229,10 @@ public class ProcessContainer extends FlowContainer {
 	
 	private void invokelistener(ListenerManager.Event_Type listenerType) {
 		if(ListenerManager.getListenerManager().haveProcessEvent(this.processInstance.getProcessModelId()+"",listenerType)){
-			Execution handlerContext = new Execution();
-			handlerContext.setProcessDefinition(this.processDefinition);
-			handlerContext.setProcessInstance(this.processInstance);
-			ListenerManager.getListenerManager().invokeProcessListener(handlerContext, listenerType);
+			ProcessContextBean processContextBean = new ProcessContextBean();
+			processContextBean.setProcessDefinition(this.processDefinition);
+			processContextBean.setProcessInstance(this.processInstance);
+			ListenerManager.getListenerManager().invokeProcessListener(processContextBean, listenerType);
 		}
 	}
 	

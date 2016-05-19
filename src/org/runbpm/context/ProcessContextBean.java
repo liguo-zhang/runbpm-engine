@@ -15,7 +15,7 @@ import org.runbpm.entity.VariableInstance;
  * 所有流程插件接口的传递对象，包含当前流程执行过程中的所有对象信息。
  * 对于某次调用，可能获取的对象为空，例如对于一个流程监听事件，其Execution对象不包含活动定义信息。
  */
-public class Execution {
+public class ProcessContextBean {
 	
 	private ProcessDefinition processDefinition;
 	private ProcessInstance processInstance;

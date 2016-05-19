@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.listener.ListenerInterface;
 import org.runbpm.listener.ListenerManager;
@@ -27,16 +27,16 @@ public class UserTaskListenerSample implements ListenerInterface{
 	}
 
 	@Override
-	public void execute(Execution handlerContext, Enum eventType) {
+	public void execute(ProcessContextBean processContextBean, Enum eventType) {
 
 		if(eventType.equals(ListenerManager.Event_Type.beforeUserTaskStarted)){
 			Configuration.getContext().getEntityManager().setProcessVariable(
-					handlerContext.getActivityInstance().getProcessInstanceId(),
+					processContextBean.getActivityInstance().getProcessInstanceId(),
 					ListenerManager.Event_Type.beforeUserTaskStarted
 							.toString(),
 							beforeUserTaskStart.incrementAndGet());
 
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 
@@ -45,12 +45,12 @@ public class UserTaskListenerSample implements ListenerInterface{
 			
 		}else if(eventType.equals(ListenerManager.Event_Type.afterUserTaskStarted)){
 			Configuration.getContext().getEntityManager().setProcessVariable(
-					handlerContext.getActivityInstance().getProcessInstanceId(),
+					processContextBean.getActivityInstance().getProcessInstanceId(),
 					ListenerManager.Event_Type.afterUserTaskStarted
 							.toString(),
 							afterUserTaskStart.incrementAndGet());
 
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 
@@ -59,12 +59,12 @@ public class UserTaskListenerSample implements ListenerInterface{
 			
 		} else if(eventType.equals(ListenerManager.Event_Type.beforeUserTaskClaimed)){
 			Configuration.getContext().getEntityManager().setProcessVariable(
-					handlerContext.getActivityInstance().getProcessInstanceId(),
+					processContextBean.getActivityInstance().getProcessInstanceId(),
 					ListenerManager.Event_Type.beforeUserTaskClaimed
 							.toString(),
 							beforeUserTaskClaim.incrementAndGet());
 
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 
@@ -73,11 +73,11 @@ public class UserTaskListenerSample implements ListenerInterface{
 			
 		}else if(eventType.equals(ListenerManager.Event_Type.afterUserTaskClaimed)){
 			Configuration.getContext().getEntityManager().setProcessVariable(
-					handlerContext.getActivityInstance().getProcessInstanceId(),
+					processContextBean.getActivityInstance().getProcessInstanceId(),
 					ListenerManager.Event_Type.afterUserTaskClaimed
 							.toString(),
 							afterUserTaskClaim.incrementAndGet());
-			ActivityDefinition activityDefinition = handlerContext
+			ActivityDefinition activityDefinition = processContextBean
 					.getActivityDefinition();
 			String pid = activityDefinition.getProcessDefinition().getId();
 

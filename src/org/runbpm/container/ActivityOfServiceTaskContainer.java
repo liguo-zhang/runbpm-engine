@@ -7,7 +7,7 @@ import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.bpmn.definition.ServiceTask;
 import org.runbpm.context.Configuration;
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.VariableInstance;
@@ -29,12 +29,12 @@ public class ActivityOfServiceTaskContainer extends ActivityContainer{
 		ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
 		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
 		
-		Execution execution = new Execution();
-		execution.setProcessInstance(processInstance);
-		execution.setProcessDefinition(processDefinition);
-		execution.setActivityInstance(activityInstance);
-		execution.setActivityDefinition(activityDefinition);
-		execution.setVariableMap(context);
+		ProcessContextBean processContextBean = new ProcessContextBean();
+		processContextBean.setProcessInstance(processInstance);
+		processContextBean.setProcessDefinition(processDefinition);
+		processContextBean.setActivityInstance(activityInstance);
+		processContextBean.setActivityDefinition(activityDefinition);
+		processContextBean.setVariableMap(context);
 		
 		ServiceTask serviceTaskDefinition =  (ServiceTask) activityDefinition;
 		ServiceTask.SERVICETASK_TYPE type = serviceTaskDefinition.getType();
@@ -90,7 +90,7 @@ public class ActivityOfServiceTaskContainer extends ActivityContainer{
 		
 		//Ö´ÐÐ
 		//this.newUserTaskInstance(serviceTaskDefinition, EntityConstants.TASK_STATE.RUNNING, "RUNBPM-SERVICETASK");
-		serviceTaskHandler.executeService(execution);
+		serviceTaskHandler.executeService(processContextBean);
 		
 		super.complete();
 		

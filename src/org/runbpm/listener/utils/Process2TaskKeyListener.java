@@ -1,6 +1,6 @@
 package org.runbpm.listener.utils;
 
-import org.runbpm.context.Execution;
+import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.exception.RunBPMException;
@@ -12,12 +12,12 @@ public class Process2TaskKeyListener  implements ListenerInterface{
 
 	@SuppressWarnings(value={"rawtypes"})
 	@Override
-	public void execute(Execution handlerContext, Enum eventType) {
+	public void execute(ProcessContextBean processContextBean, Enum eventType) {
 		if(!(ListenerManager.Event_Type.beforeUserTaskStarted.equals(eventType))){
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020301_UNEXPECTED_LISTENER);
 		}
-		ProcessInstance processInstance = handlerContext.getProcessInstance();
-		TaskInstance taskInstance = handlerContext.getTaskInstance();
+		ProcessInstance processInstance = processContextBean.getProcessInstance();
+		TaskInstance taskInstance = processContextBean.getTaskInstance();
 		
 		taskInstance.setKeyA(processInstance.getKeyA());
 		taskInstance.setKeyB(processInstance.getKeyB());
