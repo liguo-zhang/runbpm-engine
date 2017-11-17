@@ -9,7 +9,7 @@ import org.runbpm.context.RunBPMSpringContext;
 import org.runbpm.service.RuntimeService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
+//todo 移除这个类到web工程
 public class InitRunBPMSpringContextServlet extends HttpServlet {
 	 
 	 /**
