@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions id="definitions"
+	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
+
+	<process id="SimpleUserTaskContainerTest3.xml" name="SimpleUserTask">
+
+	  <startEvent id="theStart" />
+	  <sequenceFlow id='flow1' sourceRef='theStart' targetRef='u1' />
+
+	  <userTask id="u1" name="u1" >
+		  <extensionElements>
+			    <runbpm:resource>
+			    		<runbpm:resourceAssignment>
+			  			<runbpm:resourceExpression type="group">groupA</runbpm:resourceExpression>
+			  		</runbpm:resourceAssignment>
+			  	</runbpm:resource>
+			  	<runbpm:extensionProps>
+		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  				<runbpm:map>
+			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
+			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap1</runbpm:entry>
+			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
+			             </runbpm:map> 
+		  			</runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_ApplicationMap1">
+			            <runbpm:map>
+			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
+			            </runbpm:map>
+			          </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_OperationMap">
+			            <runbpm:map>
+			              <runbpm:entry key="提交">taskComplete</runbpm:entry>
+			              <runbpm:entry key="跳转">taskTerminateForJump</runbpm:entry>
+			            </runbpm:map>
+			        </runbpm:extensionProp>
+		        </runbpm:extensionProps>
+		  	</extensionElements>
+	  </userTask>
+	  
+	  <sequenceFlow id='flow2' sourceRef='u1' targetRef='u2' />
+	  
+	  <userTask id="u2" name="u2" >
+	  	<extensionElements>
+		  	<runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="group">groupB</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+		  	<runbpm:extensionProps>
+		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  				<runbpm:map>
+			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
+			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap1,runBPM_ApplicationMap2</runbpm:entry>
+			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
+			             </runbpm:map> 
+		  			</runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_ApplicationMap1">
+			            <runbpm:map>
+			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
+			            </runbpm:map>
+			          </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_ApplicationMap2">
+			            <runbpm:map>
+			              <runbpm:entry key="application4">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application5">taskApplication.jsp</runbpm:entry>
+			            </runbpm:map>
+			         </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_OperationMap">
+			            <runbpm:map>
+			              <runbpm:entry key="提交">taskComplete</runbpm:entry>
+			              <runbpm:entry key="退回到上一步">taskTerminateForBack</runbpm:entry>
+			              <runbpm:entry key="放回">taskPutBack</runbpm:entry>
+			              <runbpm:entry key="重分配任务">taskSetAssignee</runbpm:entry>
+			            </runbpm:map>
+			          </runbpm:extensionProp>
+	         </runbpm:extensionProps>
+	  	</extensionElements>
+	  </userTask>
+	  
+	  <sequenceFlow id='flow3' sourceRef='u2' targetRef='u3' />
+	  
+	   <userTask id="u3" name="u3" >
+	  	<extensionElements>
+		  	<runbpm:resource>
+		  		<runbpm:resourceAssignment>
+			  		<runbpm:resourceExpression type="user">user9</runbpm:resourceExpression>
+		  		</runbpm:resourceAssignment>
+		  	</runbpm:resource>
+		  	<runbpm:extensionProps>
+		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  				<runbpm:map>
+			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
+			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap</runbpm:entry>
+			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
+			             </runbpm:map>
+		  			</runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_ApplicationMap">
+			            <runbpm:map>
+			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
+			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
+			            </runbpm:map>
+			          </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_OperationMap">
+			            <runbpm:map>
+			              <runbpm:entry key="批准">taskComplete</runbpm:entry>
+			              <runbpm:entry key="退回">taskTerminateForBackWithSelection</runbpm:entry>
+			            </runbpm:map>
+			          </runbpm:extensionProp>
+	         </runbpm:extensionProps>
+	  	</extensionElements>
+	  </userTask>
+
+	  <sequenceFlow id='flow4' sourceRef='u3' targetRef='theEnd' />
+	  <endEvent id="theEnd" />
+
+	</process>
+
+</definitions>
