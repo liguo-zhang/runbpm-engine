@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <hibernate-mapping package="org.runbpm.entity">
 
-    <class name="ProcessModelImpl">
+    <class name="ProcessModelImpl" table="RUNBPM_PROCESS_MODEL">
         <id name="id" type="long">
             <generator class="native" />
         </id>
+        
+        <property name="version" type="integer"/>
         
         <property name="name" type="string"/>
         

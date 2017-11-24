@@ -26,7 +26,7 @@ public class PersistenceTest {
 		
 		// 内存形式总是1
 		long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 		Assert.assertNotNull(newProcessInstance.getCreateDate());
 		Assert.assertNotNull(newProcessInstance.getModifyDate());
 		//Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
@@ -34,7 +34,7 @@ public class PersistenceTest {
 		
 		// 开始节点1结束后，   有 theStart（完成状态） fork（完成状态） receivePayment(运行状态) shipOrder（运行状态） 
 		runtimeService.startProcessInstance(processInstanceId);
-		newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 		
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
 		Assert.assertEquals("" , runtimeService.listActivityInstanceByProcessInstId(processInstance.getId()).size(),4);

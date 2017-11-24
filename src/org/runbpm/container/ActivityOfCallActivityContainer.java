@@ -34,7 +34,7 @@ public class ActivityOfCallActivityContainer extends ActivityContainer{
 			for(InElement cIN:callActivityExtensionElements.getInElementList()){
 				
 				String source = cIN.getSource();
-				VariableInstance v = Configuration.getContext().getEntityManager().getVariableInstance(activityInstance.getProcessInstanceId(), source);
+				VariableInstance v = Configuration.getContext().getEntityManager().loadVariableInstance(activityInstance.getProcessInstanceId(), source);
 				Object value = v.getValue();
 				
 				String target = cIN.getTarget();
@@ -55,7 +55,7 @@ public class ActivityOfCallActivityContainer extends ActivityContainer{
 			for(OutElement cOut:callActivityExtensionElements.getOutElementList()){	
 
 				String source = cOut.getSource();
-				VariableInstance v = Configuration.getContext().getEntityManager().getVariableInstance(subProcessInstance.getId(), source);
+				VariableInstance v = Configuration.getContext().getEntityManager().loadVariableInstance(subProcessInstance.getId(), source);
 				Object value = v.getValue();
 				
 				String target = cOut.getTarget();

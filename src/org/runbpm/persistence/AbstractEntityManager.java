@@ -26,11 +26,13 @@ import org.runbpm.bpmn.definition.ExtensionElements;
 import org.runbpm.bpmn.definition.ExtensionExecutionListener;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.bpmn.definition.SubProcessDefinition;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
 import org.runbpm.entity.ProcessModel;
 import org.runbpm.entity.ProcessModelImpl;
+import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.exception.RunBPMException;
@@ -326,6 +328,20 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return activityList;
 	}
 	
+	public List<ActivityHistory> listActivityHistoryByActivityDefId(
+			long processInstanceId, String activityDefinitionId) {
+		List<ActivityHistory> activityList = new ArrayList<ActivityHistory>();
+		List<ActivityHistory> parentList = listActivityHistoryByProcessInstId(processInstanceId);
+		for(ActivityHistory activityHistory:parentList){
+			
+			if(activityHistory.getActivityDefinitionId().equals(activityDefinitionId)){
+				activityList.add(activityHistory);
+			}
+			
+		}
+		return activityList;
+	}
+	
 	public List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(long processInstanceId,String activityDefinitionId,EnumSet<ACTIVITY_STATE> stateSet) {
 		List<ActivityInstance> activityList = new ArrayList<ActivityInstance>();
 		List<ActivityInstance> parentList = listActivityInstanceByProcessInstId(processInstanceId);
@@ -387,15 +403,26 @@ public abstract class AbstractEntityManager implements EntityManager{
 	}
 	
 	@Override
-	public VariableInstance getVariableInstance(long processInstanceId,
+	public VariableInstance loadVariableInstance(long processInstanceId,
 			String name) {
-		Map<String,VariableInstance> variableInstanceMap =this.getVariableMap(processInstanceId);
+		Map<String,VariableInstance> variableInstanceMap =this.loadVariableMap(processInstanceId);
 		if(variableInstanceMap!=null&&(!variableInstanceMap.isEmpty())){
 			VariableInstance dataFieldInstance = variableInstanceMap.get(name);
 			return dataFieldInstance;
 		}else{ 
 			return null;
 		}
+	}
+	
+	@Override
+	public List<TaskHistory> listTaskHistoryByProcessInstId(long processHistoryId) {
+		List<TaskHistory> taskHistoryList = new ArrayList<TaskHistory>();
+		List<ActivityHistory> activityList = this.listActivityHistoryByProcessInstId(processHistoryId);
+		
+		for(ActivityHistory activityHistory:activityList){
+			taskHistoryList.addAll(this.listTaskHistoryByActivityInstId(activityHistory.getId()));
+		}
+		return taskHistoryList;
 	}
 	
 }

@@ -42,7 +42,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getId(),1);
 		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);
@@ -153,7 +153,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getId(),1);
 		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);
@@ -240,7 +240,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		Assert.assertEquals("" , activityInstance_Instance_6_3.getState(),ACTIVITY_STATE.TERMINATED);
 		
 		//数字最大就是 新建活动 4 shipOrder
-		ActivityInstance activityInstance_Instance_4_3_2 = entityManager.getActivityInstance(new Long(7));
+		ActivityInstance activityInstance_Instance_4_3_2 = entityManager.loadActivityInstance(new Long(7));
 		Assert.assertEquals("" , activityInstance_Instance_4_3_2.getState(),ACTIVITY_STATE.RUNNING);
 
 		// 节点4 提交后 
@@ -252,7 +252,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		activityContainer.complete();
 		
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),9);
-		Assert.assertEquals("" ,entityManager.getActivityInstance(new Long(9)).getState(),ACTIVITY_STATE.RUNNING);
+		Assert.assertEquals("" ,entityManager.loadActivityInstance(new Long(9)).getState(),ACTIVITY_STATE.RUNNING);
 		
 	}
 }

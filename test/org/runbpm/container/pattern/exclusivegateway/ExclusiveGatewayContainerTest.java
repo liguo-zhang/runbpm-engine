@@ -44,7 +44,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getId(),1);
 		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);
@@ -115,7 +115,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getId(),1);
 		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);
@@ -178,7 +178,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getId(),1);
 		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);

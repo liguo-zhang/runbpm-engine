@@ -11,13 +11,16 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.hibernate.Session;
 import org.runbpm.bpmn.definition.ProcessDefinition;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.ActivityInstanceImpl;
 import org.runbpm.entity.ApplicationInstance;
+import org.runbpm.entity.ProcessHistory;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.ProcessInstanceImpl;
 import org.runbpm.entity.ProcessModel;
 import org.runbpm.entity.ProcessModelHistory;
+import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.TaskInstanceImpl;
 import org.runbpm.entity.VariableInstance;
@@ -57,19 +60,19 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	    return processModel; 
 	}
 	
-	public ProcessInstance getProcessInstance(long processInstanceId){
+	public ProcessInstance loadProcessInstance(long processInstanceId){
 		ProcessInstance processInstance = processInstanceMap.get(processInstanceId);
 		return processInstance;
 	}
 	
 
-	public ActivityInstance getActivityInstance(long activityInstanceeId){
+	public ActivityInstance loadActivityInstance(long activityInstanceeId){
 		ActivityInstance activityInstance = activityInstanceMap.get(activityInstanceeId);
 		return activityInstance;
 	}
 	
 
-	public TaskInstance getTaskInstance(long workItemInstanceId){
+	public TaskInstance loadTaskInstance(long workItemInstanceId){
 		TaskInstance taskInstance = taskInstanceMap.get(workItemInstanceId);
 		return taskInstance;
 	}
@@ -116,7 +119,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
         }  
 	}
 
-	public ApplicationInstance getApplicationInstance(long applicationInstanceId){
+	public ApplicationInstance loadApplicationInstance(long applicationInstanceId){
 		ApplicationInstance applicationInstance = applicationInstanceMap.get(applicationInstanceId);
 		return applicationInstance;
 	}
@@ -167,7 +170,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 	
 
 	@Override
-	public Map<String, VariableInstance> getVariableMap(
+	public Map<String, VariableInstance> loadVariableMap(
 			long processInstanceId) {
 		Map<String,VariableInstance> map = new HashMap<String,VariableInstance>();
 		for(Map.Entry<Long, VariableInstance> entry:variableMap.entrySet()){	
@@ -278,6 +281,42 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 
 	@Override
 	public List<ProcessInstance> listProcessInstanceByCreator(String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProcessHistory> listProcessHistoryByCreator(String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProcessHistory loadProcessHistory(long processHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActivityHistory loadActivityHistory(long activityHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByProcessInstId(long processInstanceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TaskHistory loadTaskHistory(long taskHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

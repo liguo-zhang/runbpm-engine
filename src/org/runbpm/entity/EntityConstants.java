@@ -48,6 +48,7 @@ public class EntityConstants {
 				 return null;
 			 }
 		 }
+		 
 	}
 	
 
@@ -84,6 +85,8 @@ public class EntityConstants {
 				 return null;
 			 }
 		 }
+		 
+		
 	}
 
 
@@ -93,7 +96,7 @@ public class EntityConstants {
 	 */
 	public enum TASK_STATE {
 		
-		NOT_STARTED("0"), RUNNING("1"), COMPLETED("2"),TERMINATED("3"),SUSPENDED("4");
+		NOT_STARTED("0"), RUNNING("1"), COMPLETED("2"),TERMINATED("3"),SUSPENDED("4"),CANCELED("5");
 		
 		private String value;
 		 
@@ -116,10 +119,14 @@ public class EntityConstants {
 				 return TERMINATED;
 			 }else if("4".equals(state)){
 				 return SUSPENDED;
+			 }else if("5".equals(state)){
+				 return CANCELED;
 			 }else {
 				 return null;
 			 }
 		 }
+		 
+		
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.UserTask;
 import org.runbpm.context.Configuration;
 import org.runbpm.context.ProcessContextBean;
@@ -26,6 +27,10 @@ public class UserTaskContainer {
 	private UserTask userTask;
 	private TaskInstance taskInstance;
 	
+	public static UserTaskContainer getUserTaskContainer(TaskInstance taskInstance) {
+		return new UserTaskContainer(taskInstance);
+	}
+	
 	public UserTaskContainer(ActivityInstance activityInstance, UserTask userTask, TaskInstance taskInstance){
 		this.activityInstance = activityInstance;
 		this.userTask = userTask;
@@ -34,7 +39,7 @@ public class UserTaskContainer {
 	
 	public UserTaskContainer(TaskInstance taskInstance){
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
-		this.activityInstance = entityManager.getActivityInstance(taskInstance.getActivityInstanceId());
+		this.activityInstance = entityManager.loadActivityInstance(taskInstance.getActivityInstanceId());
 		ProcessModel processModel = entityManager.loadProcessModelByModelId(taskInstance.getProcessModelId());
 		this.userTask = (UserTask) processModel.getProcessDefinition().getActivity(taskInstance.getActivityDefinitionId());
 		this.taskInstance = taskInstance;
@@ -106,7 +111,7 @@ public class UserTaskContainer {
 		invokelistener(ListenerManager.Event_Type.beforeUserTaskCompleted);
 		//before event end	
 		
-		completeTaskInstance(EntityConstants.TASK_STATE.COMPLETED);
+		completeTaskInstance(null,EntityConstants.TASK_STATE.COMPLETED,true);
 		
 		//befor event begin
 		invokelistener(ListenerManager.Event_Type.afterUserTaskCompleted);
@@ -116,7 +121,13 @@ public class UserTaskContainer {
 	
 	public void terminate(){
 		
-		if(!this.taskInstance.getState().equals(EntityConstants.TASK_STATE.RUNNING)){
+		terminate(null);
+		
+	}
+	
+	//该方法可能被活动的终止调用，而活动的终止可能带有目标活动定义对象，所以传入
+	public void terminate(ActivityDefinition targetActivityDefinition) {
+		if(this.taskInstance.getState().equals(EntityConstants.TASK_STATE.TERMINATED)||this.taskInstance.getState().equals(EntityConstants.TASK_STATE.CANCELED)){
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020008_Cannot_Complete_Task_for_Invalid_State,"当前状态是："+taskInstance.getState());
 		}
 
@@ -124,15 +135,23 @@ public class UserTaskContainer {
 		invokelistener(ListenerManager.Event_Type.beforeUserTaskTerminated);
 		//before event end	
 		
-		completeTaskInstance(EntityConstants.TASK_STATE.TERMINATED);
+		completeTaskInstance(targetActivityDefinition,EntityConstants.TASK_STATE.TERMINATED,true);
 		
 		//befor event begin
 		invokelistener(ListenerManager.Event_Type.afterUserTaskTerminated);
 		//before event end
-		
 	}
 	
-	private void completeTaskInstance(EntityConstants.TASK_STATE completeState){
+	//与取消不同，remove方法直接删除工作项目实例
+	public void remove() {
+		
+		EntityManager entityManager = Configuration.getContext().getEntityManager();
+		//删除其他任务
+		entityManager.removeTaskInstance(this.taskInstance.getId());
+	}
+	
+	//finishPolicy true:自动提交活动 false:不提交活动
+	private void completeTaskInstance(ActivityDefinition targetActivityDefinition,EntityConstants.TASK_STATE completeState,boolean finishPolicy){
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		
 		this.taskInstance.setState(completeState);
@@ -142,16 +161,18 @@ public class UserTaskContainer {
         set.add(EntityConstants.TASK_STATE.NOT_STARTED);  
         set.add(EntityConstants.TASK_STATE.RUNNING);
         
-        //如果该活动下没有活跃的工作项，则结束
-        List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(taskInstance.getActivityInstanceId(), set);
-        if(notCompleteTaskInstanceList.size()==0){
-        	ActivityInstance activityInstance = entityManager.getActivityInstance(taskInstance.getActivityInstanceId());
-        	ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
-        	if(completeState.equals(TASK_STATE.TERMINATED)){
-        		activityContainer.terminate();
-        	}else if(completeState.equals(TASK_STATE.COMPLETED)){
-        		activityContainer.complete();
-        	}
+        //在自由模式下，如果该活动下没有活跃的工作项，则结束，
+        if(finishPolicy) {
+	        List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(taskInstance.getActivityInstanceId(), set);
+	        if(notCompleteTaskInstanceList.size()==0){
+		        	ActivityInstance activityInstance = entityManager.loadActivityInstance(taskInstance.getActivityInstanceId());
+		        	ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
+		        	if(completeState.equals(TASK_STATE.TERMINATED)){
+		        		activityContainer.terminate(targetActivityDefinition);
+		        	}else if(completeState.equals(TASK_STATE.COMPLETED)){
+		        		activityContainer.complete();
+		        	}
+		     }
         }
 	}
 	
@@ -197,10 +218,10 @@ public class UserTaskContainer {
 		String uid = userTask.getId();
 		if(ListenerManager.getListenerManager().haveTaskEvent(pid+":"+uid,listenerType)){
 			ProcessContextBean processContextBean = new ProcessContextBean();
-			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
+			ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 			//对于afterComplete事件，有可能到历史库中
 			if(processInstance!=null){
-				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
+				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().loadVariableMap(processInstance.getId());
 				processContextBean.setVariableMap(variableMap);
 			}
 			processContextBean.setUserTask(userTask);
@@ -212,7 +233,7 @@ public class UserTaskContainer {
 	}
 	
 	//放回工作项
-	public void pubBack(){
+	public void putBack(){
 		//活动不是running状态不允许放回
 		if(!this.taskInstance.getState().equals(EntityConstants.TASK_STATE.RUNNING)){
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_putback_Task_for_Invalid_State,"当前状态是："+taskInstance.getState());
@@ -224,12 +245,30 @@ public class UserTaskContainer {
 		
 		//设置该任务状态为终止
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
-		TaskInstance taskInstance = entityManager.getTaskInstance(this.taskInstance.getId());
+		TaskInstance taskInstance = entityManager.loadTaskInstance(this.taskInstance.getId());
 		taskInstance.setState(EntityConstants.TASK_STATE.TERMINATED);
 		
 		//重启活动
 		ActivityContainer activityContainer =  ActivityContainer.getActivityContainer(activityInstance);
 		activityContainer.start();
+		
+	}
+
+	public void cancel() {
+		if(this.taskInstance.getState().equals(EntityConstants.TASK_STATE.TERMINATED)||this.taskInstance.getState().equals(EntityConstants.TASK_STATE.CANCELED)){
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020008_Cannot_Complete_Task_for_Invalid_State,"当前状态是："+taskInstance.getState());
+		}
+
+		//befor event begin
+		invokelistener(ListenerManager.Event_Type.beforeUserTaskCanceled);
+		//before event end	
+		
+		completeTaskInstance(null,EntityConstants.TASK_STATE.CANCELED,false);
+		
+		//befor event begin
+		invokelistener(ListenerManager.Event_Type.afterUserTaskCanceled);
+		//before event end
+
 		
 	}
 	

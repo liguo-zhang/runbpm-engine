@@ -24,9 +24,9 @@ public class ActivityOfServiceTaskContainer extends ActivityContainer{
 	
 	@Override
 	public void activityStart() {
-		Map<String,VariableInstance> context = Configuration.getContext().getEntityManager().getVariableMap(activityInstance.getProcessInstanceId());
+		Map<String,VariableInstance> context = Configuration.getContext().getEntityManager().loadVariableMap(activityInstance.getProcessInstanceId());
 		
-		ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
+		ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
 		
 		ProcessContextBean processContextBean = new ProcessContextBean();

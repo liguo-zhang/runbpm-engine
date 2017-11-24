@@ -46,6 +46,7 @@ public class RunBPMException extends RuntimeException {
 		Code_020007_Cannot_setAssignee_Task_for_Invalid_State("不能够重新设置执行人，因为状态不是运行状态"),
 		Code_020007_Cannot_putback_Task_for_Invalid_State("不能够放回任务，因为状态不是运行状态"),
 		Code_020007_Cannot_putback_Task_for_Multi_UserTask("不能够放回任务，因为活动是会签活动"),
+		Code_020007_Cannot_addUser_Task_for_NOT_UserTask("不能够增加任务，因为该活动不是人工活动"),
 		
 		
 		Code_020010_INVALID_PROCESSINSTANCE_TO_START("流程不是处于未启动状态，所以不能被启动"),

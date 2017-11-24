@@ -22,6 +22,8 @@ import org.runbpm.container.subprocess.SubprocessNestedContainerTest;
 import org.runbpm.container.subprocess.SubprocessContainerTest;
 import org.runbpm.container.usertask.ExpressUserTaskContainerTest;
 import org.runbpm.container.usertask.SimpleUserTaskContainerTest;
+import org.runbpm.container.usertask.SimpleUserTaskContainerTest3;
+import org.runbpm.service.ServiceSampleTest;
 import org.runbpm.spring.execlusivegateway.ExclusiveGatewaySpringBeanTest;
 import org.runbpm.spring.listener.activity.ActivityListenerTest_WithoutSpring;
 import org.runbpm.spring.listener.activity.GlobalActivityListenerTest_WithSpring;
@@ -74,6 +76,7 @@ import org.runbpm.spring.usertask.UserTaskSprngBeanTest;
 	
 	//org.runbpm.container.usertask
 	SimpleUserTaskContainerTest.class,
+	SimpleUserTaskContainerTest3.class,
 	ExpressUserTaskContainerTest.class,
 	
 	//org.runbpm.container.pattern
@@ -114,6 +117,7 @@ import org.runbpm.spring.usertask.UserTaskSprngBeanTest;
 	
 	//org.runbpm.spring.usertask
 	UserTaskSprngBeanTest.class,
+	ServiceSampleTest.class,
 	
 })
 

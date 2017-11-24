@@ -54,7 +54,7 @@ public class CallActivityTest extends RunBPMTestCase{
 		ActivityInstance receiveOrder_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receiveOrder").iterator().next();
 		Assert.assertEquals("" , receiveOrder_instance.getState(),ACTIVITY_STATE.COMPLETED);
 		
-		ProcessInstance subProcessInstance = entityManager.getProcessInstance(new Long(2));
+		ProcessInstance subProcessInstance = entityManager.loadProcessInstance(new Long(2));
 		Assert.assertEquals("" , subProcessInstance.getState(),PROCESS_STATE.RUNNING);
 		
 		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();

@@ -45,7 +45,7 @@ public class GlobalProcessListener_WithoutSpring extends RunBPMTestCase{
 				ListenerManager.Event_Type.afterProcessInstanceStarted
 						.toString(),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.afterProcessInstanceStarted
 										.toString()).getValue());

@@ -149,7 +149,7 @@ public abstract class ActivityContainer {
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		
 		//看看有无没有完成的TaskInstance
-		//如果为UserTask，则需要判断没有未完成的工作项,有的话需要逐一终止；如果执行终止工作项，会在执行最后一个终止工作项后自动提交活动
+		//如果为UserTask，则需要判断没有未完成的工作项,有的话需要逐一终止；最后一个终止工作项，不会自动提交活动
 		boolean commit_internal = true;
         if(this.activityDefinition instanceof UserTask){
         	EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
@@ -157,33 +157,33 @@ public abstract class ActivityContainer {
             set.add(EntityConstants.TASK_STATE.RUNNING);
 			List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
 	        if(notCompleteTaskInstanceList.size()>0){
-	        	//最后一个uc会自动调用活动终止
-	        	commit_internal = false;
-	    		for (TaskInstance taskInstance : notCompleteTaskInstanceList) {
-	    			UserTaskContainer uc = new UserTaskContainer(taskInstance);
-	    			uc.terminate();
+	            	//放置标志位，使得，最后一个uc,不会自动调用活动终止
+	        	    commit_internal = false;
+	    		    for (TaskInstance taskInstance : notCompleteTaskInstanceList) {
+	    		    	    UserTaskContainer uc = new UserTaskContainer(taskInstance);
+	    			    uc.terminate(targetActivityDefinition);
 				}
 	        }
         }
 		
         if(commit_internal){
-        	//before event begin
-    		if(targetActivityDefinition==null){
-    			invokelistener(ListenerManager.Event_Type.beforeActivityInstanceTerminated);
-    		}else{
-    			invokelistener(ListenerManager.Event_Type.beforeActivityInstanceTerminateAndTargeted);
-    		}
-    		//before event end	
-    		
-    		commit_internal(targetActivityDefinition,ACTIVITY_STATE.TERMINATED);
-    		
-    		//before event begin
-    		if(targetActivityDefinition==null){
-    			invokelistener(ListenerManager.Event_Type.afterActivityInstanceTerminated);
-    		}else{
-    			invokelistener(ListenerManager.Event_Type.afterActivityInstanceTerminateAndTargeted);
-    		}
-    		//before event end
+	        	//before event begin
+	    		if(targetActivityDefinition==null){
+	    			invokelistener(ListenerManager.Event_Type.beforeActivityInstanceTerminated);
+	    		}else{
+	    			invokelistener(ListenerManager.Event_Type.beforeActivityInstanceTerminateAndTargeted);
+	    		}
+	    		//before event end	
+	    		
+	    		commit_internal(targetActivityDefinition,ACTIVITY_STATE.TERMINATED);
+	    		
+	    		//before event begin
+	    		if(targetActivityDefinition==null){
+	    			invokelistener(ListenerManager.Event_Type.afterActivityInstanceTerminated);
+	    		}else{
+	    			invokelistener(ListenerManager.Event_Type.afterActivityInstanceTerminateAndTargeted);
+	    		}
+	    		//before event end
         }
 		
 	}
@@ -193,7 +193,7 @@ public abstract class ActivityContainer {
 		activityInstance.setState(commitState);
 		activityInstance.setCompleteDate(new Date());
 		
-		ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
+		ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 		
 		FlowContainer flowContainer = ProcessContainer.getFlowContainer(processInstance,activityInstance);
 		if (activityDefinition instanceof EndEvent && targetActivityDefinition==null) {
@@ -211,7 +211,7 @@ public abstract class ActivityContainer {
 		ActivityDefinition activityDefinition = null;
 		if(activityInstance.getParentActivityInstanceId()!=0){
 			//块活动
-			ActivityInstance parentActivityInstance = Configuration.getContext().getEntityManager().getActivityInstance(activityInstance.getParentActivityInstanceId());
+			ActivityInstance parentActivityInstance = Configuration.getContext().getEntityManager().loadActivityInstance(activityInstance.getParentActivityInstanceId());
 			SubProcessDefinition subProcessDefinition =processDefinition.getSubProcessActivityDefinition(parentActivityInstance.getSequenceBlockId());
 			if(subProcessDefinition==null){
 				throw new RunBPMException("cannot find subprocess .blockId["+activityInstance.getSubProcessBlockId()+"],current activity definitionid:["+activityInstance.getActivityDefinitionId()+"]");
@@ -250,9 +250,9 @@ public abstract class ActivityContainer {
 			processContextBean = new ProcessContextBean();
 			
 			//如果是afterActivityInstanceCompleted类型，此时可能已经到历史库，processInstance为null
-			ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
+			ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 			if(processInstance!=null){
-				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
+				Map<String,VariableInstance> variableMap = Configuration.getContext().getEntityManager().loadVariableMap(processInstance.getId());
 				processContextBean.setVariableMap(variableMap);
 			}
 			processContextBean.setProcessInstance(processInstance);

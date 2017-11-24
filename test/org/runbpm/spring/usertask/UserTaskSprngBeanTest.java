@@ -92,7 +92,7 @@ public class UserTaskSprngBeanTest extends RunBPMTestCase{
 		taskInstance_u2_0.complete();
 		
 		//流程完成
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.COMPLETED);
 		
 	}

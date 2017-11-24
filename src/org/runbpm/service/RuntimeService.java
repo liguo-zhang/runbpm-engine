@@ -4,14 +4,19 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
+import org.runbpm.entity.EntityConstants;
+import org.runbpm.entity.ProcessHistory;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.ProcessModel;
+import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.persistence.EntityManager;
@@ -70,7 +75,7 @@ public interface RuntimeService {
 	ProcessModel deployProcessDefinition(ProcessDefinition processDefinition);
 	
 	/**
-	 * 该方法使用根据模板ID加载指定的流程模板对象。具体的流程定义导入与流程模板的机制参照 {@link #getLatestProcessMode(String)}
+	 * 该方法使用根据模板ID加载指定的流程模板对象。具体的流程定义导入与流程模板的机制参照 {@link #loadLatestProcessMode(String)}
 	 * @param processModelId 流程模板ID,在关系型数据库中，为流程模板的主键。
 	 * @return 流程模板对象。通过该流程模板对象的getProcessDefinition()方法可以获取流程定义 {@link org.runbpm.bpmn.definition.ProcessDefinition}<br>
 	 */
@@ -92,7 +97,7 @@ public interface RuntimeService {
 	 * @param processDefinitionId 指定的流程实例ID，不能为空
 	 * @return 流程模板对象
 	 */
-	ProcessModel getLatestProcessMode(String processDefinitionId);
+	ProcessModel loadLatestProcessMode(String processDefinitionId);
 	
 	/**
 	 * 根据指定的流程定义ID，工作流引擎将获取该定义的最新版本（即流程模板），然后创建一个新的流程实例。<br>
@@ -185,9 +190,9 @@ public interface RuntimeService {
 	 * 强制终止指定的活动实例，并且指定里路程启动指定的活动定义。<br>
 	 * {@link #terminateActivityInstance(long)}方法会按照流程定义运行，而此方法用于实现退回或跳转需求<br>
 	 * @param activityInstanceId 指定的活动实例
-	 * @param targetActivityDefinition 指定要启动的下一步活动定义。
+	 * @param targetActivityDefinitionId 指定要启动的下一步活动定义。
 	 */
-	void terminateActivityInstance(long activityInstanceId,ActivityDefinition targetActivityDefinition);
+	void terminateActivityInstance(long activityInstanceId,String targetActivityDefinitionId);
 	
 	/**
 	 * 强制终止流程实例，流程实例以及其下的活动实例、任务项实例以及流程变量数据将会转移到历史库中。
@@ -264,6 +269,35 @@ public interface RuntimeService {
 	void resumeUserTask(long userTaskId);
 	
 	/**
+	 * 取消一个任务。该方法只会将任务状态置为取消，不会驱动流程往下执行。如果需要将此任务删除，请使用{@ #removeUserTask(long)}方法
+	 * @param userTaskId 需要取消的任务ID
+	 */
+	void cancelUserTask(long userTaskId);
+	
+	/**
+	 * 删除一个任务。如果需要保留该任务同时置为取消，请使用{@ #cancelUserTask(long)}方法
+	 * @param userTaskId 需要删除的任务ID
+	 */
+	void removeUserTask(long userTaskId);
+	
+	/**
+	 * 将此任务重新分配一个执行人。该方法会将任务直接执行人。<br>
+	 * 如果需要保留原执行人的任务，可综合 {@ link #cancelUserTask(long)} 和{@ link #addUserTask(long, long)}两个方法实现。 
+	 * @param userTaskId 指定的任务ID
+	 * @param userId 执行人ID
+	 */
+	void setAssignee(long userTaskId,String userId);
+	
+	/**
+	 * 动态增加一个任务
+	 * @param activityInstanceID 对应的活动实例。该活动定义必须是人工活动，否则会抛出异常。
+	 * @param userId 执行人ID
+	 * @param state 添加任务后的状态，如果是会签模式，则应该是{@link EntityConstants.TASK_STATE#RUNNING};如果是竞争(抢任务）模式，则应该是{@link EntityConstants.TASK_STATE#NOT_STARTED}
+	 * 
+	 */
+	void addUserTask(long activityInstanceId,String userId,EntityConstants.TASK_STATE state);
+	
+	/**
 	 * 如果一个用户活动，也就是UerTask为抢任务模式（或者成为单一执行模式），在通过 {@link #claimUserTask(long)}获取任务的执行权后，可以通过此方法将任务重新放回，所有的人可以重新抢任务。<br>
 	 * 如果一个用户活动，也就是UerTask为会签模式，不适用执行该方法。<br>
 	 * @param userTaskId 指定的任务实例ID。
@@ -274,15 +308,30 @@ public interface RuntimeService {
 	 * 如果一个用户活动，也就是UerTask为抢任务模式（或者成为单一执行模式），在通过 {@link #claimUserTask(long)}获取任务的执行权后，可以通过此方法将任务重新分配给另一个人。<br>
 	 * 如果一个用户活动，也就是UerTask为会签模式，也可以通过此方法将任务重新分配给另一个人。<br>
 	 * @param userTaskId 指定的任务实例ID。
+	 * @param userId 用户ID。
 	 */
-	void setUserTaskAssignee(long userTaskId);
+	void setUserTaskAssignee(long userTaskId,String userId) ;
 	
 	/**
 	 * 获取指定的流程实例
 	 * @param processInstanceId 指定的流程实例ID。
 	 * @return 流程实例对象
 	 */
-	ProcessInstance getProcessInstance(long processInstanceId);
+	ProcessInstance loadProcessInstance(long processInstanceId);
+	
+	/**
+	 * 获取指定的活动实例
+	 * @param activityInstanceId 指定的活动实例ID。
+	 * @return 流程实例对象
+	 */
+	ActivityInstance loadActivityInstance(long activityInstanceId);
+	
+	/**
+	 * 获取指定的工作项实例
+	 * @param taskInstanceId 指定的工作项实例ID。
+	 * @return 工作项实例对象
+	 */
+	TaskInstance loadTaskInstance(long taskInstanceId);
 
 	/**
 	 * 获取指定流程实例下的所有活动实例列表。
@@ -375,20 +424,20 @@ public interface RuntimeService {
 	 * @param stateSet 指定的状态 <br>
 	 * 例1：获取所有活跃状态的任务的输入参数
 	  		<pre>
-			EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
-			set.add(EntityConstants.TASK_STATE.NOT_STARTED);  
-			set.add(EntityConstants.TASK_STATE.RUNNING);
+			EnumSet<EntityConstants.TASK_STATE> stateSet = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
+			stateSet.add(EntityConstants.TASK_STATE.NOT_STARTED);  
+			stateSet.add(EntityConstants.TASK_STATE.RUNNING);
             </pre>
 	 * 例2：获取所有结束状态的任务的输入参数<br>
 	 		<pre>
-	 		EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class); 
-	 		set.add(EntityConstants.TASK_STATE.TERMINATED);
-	 		set.add(EntityConstants.TASK_STATE.COMPLETED);
+	 		EnumSet<EntityConstants.TASK_STATE> stateSet = EnumSet.noneOf(EntityConstants.TASK_STATE.class); 
+	 		stateSet.add(EntityConstants.TASK_STATE.TERMINATED);
+	 		stateSet.add(EntityConstants.TASK_STATE.COMPLETED);
             </pre>
 	 * 例3：获取处于挂起状态的任务的输入参数<br>
 			<pre>
-			EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
-			set.add(EntityConstants.TASK_STATE.SUSPENDED);
+			EnumSet<EntityConstants.TASK_STATE> stateSet = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
+			stateSet.add(EntityConstants.TASK_STATE.SUSPENDED);
 			</pre>
 	 * @return 任务项列表
 	 */
@@ -401,15 +450,7 @@ public interface RuntimeService {
 	 */
 	List<TaskInstance> listTaskInstanceByUserId(String userId) ;
 	
-	/**
-	 * 删除指定的任务项。
-	 * @param userTaskId 指定的任务项
-	 * @param autoCommit <br>
-	 * 在抢任务模式下，如果该活动下只剩下一个处于活跃状态的任务项，该参数控制删除后是否自动提交。如果是true，则自动提交，引擎自动调用 {@link #completeActivityInstance(long)} 方法。<br>
-	 * 在会签模式下，如果该活动只有一个活动状态的任务项，引擎才会始终不触发 {@link #completeActivityInstance(long)}方法。
-	 * 
-	 */
-	void removeUserTask(long userTaskId,boolean autoCommit);
+
 
 	/**
 	 * 为指定的流程实例，设置一对流程变量
@@ -431,7 +472,7 @@ public interface RuntimeService {
 	 * @param processInstanceId
 	 * @return 最终的变量值，使用 {@link org.runbpm.entity.VariableInstance#getValue()}获得
 	 */
-	Map<String,VariableInstance> getVariableMap(long processInstanceId);
+	Map<String,VariableInstance> loadVariableMap(long processInstanceId);
 	
 	/**
 	 * 查询根据指定创建者，所创建的流程实例列表。<br>
@@ -440,5 +481,76 @@ public interface RuntimeService {
 	 * @return 流程实例列表
 	 */
 	List<ProcessInstance> listProcessInstanceByCreator(String creator);
+	
+	/**
+	 * 查询根据指定创建者，所创建的流程历史列表。<br>
+	 * 流程实例的创建者字段，根据创建流程API时的输入赋值。
+	 * @param creator 创建者
+	 * @return 流程历史列表
+	 */
+	List<ProcessHistory> listProcessHistoryByCreator(String creator);
+	
+	/**
+	 * 获取指定的流程历史
+	 * @param processHistoryId
+	 * @return 流程历史对象
+	 */
+	ProcessHistory loadProcessHistory(long processHistoryId);
+	
+	/**
+	 * 获取指定的活动历史
+	 * @param activityHistoryId 活动历史ID
+	 * @return 活动历史对象
+	 */
+	ActivityHistory loadActivityHistory(long activityHistoryId);
+	
+	/**
+	 * 获取任务对象历史
+	 * @param taskHistoryId 任务历史对象ID 
+	 * @return 任务历史对象
+	 */
+	TaskHistory loadTaskHistory(long taskHistoryId);
+	
+	/**
+	 * 获取指定流程历史下的所有活动对象列表
+	 * @param processHistoryId 指定的流程历史ID
+	 * @return 活动历史对象列表
+	 */
+	List<ActivityHistory> listActivityHistoryByProcessInstId(long processHistoryId);
+	
+	/**
+	 * 加载指定流程历史记录下的，指定活动定义的活动实例历史 
+	 * @param processHistoryId 流程历史记录
+	 * @param activityDefinitionId 活动定义
+	 * @return 指定的活动实例历史
+	 */
+	List<ActivityHistory> listActivityHistoryByActivityDefId(long processHistoryId, String activityDefinitionId);
+	
+	/**
+	 * 加载指定流程历史下的，所有任务历史列表
+	 * @param processHistoryId 流程历史ID
+	 * @return 任务历史列表
+	 */
+	List<TaskHistory> listTaskHistoryByProcessInstId(long processHistoryId);
+	
+	/**
+	 * 加载指定活动历史下的，所有任务历史列表
+	 * @param activityHistoryId 活动历史ID
+	 * @return 任务历史列表
+	 */
+	List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId);
+	
+	
+	/**
+	 * 在某一个流程运行时，获取当前活动实例下一步可能到达的活动定义。流程引擎在计算时，会考虑流程上下文变量。
+	 * 
+	 * 如果需要在流程定义层面，获取指定的活动定义未来可能到达的所有活动定义（不考虑流程上下文变量，用于流程跳转等场景），参考{@link org.runbpm.bpmn.definition.ProcessDefinition#listReachableActivitySet(ActivityDefinition)}
+	 * @param activityInstanceId 活动实例ID
+	 * @return 可以到达的活动定义
+	 */
+	Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId);
+	
+	
+		
 	
 }

@@ -44,11 +44,18 @@ public class ActivityOfUserTaskContainer extends ActivityContainer{
 		}
 	}
 	
+	public void addUserTask(User user,EntityConstants.TASK_STATE state) {
+		UserTask userTask = (UserTask)activityDefinition;
+		TaskInstance taskInstance = this.newUserTaskInstance(activityDefinition,state,user);
+		new UserTaskContainer(this.activityInstance,userTask,taskInstance).start();
+	}
+	
+	
 	private void createUserTaskInstance(UserTaskResourceAssignment resourceAssignment,EntityConstants.TASK_STATE state){
 		UserTask userTask = (UserTask)activityDefinition;
-		Map<String,VariableInstance> userTaskContext = Configuration.getContext().getEntityManager().getVariableMap(activityInstance.getProcessInstanceId());
+		Map<String,VariableInstance> userTaskContext = Configuration.getContext().getEntityManager().loadVariableMap(activityInstance.getProcessInstanceId());
 		
-		ProcessInstance processInstance = Configuration.getContext().getEntityManager().getProcessInstance(activityInstance.getProcessInstanceId());
+		ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
 		
 		if(resourceAssignment!=null){
@@ -71,6 +78,9 @@ public class ActivityOfUserTaskContainer extends ActivityContainer{
 	
 	private TaskInstance newUserTaskInstance(ActivityDefinition activityDefinition,EntityConstants.TASK_STATE state,User user){
 		TaskInstance taskInstance = Configuration.getContext().getEntityManager().produceTaskInstance(this.activityInstance.getId(),user.getId());
+		
+		taskInstance.setName(activityDefinition.getName());
+		
 		taskInstance.setActivityDefinitionId(activityDefinition.getId());
 		taskInstance.setCreateDate(new Date());
 		taskInstance.setProcessDefinitionId(activityDefinition.getProcessDefinition().getId());

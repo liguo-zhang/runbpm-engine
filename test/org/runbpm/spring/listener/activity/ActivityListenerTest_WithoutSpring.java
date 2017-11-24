@@ -36,13 +36,13 @@ public class ActivityListenerTest_WithoutSpring extends RunBPMTestCase{
 		//启动了3个实例
 		Assert.assertEquals(
 				new Integer(3),
-				entityManager.getVariableInstance(processInstance.getId(),
+				entityManager.loadVariableInstance(processInstance.getId(),
 						ListenerManager.Event_Type.beforeActivityInstanceStarted
 								.toString()).getValue());
 		
 		Assert.assertEquals(
 				new Integer(3),
-				entityManager.getVariableInstance(processInstance.getId(),
+				entityManager.loadVariableInstance(processInstance.getId(),
 						ListenerManager.Event_Type.afterActivityInstanceStarted
 										.toString()).getValue());
 		
@@ -50,7 +50,7 @@ public class ActivityListenerTest_WithoutSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(2),
 				entityManager
-				.getVariableInstance(
+				.loadVariableInstance(
 						processInstance.getId(),
 						ListenerManager.Event_Type.beforeActivityInstanceCompleted
 								.toString()).getValue());
@@ -58,7 +58,7 @@ public class ActivityListenerTest_WithoutSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(2),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.afterActivityInstanceCompleted
 										.toString()).getValue());

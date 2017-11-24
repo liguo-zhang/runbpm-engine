@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <hibernate-mapping package="org.runbpm.entity">
 
-    <class name="TaskInstanceImpl">
+    <class name="TaskInstanceImpl" table="RUNBPM_TASK_INSTANCE">
         <id name="id" type="long">
             <generator class="native" />
         </id>

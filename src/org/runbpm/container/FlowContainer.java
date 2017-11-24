@@ -17,9 +17,12 @@ import org.runbpm.context.ProcessContextBean;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
+import org.runbpm.entity.EntityConstants.PROCESS_STATE;
 import org.runbpm.entity.ProcessInstance;
+import org.runbpm.entity.ProcessModel;
 import org.runbpm.entity.VariableInstance;
 import org.runbpm.exception.RunBPMException;
+import org.runbpm.listener.ListenerManager;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.utils.RunBPMUtils;
 
@@ -27,7 +30,7 @@ import org.runbpm.utils.RunBPMUtils;
 public abstract class FlowContainer{
 	
 	protected ProcessInstance processInstance;
-	//流程与子流程
+	//流程与快活动
 	public static FlowContainer getFlowContainer(ProcessInstance processInstance,ActivityInstance activityInstance){
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		
@@ -42,10 +45,10 @@ public abstract class FlowContainer{
 			//XPDL块活动，BPMNSubProcess
 			ProcessDefinition processDefinition = entityManager.loadProcessModelByModelId(processInstance.getProcessModelId()).getProcessDefinition();
 			
-			ActivityInstance parentActivityInstance = entityManager.getActivityInstance(activityInstance.getParentActivityInstanceId());
+			ActivityInstance parentActivityInstance = entityManager.loadActivityInstance(activityInstance.getParentActivityInstanceId());
 			SubProcessDefinition subProcessDefinition = processDefinition.getSubProcessActivityDefinition(parentActivityInstance.getSequenceBlockId());
 			
-			ActivityInstance activityInstanceOfSubProcess = entityManager.getActivityInstance(activityInstance.getParentActivityInstanceId());
+			ActivityInstance activityInstanceOfSubProcess = entityManager.loadActivityInstance(activityInstance.getParentActivityInstanceId());
 			
 			SubProcessContainer subProcessContainer = new SubProcessContainer(activityInstanceOfSubProcess,subProcessDefinition);
 			return subProcessContainer;
@@ -83,7 +86,7 @@ public abstract class FlowContainer{
 		//1 寻找将要创建的活动
 		Set<ActivityDefinition> outgoingActivitySet = null;
 		if(targetActivityDefinition==null){
-			outgoingActivitySet = getOutActivitySet(activityInstance,activityDefinition);
+			outgoingActivitySet = listReachableActivitySet(activityInstance,activityDefinition);
 		}else{
 			outgoingActivitySet = new HashSet<ActivityDefinition>();
 			outgoingActivitySet.add(targetActivityDefinition);
@@ -91,11 +94,11 @@ public abstract class FlowContainer{
 		
 		if(outgoingActivitySet.size() == 0){
 			Set<Object> exceptionHashSet = new HashSet<Object>();
-    		exceptionHashSet.add(processInstance);
-    		exceptionHashSet.add(activityDefinition);
-    		Map<String,VariableInstance> dataFieldInstanceMap = Configuration.getContext().getEntityManager().getVariableMap(processInstance.getId());
-    		exceptionHashSet.add(dataFieldInstanceMap);
-    		throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020001_Empty_Activity, exceptionHashSet.toString());
+	    		exceptionHashSet.add(processInstance);
+	    		exceptionHashSet.add(activityDefinition);
+	    		Map<String,VariableInstance> dataFieldInstanceMap = Configuration.getContext().getEntityManager().loadVariableMap(processInstance.getId());
+	    		exceptionHashSet.add(dataFieldInstanceMap);
+	    		throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020001_Empty_Activity, exceptionHashSet.toString());
 		}
 		
 		//2 已经是正在运行的活动 + 将要创建的活动
@@ -147,10 +150,10 @@ public abstract class FlowContainer{
 		
 	}
 	
-	protected Set<ActivityDefinition> getOutActivitySet(ActivityInstance activityInstance,ActivityDefinition activityDefinition) {
+	public Set<ActivityDefinition> listReachableActivitySet(ActivityInstance activityInstance,ActivityDefinition activityDefinition) {
 		EntityManager runBPMEntityManager = Configuration.getContext().getEntityManager();
 		Set<ActivityDefinition> outgoingActivitySet = new HashSet<ActivityDefinition>();
-		Map<String, VariableInstance> variableMap = runBPMEntityManager.getVariableMap(processInstance.getId());
+		Map<String, VariableInstance> variableMap = runBPMEntityManager.loadVariableMap(processInstance.getId());
 		
 		List<SequenceFlow> outgoingSequenceFlowList = activityDefinition.getOutgoingSequenceFlowList();
 		
@@ -233,4 +236,72 @@ public abstract class FlowContainer{
 	
 	//是否有相同的实例
 	protected abstract boolean evalEmptyInContainer(List<ActivityInstance> sameActivityInstance);
+	
+	public void suspend(){
+		
+		PROCESS_STATE currentState = this.processInstance.getState();
+		if(currentState.equals(PROCESS_STATE.NOT_STARTED)||currentState.equals(PROCESS_STATE.RUNNING)){
+			
+
+			//event begin
+			invokelistener(ListenerManager.Event_Type.beforeProcessInstanceSuspended);
+			//event end		
+			this.processInstance.setStateBeforeSuspend(currentState);
+			processInstance.setState(PROCESS_STATE.SUSPENDED);
+			//event begin
+			invokelistener(ListenerManager.Event_Type.afterProcessInstanceSuspended);
+			//event end
+		}else{
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020010_INVALID_PROCESSINSTANCE_TO_SUSPEND);
+		}
+	}
+
+	public void invokelistener(ListenerManager.Event_Type listenerType) {
+		if(ListenerManager.getListenerManager().haveProcessEvent(this.processInstance.getProcessModelId()+"",listenerType)){
+			ProcessContextBean processContextBean = new ProcessContextBean();
+			
+			EntityManager entityManager = Configuration.getContext().getEntityManager();
+			ProcessModel processModel = entityManager.loadProcessModelByModelId(processInstance.getProcessModelId());
+			ProcessDefinition processDefinition = processModel.getProcessDefinition();
+			
+			processContextBean.setProcessDefinition(processDefinition);
+			processContextBean.setProcessInstance(this.processInstance);
+			ListenerManager.getListenerManager().invokeProcessListener(processContextBean, listenerType);
+		}
+	}
+	
+	public void resume(){
+		
+		if(this.processInstance.getState().equals(PROCESS_STATE.SUSPENDED)){
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020013_INVALID_PROCESSINSTANCE_TO_RESUME);
+		}else{
+
+			//event begin
+			invokelistener(ListenerManager.Event_Type.beforeProcessInstanceResumed);
+			//event end
+			
+			PROCESS_STATE stateBeforeSuspend = this.processInstance.getStateBeforeSuspend();
+			processInstance.setState(stateBeforeSuspend);
+			
+			//event begin
+			invokelistener(ListenerManager.Event_Type.afterProcessInstanceResume);
+			//event end
+		}
+		
+	}
+	
+	public void terminate(){
+		
+		//event begin
+		invokelistener(ListenerManager.Event_Type.beforeProcessInstanceTerminated);
+		//event end	RunBPMListenerBroker
+		
+		complete_internal(PROCESS_STATE.TERMINATED);
+		
+		//event begin
+		invokelistener(ListenerManager.Event_Type.afterProcessInstanceTerminated);
+		//event end
+	}
+
+	public abstract void complete_internal(PROCESS_STATE terminated) ;
 }

@@ -47,7 +47,7 @@ public class GlobalActivityListenerTest_WithSpring extends RunBPMTestCase{
 				Assert.assertEquals(
 						new Integer(3),
 						entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.beforeActivityInstanceStarted
 										.toString()).getValue());
@@ -55,7 +55,7 @@ public class GlobalActivityListenerTest_WithSpring extends RunBPMTestCase{
 				Assert.assertEquals(
 						new Integer(3),
 						entityManager
-								.getVariableInstance(
+								.loadVariableInstance(
 										processInstance.getId(),
 										ListenerManager.Event_Type.afterActivityInstanceStarted
 												.toString()).getValue());
@@ -64,7 +64,7 @@ public class GlobalActivityListenerTest_WithSpring extends RunBPMTestCase{
 				Assert.assertEquals(
 						new Integer(2),
 						entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.beforeActivityInstanceCompleted
 										.toString()).getValue());
@@ -72,7 +72,7 @@ public class GlobalActivityListenerTest_WithSpring extends RunBPMTestCase{
 				Assert.assertEquals(
 						new Integer(2),
 						entityManager
-								.getVariableInstance(
+								.loadVariableInstance(
 										processInstance.getId(),
 										ListenerManager.Event_Type.afterActivityInstanceCompleted
 												.toString()).getValue());

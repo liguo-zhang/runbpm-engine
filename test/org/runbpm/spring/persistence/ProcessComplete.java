@@ -46,14 +46,14 @@ public class ProcessComplete extends RunBPMTestCase{
 		ProcessInstance processInstance = runtimeService.createProcessInstance("ProcessComplete",null);
 		
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 		runtimeService.startProcessInstance(processInstanceId);
 		
-		newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 		ActivityInstance activityInstance_Instance_2_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "callCheckCreditProcess").iterator().next();
 		long subProcessInstanceId = activityInstance_Instance_2_0.getCallActivityProcessInstanceId();
 		
-		ProcessInstance subProcessInstance = runtimeService.getProcessInstance(subProcessInstanceId);
+		ProcessInstance subProcessInstance = runtimeService.loadProcessInstance(subProcessInstanceId);
 		
 		//提交子流程
 		ActivityInstance u1_instance = runtimeService.listActivityInstanceByActivityDefId(subProcessInstanceId, "u1").iterator().next();
@@ -63,7 +63,7 @@ public class ProcessComplete extends RunBPMTestCase{
 		ActivityInstance prepareAndShipTask_instance = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
 		runtimeService.completeActivityInstance(prepareAndShipTask_instance.getId());
 		
-		ProcessInstance newProcessInstance1 = runtimeService.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance1 = runtimeService.loadProcessInstance(processInstanceId);
 		Assert.assertNull(newProcessInstance1);
 		
 	}

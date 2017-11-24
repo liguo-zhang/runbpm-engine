@@ -11,7 +11,7 @@
 		<serviceTask id="receiveOrder" name="Receive Order">
 			<extensionElements>
 				<runbpm:extensionProps>
-		          <runbpm:extensionProp name="RunBPM_ServiceTask_Extension">
+		          <runbpm:extensionProp name="RunBPM_Internal_ServiceTask_Extension">
 		            <runbpm:map>
 		              <runbpm:entry key="type">handler_bean_class</runbpm:entry>
 		              <runbpm:entry key="value">org.runbpm.container.serviceTask.ServiceTaskHandlerSample</runbpm:entry>
@@ -25,7 +25,7 @@
 		<serviceTask id="prepareAndShipTask" name="Prepare and Ship" >
 			<extensionElements>
 				<runbpm:extensionProps>
-		          <runbpm:extensionProp name="RunBPM_ServiceTask_Extension">
+		          <runbpm:extensionProp name="RunBPM_Internal_ServiceTask_Extension">
 		            <runbpm:map>
 		              <runbpm:entry key="type">handler_bean_class</runbpm:entry>
 		              <runbpm:entry key="value">org.runbpm.container.serviceTask.ServiceTaskHandlerSample</runbpm:entry>

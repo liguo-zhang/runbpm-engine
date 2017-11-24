@@ -147,11 +147,28 @@ public class ExtensionElements {
 	 * @return
 	 */
 	public List<String> getExtensionPropsList(String name){
+		return searchExtensionPropsList(name,false);
+	}
+	
+	public List<String> getExtensionPropsListByPrefix(String name){
+		return searchExtensionPropsList(name,true);
+	}
+	
+	public List<String> searchExtensionPropsList(String name,boolean isPrefix){
 		ExtensionProps extensionProperties = getExtensionProperties();
 		List<ExtensionProperty> list = extensionProperties.getpropertyList();
 		for(ExtensionProperty extensionProperty:list){
 			String propertyName = extensionProperty.getName();
-			if(propertyName.equals(name)){
+			
+			//≈–∂œ“¿æ›
+			boolean result = false;
+			if(isPrefix) {
+				result  = propertyName.startsWith(name);
+			}else {
+				result  = propertyName.equals(name);
+			}
+			
+			if(result){
 				ExtensionPropsList extensionPropsList = extensionProperty.getExtensionPropsList();
 				List<ExtensionPropsListValue> values = extensionPropsList.getValueList();
 				

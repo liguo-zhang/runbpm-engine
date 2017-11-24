@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <hibernate-mapping package="org.runbpm.entity">
 
-    <class name="VariableInstanceImpl">
+    <class name="VariableInstanceImpl" table="RUNBPM_VARIABLE_INSTANCE">
         <id name="id" type="long">
             <generator class="native" />
         </id>

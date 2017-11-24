@@ -119,49 +119,7 @@ public class ProcessContainer extends FlowContainer {
 		//event end
 	}
 	
-	public void suspend(){
-		
-		PROCESS_STATE currentState = this.processInstance.getState();
-		if(currentState.equals(PROCESS_STATE.NOT_STARTED)||currentState.equals(PROCESS_STATE.RUNNING)){
-			
-
-			//event begin
-			invokelistener(ListenerManager.Event_Type.beforeProcessInstanceSuspended);
-			//event end		
-			
-			this.processInstance.setStateBeforeSuspend(currentState);
-			processInstance.setState(PROCESS_STATE.SUSPENDED);
-			
-
-			//event begin
-			invokelistener(ListenerManager.Event_Type.afterProcessInstanceSuspended);
-			//event end
-		}else{
-			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020010_INVALID_PROCESSINSTANCE_TO_SUSPEND);
-		}
-		
-		
-	}
 	
-	public void resume(){
-		
-		if(this.processInstance.getState().equals(PROCESS_STATE.SUSPENDED)){
-			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020013_INVALID_PROCESSINSTANCE_TO_RESUME);
-		}else{
-
-			//event begin
-			invokelistener(ListenerManager.Event_Type.beforeProcessInstanceResumed);
-			//event end
-			
-			PROCESS_STATE stateBeforeSuspend = this.processInstance.getStateBeforeSuspend();
-			processInstance.setState(stateBeforeSuspend);
-			
-			//event begin
-			invokelistener(ListenerManager.Event_Type.afterProcessInstanceResume);
-			//event end
-		}
-		
-	}
 	
 	public void complete(){
 		//event begin
@@ -175,20 +133,9 @@ public class ProcessContainer extends FlowContainer {
 		//event end
 	}
 	
-	public void terminate(){
-		
-		//event begin
-		invokelistener(ListenerManager.Event_Type.beforeProcessInstanceTerminated);
-		//event end	RunBPMListenerBroker
-		
-		complete_internal(PROCESS_STATE.TERMINATED);
-		
-		//event begin
-		invokelistener(ListenerManager.Event_Type.afterProcessInstanceTerminated);
-		//event end
-	}
 	
-	private void complete_internal(PROCESS_STATE completeState){
+	
+	public void complete_internal(PROCESS_STATE completeState){
 		
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		
@@ -199,7 +146,7 @@ public class ProcessContainer extends FlowContainer {
 		
 		if(RunBPMUtils.notNullLong(parentActivityInstanceId)){
 			processInstance.setState(PROCESS_STATE.COMPLETED);
-			ActivityInstance parentActivityInstance = entityManager.getActivityInstance(parentActivityInstanceId);
+			ActivityInstance parentActivityInstance = entityManager.loadActivityInstance(parentActivityInstanceId);
 			ActivityOfCallActivityContainer  parentActivityContainer = (ActivityOfCallActivityContainer)ActivityContainer.getActivityContainer(parentActivityInstance);
 			parentActivityContainer.complete(processInstance);
 		}else{
@@ -213,7 +160,7 @@ public class ProcessContainer extends FlowContainer {
 	}
 	
 	protected Set<ActivityDefinition> getReachableActivitySet(ActivityDefinition outgoingActivity){
-		return processDefinition.getReachableActivitySet(outgoingActivity);
+		return processDefinition.listReachableActivitySet(outgoingActivity);
 	}
 
 	@Override
@@ -227,14 +174,7 @@ public class ProcessContainer extends FlowContainer {
 		return sameActivityInstance.size()==0;
 	}
 	
-	private void invokelistener(ListenerManager.Event_Type listenerType) {
-		if(ListenerManager.getListenerManager().haveProcessEvent(this.processInstance.getProcessModelId()+"",listenerType)){
-			ProcessContextBean processContextBean = new ProcessContextBean();
-			processContextBean.setProcessDefinition(this.processDefinition);
-			processContextBean.setProcessInstance(this.processInstance);
-			ListenerManager.getListenerManager().invokeProcessListener(processContextBean, listenerType);
-		}
-	}
+	
 	
 	public void setkey(String... strings) {
 		Process_ process_ = (Process_)processInstance;

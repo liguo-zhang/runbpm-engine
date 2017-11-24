@@ -35,7 +35,7 @@ public class ServiceSampleTest extends RunBPMTestCase{
 		Assert.assertEquals("" , processInstance.getState(),PROCESS_STATE.NOT_STARTED);
 		// 内存形式总是1
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 		Assert.assertNotNull(newProcessInstance.getCreateDate());
 		Assert.assertNotNull(newProcessInstance.getModifyDate());
 		//Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
@@ -47,7 +47,7 @@ public class ServiceSampleTest extends RunBPMTestCase{
 		// 旧的实例步行啊，还是NOT_STARTED
 		Assert.assertEquals("" , processInstance.getState(),PROCESS_STATE.NOT_STARTED);
 		
-		newProcessInstance = runtimeService.getProcessInstance(processInstanceId);
+		newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
 
 	}
 		

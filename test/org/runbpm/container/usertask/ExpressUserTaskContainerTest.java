@@ -120,7 +120,7 @@ public class ExpressUserTaskContainerTest extends RunBPMTestCase{
 		Assert.assertEquals("" , ac_theend.getState(),ACTIVITY_STATE.COMPLETED);
 		
 		//流程完成
-		ProcessInstance newProcessInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
 		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.COMPLETED);
 		
 	}

@@ -2,7 +2,11 @@
 <definitions id="definitions"
 	xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:runbpm="http://runbpm.org/schema/1.0/bpmn">
-
+<!-- 
+SimpleUserTaskContainerTest：顺序流程，第一个节点给一个组分配任务、第二个节点给一个组+一个人分配任务
+SimpleUserTaskContainerTest2：在上面的基础上增加另一个扩展的应用定义
+SimpleUserTaskContainerTest2：增加多个应用定义，以及多个操作
+ -->
 	<process id="SimpleUserTaskContainerTest.xml" name="SimpleUserTask">
 
 	  <startEvent id="theStart" />

@@ -4,19 +4,28 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ActivityOfUserTaskContainer;
 import org.runbpm.container.FlowContainer;
 import org.runbpm.container.ProcessContainer;
+import org.runbpm.container.UserTaskContainer;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
+import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
+import org.runbpm.entity.ProcessHistory;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.ProcessModel;
+import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
+import org.runbpm.exception.RunBPMException;
+import org.runbpm.handler.resource.User;
 
 public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	
@@ -34,7 +43,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	
 	@Override
 	public ProcessInstance startProcessInstance(long processInstanceId) {
-		ProcessInstance processInstance = entityManager.getProcessInstance(processInstanceId);
+		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
 		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
 		processInstanceContainer.start();
@@ -43,7 +52,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 	@Override
 	public void completeActivityInstance(long activityInstanceId) {
-		ActivityInstance activityInstance = entityManager.getActivityInstance(activityInstanceId);
+		ActivityInstance activityInstance = entityManager.loadActivityInstance(activityInstanceId);
 		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
 		
 		activityContainer.complete();
@@ -52,8 +61,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public ProcessInstance getProcessInstance(long processInstanceId) {
-		return entityManager.getProcessInstance(processInstanceId);	
+	public ProcessInstance loadProcessInstance(long processInstanceId) {
+		return entityManager.loadProcessInstance(processInstanceId);	
 	}
 
 
@@ -106,107 +115,144 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 	@Override
 	public ProcessModel loadProcessModelByModelId(long processModelId) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.loadProcessModelByModelId(processModelId);
 	}
 
 
 	@Override
 	public ProcessModel deployProcessDefinition(
 			ProcessDefinition processDefinition) {
-		// TODO Auto-generated method stub
-		return null;
+		return  this.entityManager.deployProcessDefinition(processDefinition);
 	}
 
 
 	@Override
 	public void terminateActivityInstance(long activityInstanceId) {
-		// TODO Auto-generated method stub
+
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		activityContainer.terminate();
 		
 	}
 
 
 	@Override
 	public void terminateActivityInstance(long activityInstanceId,
-			ActivityDefinition targetActivityDefinition) {
-		// TODO Auto-generated method stub
+			String targetActivityDefinitionId) {
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
 		
+		ProcessModel processModel =this.entityManager.loadProcessModelByModelId(activityInstance.getProcessModelId());
+		
+		ActivityDefinition targetActivityDefinition = processModel.getProcessDefinition().getActivity(targetActivityDefinitionId);
+		activityContainer.terminate(targetActivityDefinition);
 	}
 
 
 	@Override
 	public void terminateProcessInstance(long processInstanceId) {
-		// TODO Auto-generated method stub
+
+
+		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
+		
+		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		processInstanceContainer.terminate();
 		
 	}
 
 
 	@Override
 	public void resumeProcessInstance(long processInstanceId) {
-		// TODO Auto-generated method stub
+
+		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
+		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		processInstanceContainer.resume();		
 	}
 
 
 	@Override
 	public void suspendProcessInstance(long processInstanceId) {
-		// TODO Auto-generated method stub
+		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
+		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		processInstanceContainer.suspend();
 	}
 
 
 	@Override
 	public void resumeActivityInstance(long activityInstanceId) {
-		// TODO Auto-generated method stub
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		activityContainer.resume();
 		
 	}
 
 
 	@Override
 	public void suspendActivityInstance(long activityInstanceId) {
-		// TODO Auto-generated method stub
+
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		activityContainer.suspend();
 		
 	}
 
 
 	@Override
 	public void claimUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
-		
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.claim();
 	}
 
 
 	@Override
 	public void completeUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
+
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.complete();
 		
 	}
 
 
 	@Override
 	public void terminateUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
+
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.terminate();
 		
 	}
 
 
 	@Override
 	public void resumeUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
+
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.resume();
 		
 	}
 
 
 	@Override
 	public void putbackUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
+
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.putBack();
 		
 	}
 
 
 	@Override
-	public void setUserTaskAssignee(long userTaskId) {
-		// TODO Auto-generated method stub
+	public void setUserTaskAssignee(long userTaskId,String userId) {
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.setAssignee(userId);
 		
 	}
 
@@ -214,8 +260,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public List<ActivityInstance> listActivityInstanceByProcessInstIdAndState(
 			long processInstanceId, EnumSet<ACTIVITY_STATE> stateSet) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.listActivityInstanceByProcessInstIdAndState(processInstanceId, stateSet);
 	}
 
 
@@ -223,8 +269,8 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public List<ActivityInstance> listActivityInstanceByProcessInstIdSubrocessIdAndState(
 			long processInstanceId, String subProcessId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.listActivityInstanceByProcessInstIdSubrocessIdAndState(processInstanceId, subProcessId, stateSet);
 	}
 
 
@@ -232,54 +278,50 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public List<ActivityInstance> listActivityInstanceByActivityDefIdAndState(
 			long processInstanceId, String activityDefinitionId,
 			EnumSet<ACTIVITY_STATE> stateSet) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.listActivityInstanceByActivityDefIdAndState(processInstanceId, activityDefinitionId, stateSet);
 	}
 
 
 	@Override
 	public List<TaskInstance> listTaskInstanceByActivityInstId(
 			long activityInstanceId) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.listTaskInstanceByActivityInstId(activityInstanceId);
 	}
 
 
 	@Override
 	public List<TaskInstance> listTaskInstanceByProcessInstId(
 			long processInstanceId) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.listTaskInstanceByProcessInstId(processInstanceId);
 	}
 
 
 	@Override
 	public List<TaskInstance> listTaskInstanceByActivityInstIdAndState(
 			long activityInstanceId, EnumSet<TASK_STATE> stateSet) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.listTaskInstanceByActivityInstIdAndState(activityInstanceId,stateSet);
 	}
 
 
 	@Override
 	public List<TaskInstance> listTaskInstanceByUserIdAndState(String userId,
 			EnumSet<TASK_STATE> stateSet) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.entityManager.listTaskInstanceByUserIdAndState(userId, stateSet);
 	}
 
 
 	@Override
 	public List<TaskInstance> listTaskInstanceByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return this.entityManager.listTaskInstanceByUserId(userId);
 	}
 
 
 	@Override
-	public Map<String, VariableInstance> getVariableMap(long processInstanceId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, VariableInstance> loadVariableMap(long processInstanceId) {
+		return this.entityManager.loadVariableMap(processInstanceId);
 	}
 
 
@@ -290,24 +332,21 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public ProcessModel getLatestProcessMode(String processDefinitionId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ProcessModel loadLatestProcessMode(String processDefinitionId) {
+
+		return this.entityManager.loadLatestProcessModel(processDefinitionId);
 	}
 
 
 	@Override
 	public void suspendUserTask(long userTaskId) {
-		// TODO Auto-generated method stub
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.suspend();
 		
 	}
 
 
-	@Override
-	public void removeUserTask(long userTaskId, boolean autoCommit) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -359,6 +398,121 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 		return this.entityManager.listProcessInstanceByCreator(creator);
 	}
 
+
+	@Override
+	public ActivityInstance loadActivityInstance(long activityInstanceId) {
+		return this.entityManager.loadActivityInstance(activityInstanceId);
+	}
+
+
+	@Override
+	public TaskInstance loadTaskInstance(long taskInstanceId) {
+		return this.entityManager.loadTaskInstance(taskInstanceId);
+	}
+
+
+	@Override
+	public List<ProcessHistory> listProcessHistoryByCreator(String creator) {
+		return this.entityManager.listProcessHistoryByCreator(creator);
+	}
+
+
+	@Override
+	public ProcessHistory loadProcessHistory(long processHistoryId) {
+		return this.entityManager.loadProcessHistory(processHistoryId);
+	}
+
+
+	@Override
+	public ActivityHistory loadActivityHistory(long activityHistoryId) {
+		return this.entityManager.loadActivityHistory(activityHistoryId);
+	}
+
+
+	@Override
+	public TaskHistory loadTaskHistory(long taskHistoryId) {
+		return this.entityManager.loadTaskHistory(taskHistoryId);
+	}
+
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByProcessInstId(long processHistoryId) {
+		return this.entityManager.listActivityHistoryByProcessInstId(processHistoryId);
+	}
+
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByActivityDefId(long processHistoryId,
+			String activityDefinitionId) {
+		return this.entityManager.listActivityHistoryByActivityDefId(processHistoryId,activityDefinitionId);
+	}
+
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByProcessInstId(long processHistoryId) {
+		return this.entityManager.listTaskHistoryByProcessInstId(processHistoryId);
+	}
+
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId) {
+		return this.entityManager.listTaskHistoryByActivityInstId(activityHistoryId);
+
+	}
+
+
+	@Override
+	public Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId) {
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ProcessInstance processInstance = this.entityManager.loadProcessInstance(activityInstance.getProcessInstanceId());
+		FlowContainer processContainer = ProcessContainer.getFlowContainer(processInstance, activityInstance);
+		
+		ProcessModel processModel = this.entityManager.loadProcessModelByModelId(activityInstance.getProcessModelId());
+		ProcessDefinition processDefinition = processModel.getProcessDefinition();
+		ActivityDefinition activityDefinition = processDefinition.getActivityMap().get(activityInstance.getActivityDefinitionId());
+		
+		Set<ActivityDefinition> set =processContainer.listReachableActivitySet(activityInstance, activityDefinition);
+		return set;
+	}
+
+
+	@Override
+	public void cancelUserTask(long userTaskId) {
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.cancel();
+		
+	}
+
+
+	@Override
+	public void removeUserTask(long userTaskId) {
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.remove();
+	}
+
+
+	@Override
+	public void setAssignee(long userTaskId,String userId) {
+		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
+		userTaskContainer.setAssignee(userId);
+	}
+
+
+	@Override
+	public void addUserTask(long activityInstanceId, String userId,EntityConstants.TASK_STATE state) {
+		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		if(activityContainer instanceof ActivityOfUserTaskContainer) {
+			ActivityOfUserTaskContainer activityOfUserTaskContainer = (ActivityOfUserTaskContainer)activityContainer;
+			activityOfUserTaskContainer.addUserTask(new User(userId), state);
+		}else {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_addUser_Task_for_NOT_UserTask,"»î¶¯ÊµÀýID£º"+activityInstanceId);
+		}
+		
+	}
 
 
 }

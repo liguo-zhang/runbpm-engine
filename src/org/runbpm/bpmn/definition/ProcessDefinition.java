@@ -282,7 +282,7 @@ public class ProcessDefinition extends Element{
 	}
 
 	
-	public Set<ActivityDefinition> getReachableActivitySet(ActivityDefinition activity) {
+	public Set<ActivityDefinition> listReachableActivitySet(ActivityDefinition activity) {
 		// 初始化访问列表 
         Map<ActivityDefinition,Boolean> activityVisitMap = new HashMap<ActivityDefinition,Boolean>();
         for(ActivityDefinition a:activityList){

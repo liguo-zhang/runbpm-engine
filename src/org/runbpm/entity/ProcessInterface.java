@@ -11,6 +11,8 @@ interface ProcessInterface extends EntityInterface{
 	 * @return
 	 */
 	PROCESS_STATE getState() ;
+	
+	
 
 	/**
 	 * 该方法为流程引擎内部使用的方法

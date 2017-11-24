@@ -4,15 +4,19 @@ import java.io.File;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.context.Configuration;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
+import org.runbpm.entity.ProcessHistory;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.ProcessModel;
+import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +25,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
+ * 
  * 对外公开REST服务接口。
+  
  * 例如通过该种方式启动一个流程(已经测试通过)：<br>
  * http://localhost:9080/RunBPMWeb/createProcessInstance?processDefinitionId=Payment
- *
+ * http://localhost:9080/runbpm-workspace/loadProcessInstance?processInstanceId=1
+ * 需要配合rest-servlet.xml
+    <servlet>  
+        <servlet-name>RunBPMRestServlet</servlet-name>  
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
+        <init-param>  
+            <param-name>contextConfigLocation</param-name>  
+            <param-value>/WEB-INF/rest-servlet.xml</param-value>  
+        </init-param>  
+        <load-on-startup>2</load-on-startup>  
+    </servlet>
+    
+    <servlet-mapping>  
+        <servlet-name>RunBPMRestServlet</servlet-name>  
+        <url-pattern>/</url-pattern>  
+    </servlet-mapping> 
  */
+
 @RestController
 public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
@@ -50,10 +72,9 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 	}
 
 
-	@Override
-	public ProcessModel loadProcessModelByModelId(long processModelId) {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping("/loadProcessModelByModelId")
+	public ProcessModel loadProcessModelByModelId(@RequestParam(value="processModelId") long processModelId) {
+		return runtimeService.loadProcessModelByModelId(processModelId);
 	}
 
 
@@ -115,7 +136,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 	@Override
 	public void terminateActivityInstance(long activityInstanceId,
-			ActivityDefinition targetActivityDefinition) {
+			String targetActivityDefinitionId) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -192,16 +213,14 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public void setUserTaskAssignee(long userTaskId) {
+	public void setUserTaskAssignee(long userTaskId,String userId) {
 		// TODO Auto-generated method stub
 		
 	}
 
-
-	@Override
-	public ProcessInstance getProcessInstance(long processInstanceId) {
-		// TODO Auto-generated method stub
-		return null;
+	@RequestMapping("/loadProcessInstance")
+	public ProcessInstance loadProcessInstance(@RequestParam(value="processInstanceId") long processInstanceId) {
+		return runtimeService.loadProcessInstance(processInstanceId);
 	}
 
 
@@ -302,7 +321,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public Map<String, VariableInstance> getVariableMap(long processInstanceId) {
+	public Map<String, VariableInstance> loadVariableMap(long processInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -316,7 +335,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 
 	@Override
-	public ProcessModel getLatestProcessMode(String processDefinitionId) {
+	public ProcessModel loadLatestProcessMode(String processDefinitionId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -328,12 +347,6 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 		
 	}
 
-
-	@Override
-	public void removeUserTask(long userTaskId, boolean autoCommit) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -379,5 +392,114 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public ActivityInstance loadActivityInstance(long activityInstanceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public TaskInstance loadTaskInstance(long taskInstanceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ProcessHistory> listProcessHistoryByCreator(String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ProcessHistory loadProcessHistory(long processHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public ActivityHistory loadActivityHistory(long activityHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public TaskHistory loadTaskHistory(long taskHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByProcessInstId(long processHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByActivityDefId(long processHistoryId,
+			String activityDefinitionId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByProcessInstId(long processHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void cancelUserTask(long userTaskId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void removeUserTask(long userTaskId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setAssignee(long userTaskId,String userId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addUserTask(long activityInstanceId, String userId, TASK_STATE state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 
 }

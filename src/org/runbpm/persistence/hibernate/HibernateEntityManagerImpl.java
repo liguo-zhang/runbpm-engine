@@ -143,7 +143,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public ProcessInstance getProcessInstance(long processInstanceId) {
+	public ProcessInstance loadProcessInstance(long processInstanceId) {
 		Session session = TransactionObjectHolder.get().getSession();
 		ProcessInstance processInstance= session.get(ProcessInstanceImpl.class, processInstanceId);
 		
@@ -151,7 +151,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public ActivityInstance getActivityInstance(long activityInstanceeId) {
+	public ActivityInstance loadActivityInstance(long activityInstanceeId) {
 		Session session = TransactionObjectHolder.get().getSession();
 		ActivityInstance activityInstance= session.get(ActivityInstanceImpl.class, activityInstanceeId);
 		return activityInstance;
@@ -174,7 +174,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	
 
 	@Override
-	public TaskInstance getTaskInstance(long taskInstanceId) {
+	public TaskInstance loadTaskInstance(long taskInstanceId) {
 		Session session = TransactionObjectHolder.get().getSession();
 		TaskInstance taskInstance= session.get(TaskInstanceImpl.class, taskInstanceId);
 		return taskInstance;
@@ -189,6 +189,19 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		
 		return queryList;
 	}
+	
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId) {
+		String hsql = "select t from TaskHistoryImpl t where t.activityInstanceId = :activityHistoryId";
+		Session session = TransactionObjectHolder.get().getSession();
+		@SuppressWarnings("unchecked")
+		List<TaskHistory> queryList = session.createQuery(hsql)
+				.setParameter("activityHistoryId", activityHistoryId).list();
+		
+		return queryList;
+	}
+
 	
 	public List<TaskInstance> listTaskInstanceByUserId(String userId){
 		List<TaskInstance> taskInstanceList = new ArrayList<TaskInstance>();
@@ -224,20 +237,20 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	}
 	
 	public void removeTaskInstance(long removeTaskInstanceId){
-		TaskInstance taskInstance = this.getTaskInstance(removeTaskInstanceId);
+		TaskInstance taskInstance = this.loadTaskInstance(removeTaskInstanceId);
 		Session session = TransactionObjectHolder.get().getSession();
 		session.delete(taskInstance);
 		
 	}
 
 	@Override
-	public ApplicationInstance getApplicationInstance(
+	public ApplicationInstance loadApplicationInstance(
 			long applicationInstanceId) {
 		return null;
 	}
 
 	@Override
-	public Map<String, VariableInstance> getVariableMap(long processInstanceId) {
+	public Map<String, VariableInstance> loadVariableMap(long processInstanceId) {
 		
 		Map<String, VariableInstance> variableInstanceMap = new HashMap<String, VariableInstance> ();
 		String hsql = "select v from VariableInstanceImpl v where v.processInstanceId = :processInstanceId";
@@ -313,7 +326,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	@Override
 	public void setProcessVariable(long processInstanceId, String name,
 			Object value) {
-		VariableInstance variableInstance = this.getVariableInstance(processInstanceId, name);
+		VariableInstance variableInstance = this.loadVariableInstance(processInstanceId, name);
 		if(variableInstance==null){
 			variableInstance = new VariableInstanceImpl();
 			
@@ -366,7 +379,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
 				long callProcessInstanceId = activityInstance.getCallActivityProcessInstanceId();
-				ProcessInstance  callProcessInstance = this.getProcessInstance(callProcessInstanceId);
+				ProcessInstance  callProcessInstance = this.loadProcessInstance(callProcessInstanceId);
 				this.archiveProcess(callProcessInstance);
 			}
 			ActivityHistory activityHistory = new ActivityHistoryImpl();
@@ -384,7 +397,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		}
 		 
 		//copy VariableInstance 
-		Map<String, VariableInstance> variableMap = this.getVariableMap(processInstance.getId());
+		Map<String, VariableInstance> variableMap = this.loadVariableMap(processInstance.getId());
 		for(Map.Entry<String, VariableInstance> entry:variableMap.entrySet()){
 			VariableInstance variableInstance = entry.getValue();
 			VariableHistory variableHistory = new VariableHistoryImpl ();
@@ -438,5 +451,65 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		}
 		return processlist;
 	}
+
+	@Override
+	public List<ProcessHistory> listProcessHistoryByCreator(String creator) {
+		List<ProcessHistory> processlist = new ArrayList<ProcessHistory>();
+		String hsql = "select p from ProcessHistoryImpl p where p.creator = :creator";
+
+		Session session = TransactionObjectHolder.get().getSession();
+	    @SuppressWarnings("unchecked")
+		List<ProcessHistory> queryList = session.createQuery(hsql).setParameter("creator",creator).list();
+		
+		for(ProcessHistory processHistory:queryList){
+			processlist.add(processHistory);
+		}
+		return processlist;
+
+	}
+
+	@Override
+	public ProcessHistory loadProcessHistory(long processHistoryId) {
+		Session session = TransactionObjectHolder.get().getSession();
+		ProcessHistory processHistory= session.get(ProcessHistoryImpl.class, processHistoryId);
+		
+		return processHistory;
+	}
+
+	@Override
+	public ActivityHistory loadActivityHistory(long activityHistoryId) {
+		Session session = TransactionObjectHolder.get().getSession();
+		ActivityHistory activityHistory= session.get(ActivityHistoryImpl.class, activityHistoryId);
+		
+		return activityHistory;
+	}
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByProcessInstId(long processInstanceId) {
+		
+		List<ActivityHistory> activityList = new ArrayList<ActivityHistory>();
+		String hsql = "select a from ActivityHistoryImpl a where a.processInstanceId = :processInstanceId";
+	
+		Session session = TransactionObjectHolder.get().getSession();
+	    @SuppressWarnings("unchecked")
+		List<ActivityHistory> queryList = session.createQuery(hsql).setParameter("processInstanceId", processInstanceId).list();
+		
+		for(ActivityHistory activityHistory:queryList){
+			activityList.add(activityHistory);
+		}
+		return activityList;
+	}
+
+	
+
+	@Override
+	public TaskHistory loadTaskHistory(long taskHistoryId) {
+		Session session = TransactionObjectHolder.get().getSession();
+		TaskHistory taskHistory= session.get(TaskHistoryImpl.class, taskHistoryId);
+		
+		return taskHistory;
+	}
+
+	
 		
 }

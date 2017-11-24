@@ -45,6 +45,8 @@ public class ListenerManager {
 		afterUserTaskClaimed,
 		beforeUserTaskTerminated,
 		afterUserTaskTerminated,
+		beforeUserTaskRemoved,
+		afterUserTaskRemoved,
 		beforeUserTaskSuspended,
 		afterUserTaskSuspended,
 		beforeUserTaskResumed,
@@ -52,7 +54,9 @@ public class ListenerManager {
 		beforeUserTaskCompleted,
 		afterUserTaskCompleted,
 		beforeUserTaskReassigned,
-		afterUserTaskReassigned
+		afterUserTaskReassigned,
+		beforeUserTaskCanceled,
+		afterUserTaskCanceled
 	};
 	
 	private static ListenerManager listenerManager = new ListenerManager();

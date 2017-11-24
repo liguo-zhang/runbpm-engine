@@ -11,6 +11,7 @@ import java.util.Set;
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.CallActivity;
 import org.runbpm.bpmn.definition.ProcessDefinition;
+import org.runbpm.entity.ActivityHistory;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.Activity_;
 import org.runbpm.entity.ApplicationInstance;
@@ -189,7 +190,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public ProcessInstance getProcessInstance(long processInstanceId) {
+	public ProcessInstance loadProcessInstance(long processInstanceId) {
 		
 		ShardedJedis shardedJedis = getSharedJedis();
 		
@@ -230,7 +231,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 
 	@Override
-	public ActivityInstance getActivityInstance(long activityInstanceId) {
+	public ActivityInstance loadActivityInstance(long activityInstanceId) {
 		ShardedJedis shardedJedis = getSharedJedis();
 		
 		String domain = getDomainActInst(activityInstanceId+"");
@@ -283,7 +284,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		String domain = getDomainMappingProcAct(processInstanceId+"");
 		Set<String> set = shardedJedis.smembers(domain);
 		for(String activityInstanceId:set){
-			activityList.add(getActivityInstance(Long.parseLong(activityInstanceId)));
+			activityList.add(loadActivityInstance(Long.parseLong(activityInstanceId)));
 		}
 		return activityList;
 	}
@@ -291,7 +292,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 
 	@Override
-	public TaskInstance getTaskInstance(long taskInstanceId) {
+	public TaskInstance loadTaskInstance(long taskInstanceId) {
 		ShardedJedis shardedJedis = getSharedJedis();
 		
 		String domain = getDomainTaskInst(taskInstanceId+"");
@@ -349,7 +350,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		String domain = getDomainMappingActTask(activityInstanceId+"");
 		Set<String> set = shardedJedis.smembers(domain.toString());
 		for(String taskId:set){
-			taskList.add(getTaskInstance(Long.parseLong(taskId)));
+			taskList.add(loadTaskInstance(Long.parseLong(taskId)));
 		}
 		return taskList;
 	}
@@ -362,7 +363,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		String domain = getDomainMappingUserTask(userId);
 		Set<String> set = shardedJedis.smembers(domain.toString());
 		for(String taskId:set){
-			taskList.add(getTaskInstance(Long.parseLong(taskId)));
+			taskList.add(loadTaskInstance(Long.parseLong(taskId)));
 		}
 		return taskList;
 	}
@@ -393,7 +394,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	}
 
 	@Override
-	public ApplicationInstance getApplicationInstance(long applicationInstanceId) {
+	public ApplicationInstance loadApplicationInstance(long applicationInstanceId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -454,7 +455,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 
 
 	@Override
-	public Map<String, VariableInstance> getVariableMap(long processInstanceId) {
+	public Map<String, VariableInstance> loadVariableMap(long processInstanceId) {
 		Map<String, VariableInstance> variableInstanceMap = new HashMap<String, VariableInstance> ();
 		
 		ShardedJedis shardedJedis = getSharedJedis();
@@ -556,7 +557,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 	public void setProcessVariable(long processInstanceId, String name,
 			Object value) {
 		ShardedJedis shardedJedis = getSharedJedis();
-		Map<String, VariableInstance> variableInstanceMap = getVariableMap(processInstanceId);
+		Map<String, VariableInstance> variableInstanceMap = loadVariableMap(processInstanceId);
 		
 		VariableInstance variableInstance = variableInstanceMap.get(name);
 		if(variableInstance==null){
@@ -640,7 +641,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
 				long callProcessInstanceId = activityInstance.getCallActivityProcessInstanceId();
-				ProcessInstance  callProcessInstance = getProcessInstance(callProcessInstanceId);
+				ProcessInstance  callProcessInstance = loadProcessInstance(callProcessInstanceId);
 				archiveProcess(callProcessInstance);
 			}
 			RedisActivityHistory activityHistory = new RedisActivityHistory();
@@ -682,7 +683,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		}
 		 
 		//copy VariableInstance 
-		Map<String, VariableInstance> variableMap = getVariableMap(processInstance.getId());
+		Map<String, VariableInstance> variableMap = loadVariableMap(processInstance.getId());
 		for(Map.Entry<String, VariableInstance> entry:variableMap.entrySet()){
 			VariableInstance variableInstance = entry.getValue();
 			
@@ -953,5 +954,43 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<ProcessHistory> listProcessHistoryByCreator(String creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProcessHistory loadProcessHistory(long processHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActivityHistory loadActivityHistory(long activityHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ActivityHistory> listActivityHistoryByProcessInstId(long processInstanceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TaskHistory loadTaskHistory(long taskHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<TaskHistory> listTaskHistoryByActivityInstId(long activityHistoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 	
 }

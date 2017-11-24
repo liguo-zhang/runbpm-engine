@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ServiceTask extends ActivityDefinitionImpl{
 
-	public static final String EXTENSION_NAME = "RunBPM_ServiceTask_Extension";
+	public static final String EXTENSION_NAME = "RunBPM_Internal_ServiceTask_Extension";
 	
 	public enum SERVICETASK_TYPE{handler_bean_id,handler_bean_class,handler_bean_id_variable,handler_bean_class_variable}
 	

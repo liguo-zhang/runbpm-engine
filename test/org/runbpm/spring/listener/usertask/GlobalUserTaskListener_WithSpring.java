@@ -76,7 +76,7 @@ public class GlobalUserTaskListener_WithSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(3),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.beforeUserTaskStarted
 										.toString()).getValue());
@@ -84,7 +84,7 @@ public class GlobalUserTaskListener_WithSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(3),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.afterUserTaskStarted
 										.toString()).getValue());
@@ -92,7 +92,7 @@ public class GlobalUserTaskListener_WithSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(1),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.beforeUserTaskClaimed
 										.toString()).getValue());
@@ -100,7 +100,7 @@ public class GlobalUserTaskListener_WithSpring extends RunBPMTestCase{
 		Assert.assertEquals(
 				new Integer(1),
 				entityManager
-						.getVariableInstance(
+						.loadVariableInstance(
 								processInstance.getId(),
 								ListenerManager.Event_Type.afterUserTaskClaimed
 										.toString()).getValue());

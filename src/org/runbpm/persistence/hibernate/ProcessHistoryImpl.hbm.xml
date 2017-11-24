@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <hibernate-mapping package="org.runbpm.entity">
 
-    <class name="ProcessHistoryImpl">
+    <class name="ProcessHistoryImpl" table="RUNBPM_PROCESS_HISTORY">
         <id name="id" type="long">
             <generator class="assigned" />
         </id>

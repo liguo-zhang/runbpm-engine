@@ -9,6 +9,7 @@ import org.runbpm.bpmn.definition.SubProcessDefinition;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
+import org.runbpm.entity.EntityConstants.PROCESS_STATE;
 import org.runbpm.persistence.EntityManager;
 
 //XPDL¿é»î¶¯£¬BPMNSubProcess
@@ -23,7 +24,7 @@ public class SubProcessContainer extends FlowContainer {
 		
 		this.activityInstanceOfSubProcess = activityInstanceOfSubProcess;
 		this.subProcessDefinition = subProcessDefinition;
-		this.processInstance = entityManager.getProcessInstance(activityInstanceOfSubProcess.getProcessInstanceId());
+		this.processInstance = entityManager.loadProcessInstance(activityInstanceOfSubProcess.getProcessInstanceId());
 	}
 
 	public void start(){
@@ -45,7 +46,7 @@ public class SubProcessContainer extends FlowContainer {
 	}
 
 	protected Set<ActivityDefinition> getReachableActivitySet(ActivityDefinition outgoingActivity){
-		return subProcessDefinition.getReachableActivitySet(outgoingActivity);
+		return subProcessDefinition.listReachableActivitySet(outgoingActivity);
 	}
 
 	@Override
@@ -75,6 +76,11 @@ public class SubProcessContainer extends FlowContainer {
 			activityInstance.setSubProcessBlockId(activityInstanceOfSubProcess.getActivityDefinitionId());
 		}
 		return activityInstance;
+	}
+
+	@Override
+	public void complete_internal(PROCESS_STATE terminated) {
+		// TODO 
 	}
 	
 }

@@ -91,7 +91,7 @@ public class RedisHibernateEntityManagerImpl extends RedisEntityManagerImpl {
 			ActivityDefinition activityElement = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
 			if(activityElement instanceof CallActivity){
 				long callProcessInstanceId = activityInstance.getCallActivityProcessInstanceId();
-				ProcessInstance  callProcessInstance = this.getProcessInstance(callProcessInstanceId);
+				ProcessInstance  callProcessInstance = this.loadProcessInstance(callProcessInstanceId);
 				this.archiveProcess(callProcessInstance);
 			}
 			RedisActivityHistory activityHistory = new RedisActivityHistory();
@@ -145,7 +145,7 @@ public class RedisHibernateEntityManagerImpl extends RedisEntityManagerImpl {
 		}
 		 
 		//copy VariableInstance 
-		Map<String, VariableInstance> variableMap = this.getVariableMap(processInstance.getId());
+		Map<String, VariableInstance> variableMap = this.loadVariableMap(processInstance.getId());
 		for(Map.Entry<String, VariableInstance> entry:variableMap.entrySet()){
 			VariableInstance variableInstance = entry.getValue();
 			
