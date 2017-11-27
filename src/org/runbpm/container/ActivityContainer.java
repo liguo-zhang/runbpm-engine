@@ -108,7 +108,7 @@ public abstract class ActivityContainer {
             set.add(EntityConstants.TASK_STATE.RUNNING);
 			List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(this.activityInstance.getId(), set);
 	        if(notCompleteTaskInstanceList.size()>0){
-	        	throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020016_WORKITEM_NOT_COMPLETE);
+	        	throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020020_WORKITEM_NOT_COMPLETE);
 	        }
         }
         

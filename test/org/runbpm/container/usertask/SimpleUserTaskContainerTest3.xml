@@ -19,22 +19,22 @@
 		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
-			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap1</runbpm:entry>
-			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
+			              <runbpm:entry key="applicationList">runBPM_Application_list</runbpm:entry>
+			              <runbpm:entry key="operationList">runBPM_Operation_list</runbpm:entry>
 			             </runbpm:map> 
 		  			</runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_ApplicationMap1">
-			            <runbpm:map>
-			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
-			            </runbpm:map>
-			          </runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_OperationMap">
-			            <runbpm:map>
-			              <runbpm:entry key="提交">taskComplete</runbpm:entry>
-			              <runbpm:entry key="跳转">taskTerminateForJump</runbpm:entry>
-			            </runbpm:map>
+				  	<runbpm:extensionProp name="runBPM_Application_list">
+					  	 <runbpm:list>
+			              <runbpm:value>1</runbpm:value>
+			              <runbpm:value>2</runbpm:value>
+			              <runbpm:value>3</runbpm:value>
+			            </runbpm:list>
+			         </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_Operation_list">
+			            <runbpm:list>
+			              <runbpm:value>1</runbpm:value>
+			              <runbpm:value>2</runbpm:value>
+			            </runbpm:list>
 			        </runbpm:extensionProp>
 		        </runbpm:extensionProps>
 		  	</extensionElements>
@@ -53,31 +53,31 @@
 		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
-			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap1,runBPM_ApplicationMap2</runbpm:entry>
-			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
+			              <runbpm:entry key="applicationList">runBPM_Application_list_1,runBPM_Application_list_2</runbpm:entry>
+			              <runbpm:entry key="operationList">runBPM_Operation_list</runbpm:entry>
 			             </runbpm:map> 
 		  			</runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_ApplicationMap1">
-			            <runbpm:map>
-			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
-			            </runbpm:map>
-			          </runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_ApplicationMap2">
-			            <runbpm:map>
-			              <runbpm:entry key="application4">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application5">taskApplication.jsp</runbpm:entry>
-			            </runbpm:map>
+				  	<runbpm:extensionProp name="runBPM_Application_list_1">
+					  	 <runbpm:list>
+			              <runbpm:value>1</runbpm:value>
+			              <runbpm:value>2</runbpm:value>
+			              <runbpm:value>3</runbpm:value>
+			            </runbpm:list>
 			         </runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_OperationMap">
-			            <runbpm:map>
-			              <runbpm:entry key="提交">taskComplete</runbpm:entry>
-			              <runbpm:entry key="退回到上一步">taskTerminateForBack</runbpm:entry>
-			              <runbpm:entry key="放回">taskPutBack</runbpm:entry>
-			              <runbpm:entry key="重分配任务">taskSetAssignee</runbpm:entry>
-			            </runbpm:map>
-			          </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_Application_list_2">
+					  	 <runbpm:list>
+			              <runbpm:value>4</runbpm:value>
+			              <runbpm:value>5</runbpm:value>
+			            </runbpm:list>
+			         </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_Operation_list">
+			            <runbpm:list>
+			              <runbpm:value>1</runbpm:value>
+			              <runbpm:value>3</runbpm:value>
+			              <runbpm:value>4</runbpm:value>
+			              <runbpm:value>5</runbpm:value>
+			            </runbpm:list>
+			        </runbpm:extensionProp>
 	         </runbpm:extensionProps>
 	  	</extensionElements>
 	  </userTask>
@@ -95,23 +95,23 @@
 		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
-			              <runbpm:entry key="applicationMap">runBPM_ApplicationMap</runbpm:entry>
-			              <runbpm:entry key="operationMap">runBPM_OperationMap</runbpm:entry>
-			             </runbpm:map>
+			              <runbpm:entry key="applicationList">runBPM_Application_list</runbpm:entry>
+			              <runbpm:entry key="operationList">runBPM_Operation_list</runbpm:entry>
+			             </runbpm:map> 
 		  			</runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_ApplicationMap">
-			            <runbpm:map>
-			              <runbpm:entry key="application1">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application2">taskApplication.jsp</runbpm:entry>
-			              <runbpm:entry key="application3">taskApplication.jsp</runbpm:entry>
-			            </runbpm:map>
-			          </runbpm:extensionProp>
-				  	<runbpm:extensionProp name="runBPM_OperationMap">
-			            <runbpm:map>
-			              <runbpm:entry key="批准">taskComplete</runbpm:entry>
-			              <runbpm:entry key="退回">taskTerminateForBackWithSelection</runbpm:entry>
-			            </runbpm:map>
-			          </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_Application_list">
+					  	 <runbpm:list>
+			              <runbpm:value>1</runbpm:value>
+			              <runbpm:value>2</runbpm:value>
+			              <runbpm:value>3</runbpm:value>
+			            </runbpm:list>
+			         </runbpm:extensionProp>
+				  	<runbpm:extensionProp name="runBPM_Operation_list">
+			            <runbpm:list>
+			              <runbpm:value>6</runbpm:value>
+			              <runbpm:value>7</runbpm:value>
+			            </runbpm:list>
+			        </runbpm:extensionProp>
 	         </runbpm:extensionProps>
 	  	</extensionElements>
 	  </userTask>

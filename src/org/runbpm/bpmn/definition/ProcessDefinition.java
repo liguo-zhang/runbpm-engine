@@ -296,10 +296,39 @@ public class ProcessDefinition extends Element{
         return set;
 	}
 	
+	public Set<ActivityDefinition> listBackableActivitySet(ActivityDefinition activity) {
+		// 初始化访问列表 
+        Map<ActivityDefinition,Boolean> activityVisitMap = new HashMap<ActivityDefinition,Boolean>();
+        for(ActivityDefinition a:activityList){
+            activityVisitMap.put(a, new Boolean(false));
+        }
+
+        Set<ActivityDefinition> set = new HashSet<ActivityDefinition>();
+        //搜索下一个
+        searchNextBack(activity, activityVisitMap, set);
+
+        return set;
+	}
+	
+	 private void searchNextBack(ActivityDefinition activity, Map<ActivityDefinition,Boolean> activityVisitMap, Set<ActivityDefinition> set) {
+         
+ 		List<SequenceFlow> incomingSequenceFlowList = activity.getIncomingSequenceFlowList();
+     
+	     for(SequenceFlow sequenceFlow:incomingSequenceFlowList){
+	     	ActivityDefinition sourceActivity = getActivity(sequenceFlow.getSourceRef());
+	     	boolean isVisit = activityVisitMap.get(sourceActivity).booleanValue();
+	         if (!isVisit) {
+	             activityVisitMap.put(sourceActivity, new Boolean(true));
+	             set.add(sourceActivity);
+	             searchNextBack(sourceActivity, activityVisitMap, set);
+	         }
+	     }
+     
+	 }
 	    
     private void searchNext(ActivityDefinition activity, Map<ActivityDefinition,Boolean> activityVisitMap, Set<ActivityDefinition> set) {
          
-    	List<SequenceFlow> outgoingSequenceFlowList = activity.getOutgoingSequenceFlowList();
+    		List<SequenceFlow> outgoingSequenceFlowList = activity.getOutgoingSequenceFlowList();
         
         for(SequenceFlow sequenceFlow:outgoingSequenceFlowList){
         	ActivityDefinition toActivity = getActivity(sequenceFlow.getTargetRef());

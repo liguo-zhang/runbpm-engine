@@ -60,8 +60,11 @@ public class RunBPMException extends RuntimeException {
 		Code_020017_INVALID_ACTIVITYINSTANCE_TO_TERMINATE("活动不是处于活跃状态，所以不能执行终止操作"),
 		Code_020018_INVALID_USERTASK_TO_COMPLETE("工作项不是处于活跃状态，所以不能执行完成操作"),
 		Code_020019_INVALID_USERTASK_TO_TERMINATE("工作项不是处于活跃状态，所以不能执行终止操作"),
+		Code_020020_WORKITEM_NOT_COMPLETE("尚有未结束的工作项，不能执行完成操作"),
+		Code_020021_NON_PROCESSINSTANCE("所涉及的流程实例为空对象，请检查流程ID是否存在"),
+		Code_020022_NON_ACTIVITYINSTANCE("所涉及的活动实例为空对象，请检查活动ID是否存在"),
+		Code_020023_NON_USERTASK("所涉及的任务实例为空对象，请检查任务ID是否存在"),
 		
-		Code_020016_WORKITEM_NOT_COMPLETE("尚有未结束的工作项，不能执行完成操作"),
 		
 		Code_020100_NO_ResourceAssignmentHandler_Impl("根据spring bean id获取的类没有实现资源接口"),
 		Code_020101_NO_SpecialConditionHandler_Impl("根据spring bean id获取的类没有实现转移条件接口"),

@@ -46,7 +46,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public ProcessInstance startProcessInstance(long processInstanceId) {
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
-		
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"流程实例ID：["+processInstanceId+"]");
+		}
 		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.start();
 		return processInstance;
@@ -55,6 +57,10 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void completeActivityInstance(long activityInstanceId) {
 		ActivityInstance activityInstance = entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
+		
 		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
 		
 		activityContainer.complete();
@@ -133,6 +139,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void terminateActivityInstance(long activityInstanceId) {
 
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.terminate();
 		
@@ -143,6 +152,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void terminateActivityInstance(long activityInstanceId,
 			String targetActivityDefinitionId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		
 		ProcessModel processModel =this.entityManager.loadProcessModelByModelId(activityInstance.getProcessModelId());
@@ -155,8 +167,10 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void terminateProcessInstance(long processInstanceId) {
 
-
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"流程实例ID：["+processInstanceId+"]");
+		}
 		
 		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.terminate();
@@ -168,7 +182,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void resumeProcessInstance(long processInstanceId) {
 
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
-		
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"流程实例ID：["+processInstanceId+"]");
+		}
 		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.resume();		
 	}
@@ -177,7 +193,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void suspendProcessInstance(long processInstanceId) {
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
-		
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"流程实例ID：["+processInstanceId+"]");
+		}
 		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.suspend();
 	}
@@ -186,6 +204,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void resumeActivityInstance(long activityInstanceId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.resume();
 		
@@ -196,6 +217,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void suspendActivityInstance(long activityInstanceId) {
 
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.suspend();
 		
@@ -205,6 +229,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void claimUserTask(long userTaskId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.claim();
 	}
@@ -214,6 +241,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void completeUserTask(long userTaskId) {
 
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.complete();
 		
@@ -224,6 +254,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void terminateUserTask(long userTaskId) {
 
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.terminate();
 		
@@ -234,6 +267,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void resumeUserTask(long userTaskId) {
 
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.resume();
 		
@@ -244,6 +280,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public void putbackUserTask(long userTaskId) {
 
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.putBack();
 		
@@ -253,6 +292,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void setUserTaskAssignee(long userTaskId,String userId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.setAssignee(userId);
 		
@@ -343,6 +385,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void suspendUserTask(long userTaskId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.suspend();
 		
@@ -466,6 +511,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ProcessInstance processInstance = this.entityManager.loadProcessInstance(activityInstance.getProcessInstanceId());
 		FlowContainer processContainer = ContainerTool.getFlowContainer(processInstance, activityInstance);
 		
@@ -481,6 +529,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void cancelUserTask(long userTaskId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.cancel();
 		
@@ -490,6 +541,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void removeUserTask(long userTaskId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.remove();
 	}
@@ -498,6 +552,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void setAssignee(long userTaskId,String userId) {
 		TaskInstance taskInstance = this.entityManager.loadTaskInstance(userTaskId);
+		if(taskInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020023_NON_USERTASK,"任务实例ID：["+userTaskId+"]");
+		}
 		UserTaskContainer userTaskContainer = UserTaskContainer.getUserTaskContainer(taskInstance);
 		userTaskContainer.setAssignee(userId);
 	}
@@ -506,6 +563,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	@Override
 	public void addUserTask(long activityInstanceId, String userId,EntityConstants.TASK_STATE state) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
+		if(activityInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
+		}
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		if(activityContainer instanceof ActivityOfUserTaskContainer) {
 			ActivityOfUserTaskContainer activityOfUserTaskContainer = (ActivityOfUserTaskContainer)activityContainer;
@@ -521,6 +581,9 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	public List<User> evalUserList(long processInstanceId, String activityDefinitionId) {
 
 		ProcessInstance processInstance = this.entityManager.loadProcessInstance(processInstanceId);
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"流程实例ID：["+processInstanceId+"]");
+		}
 		ProcessModel processModel =this.entityManager.loadProcessModelByModelId(processInstance.getProcessModelId());
 		
 		ActivityDefinition activityDefinition = processModel.getProcessDefinition().getActivity(activityDefinitionId);

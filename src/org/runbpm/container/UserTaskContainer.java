@@ -67,6 +67,7 @@ public class UserTaskContainer {
 			//before event end	
 			
 			this.taskInstance.setStateBeforeSuspend(currentState);
+			this.taskInstance.setModifyDate(new Date());
 			taskInstance.setState(EntityConstants.TASK_STATE.SUSPENDED);
 			
 
@@ -90,6 +91,7 @@ public class UserTaskContainer {
 			//before event end	
 			
 			EntityConstants.TASK_STATE stateBeforeSuspend = this.taskInstance.getStateBeforeSuspend();
+			taskInstance.setModifyDate(new Date());
 			taskInstance.setState(stateBeforeSuspend);
 			
 			//befor event begin
@@ -156,6 +158,7 @@ public class UserTaskContainer {
 		
 		this.taskInstance.setState(completeState);
 		this.taskInstance.setCompleteDate(new Date());
+		this.taskInstance.setModifyDate(new Date());
 		
 		EnumSet<EntityConstants.TASK_STATE> set = EnumSet.noneOf(EntityConstants.TASK_STATE.class);  
         set.add(EntityConstants.TASK_STATE.NOT_STARTED);  
@@ -185,7 +188,7 @@ public class UserTaskContainer {
 		//befor event begin
 		invokelistener(ListenerManager.Event_Type.beforeUserTaskClaimed);
 		//before event end	
-		
+		this.taskInstance.setModifyDate(new Date());
 		this.taskInstance.setState(EntityConstants.TASK_STATE.RUNNING);
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		//删除其他任务
@@ -205,7 +208,7 @@ public class UserTaskContainer {
 		//befor event begin
 		invokelistener(ListenerManager.Event_Type.beforeUserTaskReassigned);
 		//before event end	
-		
+		this.taskInstance.setModifyDate(new Date());
 		this.taskInstance.setUserId(userId);
 		
 		//befor event begin
@@ -244,9 +247,9 @@ public class UserTaskContainer {
 		}
 		
 		//设置该任务状态为终止
-		EntityManager entityManager = Configuration.getContext().getEntityManager();
-		TaskInstance taskInstance = entityManager.loadTaskInstance(this.taskInstance.getId());
-		taskInstance.setState(EntityConstants.TASK_STATE.TERMINATED);
+		
+		taskInstance.setModifyDate(new Date());
+		taskInstance.setState(EntityConstants.TASK_STATE.CANCELED);
 		
 		//重启活动
 		ActivityContainer activityContainer =  ContainerTool.getActivityContainer(activityInstance);
