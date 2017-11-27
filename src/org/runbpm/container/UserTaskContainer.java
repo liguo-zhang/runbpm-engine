@@ -166,7 +166,7 @@ public class UserTaskContainer {
 	        List<TaskInstance> notCompleteTaskInstanceList = entityManager.listTaskInstanceByActivityInstIdAndState(taskInstance.getActivityInstanceId(), set);
 	        if(notCompleteTaskInstanceList.size()==0){
 		        	ActivityInstance activityInstance = entityManager.loadActivityInstance(taskInstance.getActivityInstanceId());
-		        	ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
+		        	ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
 		        	if(completeState.equals(TASK_STATE.TERMINATED)){
 		        		activityContainer.terminate(targetActivityDefinition);
 		        	}else if(completeState.equals(TASK_STATE.COMPLETED)){
@@ -249,7 +249,7 @@ public class UserTaskContainer {
 		taskInstance.setState(EntityConstants.TASK_STATE.TERMINATED);
 		
 		//÷ÿ∆ÙªÓ∂Ø
-		ActivityContainer activityContainer =  ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer =  ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.start();
 		
 	}

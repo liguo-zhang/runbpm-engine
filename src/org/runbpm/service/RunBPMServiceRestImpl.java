@@ -19,6 +19,7 @@ import org.runbpm.entity.ProcessModel;
 import org.runbpm.entity.TaskHistory;
 import org.runbpm.entity.TaskInstance;
 import org.runbpm.entity.VariableInstance;
+import org.runbpm.handler.resource.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,20 +50,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
+public class RunBPMServiceRestImpl extends  AbstractRunBPMService{
 
-	//ȡorg.runbpm.service.RuntimeServiceImpl
+	//ȡorg.runbpm.service.RunBPMService
 	
-	private  RuntimeService runtimeService = Configuration.getContext().getRuntimeService();
+	private  RunBPMService runBPMService = Configuration.getContext().getRunBPMService();
 	
-	public void setRuntimeService(RuntimeService runtimeService) {
-		this.runtimeService = runtimeService;
+	public void setRunBPMService(RunBPMService runBPMService) {
+		this.runBPMService = runBPMService;
 	}
 
 
 	@RequestMapping("/createProcessInstance")
 	public ProcessInstance createProcessInstance(@RequestParam(value="processDefinitionId") String processDefinitionId,@RequestParam(value="creator") String creator){
-		return runtimeService.createProcessInstance(processDefinitionId,creator);
+		return runBPMService.createProcessInstance(processDefinitionId,creator);
 	}
 
 
@@ -74,7 +75,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 	@RequestMapping("/loadProcessModelByModelId")
 	public ProcessModel loadProcessModelByModelId(@RequestParam(value="processModelId") long processModelId) {
-		return runtimeService.loadProcessModelByModelId(processModelId);
+		return runBPMService.loadProcessModelByModelId(processModelId);
 	}
 
 
@@ -220,7 +221,7 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 
 	@RequestMapping("/loadProcessInstance")
 	public ProcessInstance loadProcessInstance(@RequestParam(value="processInstanceId") long processInstanceId) {
-		return runtimeService.loadProcessInstance(processInstanceId);
+		return runBPMService.loadProcessInstance(processInstanceId);
 	}
 
 
@@ -497,6 +498,13 @@ public class RuntimeServiceRestImpl extends  AbstractRuntimeService{
 	public void addUserTask(long activityInstanceId, String userId, TASK_STATE state) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public List<User> evalUserList(long processInstanceId, String activityDefinitionId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

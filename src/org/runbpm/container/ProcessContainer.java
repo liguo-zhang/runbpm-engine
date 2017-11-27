@@ -110,7 +110,7 @@ public class ProcessContainer extends FlowContainer {
 		
 		//create new ActivityInstance 
 		ActivityInstance activityInstance = createNewActivityInstance(activityDefinition);
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
 		
 		activityContainer.start();
 		
@@ -147,7 +147,7 @@ public class ProcessContainer extends FlowContainer {
 		if(RunBPMUtils.notNullLong(parentActivityInstanceId)){
 			processInstance.setState(PROCESS_STATE.COMPLETED);
 			ActivityInstance parentActivityInstance = entityManager.loadActivityInstance(parentActivityInstanceId);
-			ActivityOfCallActivityContainer  parentActivityContainer = (ActivityOfCallActivityContainer)ActivityContainer.getActivityContainer(parentActivityInstance);
+			ActivityOfCallActivityContainer  parentActivityContainer = (ActivityOfCallActivityContainer)ContainerTool.getActivityContainer(parentActivityInstance);
 			parentActivityContainer.complete(processInstance);
 		}else{
 			entityManager.archiveProcess(processInstance);

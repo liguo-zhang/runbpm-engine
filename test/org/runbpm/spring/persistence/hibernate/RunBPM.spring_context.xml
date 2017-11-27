@@ -120,14 +120,14 @@
 	<bean id="entityManager" class="org.runbpm.persistence.hibernate.HibernateEntityManagerImpl">
 	</bean>
 	  
-	<bean id="runtimeService" class="org.runbpm.service.RuntimeServiceImpl">
+	<bean id="runBPMService" class="org.runbpm.service.RunBPMServiceImpl">
 		<property name="entityManager" ref="entityManager" />
 	</bean>
 	
 	<bean id="globalResourceHandler" class="org.runbpm.handler.resource.GlobalResourceHandlerSample">
 	</bean>
 	
-	<!-- 针对对RuntimeService的截获器，主要为设置service接口的每一次线程调用初始化Hibernate session，设置到rumBPMThreadContext中
+	<!-- 针对对RunBPMService的截获器，主要为设置service接口的每一次线程调用初始化Hibernate session，设置到rumBPMThreadContext中
 		RunBPM内部如果配置为使用Hibernate，将使用rumBPMThreadContext中的Hibernate session-->
     <bean id="serviceInterceptor" class="org.runbpm.persistence.hibernate5.Hibernate5Interceptor">
     	<property name="recordTime" value="false" />
@@ -138,7 +138,7 @@
     <aop:config>
         <aop:aspect ref="serviceInterceptor">
             <aop:pointcut id="theExecutionOfServiceMethod"
-                        expression="execution(* org.runbpm.service.RuntimeServiceImpl.*(..))；"/>
+                        expression="execution(* org.runbpm.service.RunBPMServiceImpl.*(..))；"/>
             <aop:around pointcut-ref="theExecutionOfServiceMethod" method="interceptor"/>
         </aop:aspect>
     </aop:config>

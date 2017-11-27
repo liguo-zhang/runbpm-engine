@@ -7,7 +7,7 @@ import org.runbpm.listener.GlobalListener;
 import org.runbpm.listener.ListenerManager;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
-import org.runbpm.service.RuntimeService;
+import org.runbpm.service.RunBPMService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -19,7 +19,7 @@ public class RunBPMSpringContext implements ContextInterface {
 	
 	private  EntityManager entityManager;
 	private  GlobalResourceHandler globalResourceHandler;
-	private  RuntimeService runtimeService;
+	private  RunBPMService runBPMService;
 	
 	private GlobalListener globalListener;
 	
@@ -76,9 +76,9 @@ public class RunBPMSpringContext implements ContextInterface {
 		}
 		
 		try{
-			runtimeService = (RuntimeService) appContext.getBean("runtimeService");
+			runBPMService = (RunBPMService) appContext.getBean("runBPMService");
 		}catch(NoSuchBeanDefinitionException e){
-			logger.warn("Spring正在加载RuntimeService，但是加载失败了。有可能后续不需要runtimeService，例如内部方法的单元测试。");
+			logger.warn("Spring正在加载RunBPMService，但是加载失败了。有可能后续不需要RunBPMService，例如内部方法的单元测试。");
 		}
 		this.appContext = appContext;
 	}
@@ -92,11 +92,11 @@ public class RunBPMSpringContext implements ContextInterface {
 	}
 	
 	
-	public  RuntimeService getRuntimeService(){
-		if(runtimeService==null){
-			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_000000_NO_INIT_RunBPM,"RuntimeService");
+	public  RunBPMService getRunBPMService(){
+		if(runBPMService==null){
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_000000_NO_INIT_RunBPM,"RunBPMService");
 		}
-		return runtimeService;
+		return runBPMService;
 	}
 	
 	public GlobalListener getGlobalListener() {

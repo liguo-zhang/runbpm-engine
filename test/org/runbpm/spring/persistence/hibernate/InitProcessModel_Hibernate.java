@@ -10,7 +10,7 @@ import org.runbpm.RunBPMTestCase;
 import org.runbpm.context.Configuration;
 import org.runbpm.context.RunBPMSpringContext;
 import org.runbpm.entity.ProcessModel;
-import org.runbpm.service.RuntimeService;
+import org.runbpm.service.RunBPMService;
 import org.runbpm.spring.persistence.PersistenceTest;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -29,20 +29,20 @@ public class InitProcessModel_Hibernate extends RunBPMTestCase{
 	@Test
 	public void ParallelGateway_Hibernate() throws Exception{
 		
-		RuntimeService runtimeService = Configuration.getContext().getRuntimeService();
+		RunBPMService runBPMService = Configuration.getContext().getRunBPMService();
 
 		String fileName = "PersistenceTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,PersistenceTest.class);
-		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
-		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
+		runBPMService.deployProcessDefinitionFromFile(classPathResource.getFile());
+		runBPMService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
-		List<ProcessModel> onlyNewList = runtimeService.loadProcessModels(true);
+		List<ProcessModel> onlyNewList = runBPMService.loadProcessModels(true);
 		Assert.assertEquals(onlyNewList.size(), 1);
 		
-		List<ProcessModel> allList = runtimeService.loadProcessModels(false);
+		List<ProcessModel> allList = runBPMService.loadProcessModels(false);
 		Assert.assertEquals(allList.size(), 2);
 		
-		ProcessModel processModel = runtimeService.loadLatestProcessModel("PersistenceTest.xml");
+		ProcessModel processModel = runBPMService.loadLatestProcessModel("PersistenceTest.xml");
 		Assert.assertNotNull(processModel.getId());
 	}
 	

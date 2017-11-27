@@ -6,16 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
-import org.runbpm.bpmn.definition.CallActivity;
 import org.runbpm.bpmn.definition.EndEvent;
-import org.runbpm.bpmn.definition.ExclusiveGateway;
-import org.runbpm.bpmn.definition.InclusiveGateway;
-import org.runbpm.bpmn.definition.ManualTask;
-import org.runbpm.bpmn.definition.ParallelGateway;
-import org.runbpm.bpmn.definition.ProcessDefinition;
-import org.runbpm.bpmn.definition.ServiceTask;
-import org.runbpm.bpmn.definition.StartEvent;
-import org.runbpm.bpmn.definition.SubProcessDefinition;
 import org.runbpm.bpmn.definition.UserTask;
 import org.runbpm.context.Configuration;
 import org.runbpm.context.ProcessContextBean;
@@ -195,7 +186,7 @@ public abstract class ActivityContainer {
 		
 		ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
 		
-		FlowContainer flowContainer = ProcessContainer.getFlowContainer(processInstance,activityInstance);
+		FlowContainer flowContainer = ContainerTool.getFlowContainer(processInstance,activityInstance);
 		if (activityDefinition instanceof EndEvent && targetActivityDefinition==null) {
 			flowContainer.complete();
 		}else{
@@ -205,42 +196,6 @@ public abstract class ActivityContainer {
 	}
 	
 	
-	
-	public static ActivityContainer getActivityContainer(ActivityInstance activityInstance){
-		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
-		ActivityDefinition activityDefinition = null;
-		if(activityInstance.getParentActivityInstanceId()!=0){
-			//块活动
-			ActivityInstance parentActivityInstance = Configuration.getContext().getEntityManager().loadActivityInstance(activityInstance.getParentActivityInstanceId());
-			SubProcessDefinition subProcessDefinition =processDefinition.getSubProcessActivityDefinition(parentActivityInstance.getSequenceBlockId());
-			if(subProcessDefinition==null){
-				throw new RunBPMException("cannot find subprocess .blockId["+activityInstance.getSubProcessBlockId()+"],current activity definitionid:["+activityInstance.getActivityDefinitionId()+"]");
-			}
-			activityDefinition = subProcessDefinition.getActivity(activityInstance.getActivityDefinitionId());
-		}else{
-			activityDefinition = processDefinition.getActivity(activityInstance.getActivityDefinitionId());
-		}
-		
-		if(activityDefinition instanceof StartEvent 
-				|| activityDefinition instanceof EndEvent 
-				|| activityDefinition instanceof ManualTask 
-				|| activityDefinition instanceof ParallelGateway
-				|| activityDefinition instanceof ExclusiveGateway
-				||activityDefinition instanceof InclusiveGateway
-				){
-			return new ActivityOfRouteContainer(activityDefinition,activityInstance); 
-		}else if(activityDefinition instanceof UserTask){
-			return new ActivityOfUserTaskContainer(activityDefinition,activityInstance);
-		}else if(activityDefinition instanceof CallActivity){
-			return new ActivityOfCallActivityContainer(activityDefinition,activityInstance);
-		}else if(activityDefinition instanceof ServiceTask){
-			return new ActivityOfServiceTaskContainer(activityDefinition,activityInstance);
-		}else if(activityDefinition instanceof SubProcessDefinition){
-			return new ActivityOfSubProcessContainer(activityDefinition,activityInstance);
-		}
-		
-		throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_100001_Invalid_ActityDefinition_Type,"不合法的活动定义，定义类型为:["+activityDefinition.getClass()+"]");
-	}
 	
 	private void invokelistener(ListenerManager.Event_Type eventType) {
 		ProcessContextBean processContextBean = null;

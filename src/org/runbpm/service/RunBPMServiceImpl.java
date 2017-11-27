@@ -8,8 +8,10 @@ import java.util.Set;
 
 import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
+import org.runbpm.bpmn.definition.UserTask;
 import org.runbpm.container.ActivityContainer;
 import org.runbpm.container.ActivityOfUserTaskContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.FlowContainer;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.container.UserTaskContainer;
@@ -27,7 +29,7 @@ import org.runbpm.entity.VariableInstance;
 import org.runbpm.exception.RunBPMException;
 import org.runbpm.handler.resource.User;
 
-public class RuntimeServiceImpl extends  AbstractRuntimeService{
+public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	
 	
 	public ProcessInstance createProcessInstance(String processDefinitionId,String creator){
@@ -45,7 +47,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public ProcessInstance startProcessInstance(long processInstanceId) {
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
-		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.start();
 		return processInstance;
 	}
@@ -53,7 +55,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public void completeActivityInstance(long activityInstanceId) {
 		ActivityInstance activityInstance = entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
 		
 		activityContainer.complete();
 		
@@ -131,7 +133,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public void terminateActivityInstance(long activityInstanceId) {
 
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.terminate();
 		
 	}
@@ -141,7 +143,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public void terminateActivityInstance(long activityInstanceId,
 			String targetActivityDefinitionId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		
 		ProcessModel processModel =this.entityManager.loadProcessModelByModelId(activityInstance.getProcessModelId());
 		
@@ -156,7 +158,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
-		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.terminate();
 		
 	}
@@ -167,7 +169,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
-		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.resume();		
 	}
 
@@ -176,7 +178,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public void suspendProcessInstance(long processInstanceId) {
 		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
 		
-		FlowContainer processInstanceContainer = ProcessContainer.getFlowContainer(processInstance, null);
+		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
 		processInstanceContainer.suspend();
 	}
 
@@ -184,7 +186,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public void resumeActivityInstance(long activityInstanceId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.resume();
 		
 	}
@@ -194,7 +196,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public void suspendActivityInstance(long activityInstanceId) {
 
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		activityContainer.suspend();
 		
 	}
@@ -465,7 +467,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	public Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
 		ProcessInstance processInstance = this.entityManager.loadProcessInstance(activityInstance.getProcessInstanceId());
-		FlowContainer processContainer = ProcessContainer.getFlowContainer(processInstance, activityInstance);
+		FlowContainer processContainer = ContainerTool.getFlowContainer(processInstance, activityInstance);
 		
 		ProcessModel processModel = this.entityManager.loadProcessModelByModelId(activityInstance.getProcessModelId());
 		ProcessDefinition processDefinition = processModel.getProcessDefinition();
@@ -504,7 +506,7 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 	@Override
 	public void addUserTask(long activityInstanceId, String userId,EntityConstants.TASK_STATE state) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
-		ActivityContainer activityContainer= ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		if(activityContainer instanceof ActivityOfUserTaskContainer) {
 			ActivityOfUserTaskContainer activityOfUserTaskContainer = (ActivityOfUserTaskContainer)activityContainer;
 			activityOfUserTaskContainer.addUserTask(new User(userId), state);
@@ -512,6 +514,23 @@ public class RuntimeServiceImpl extends  AbstractRuntimeService{
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_addUser_Task_for_NOT_UserTask,"活动实例ID："+activityInstanceId);
 		}
 		
+	}
+
+
+	@Override
+	public List<User> evalUserList(long processInstanceId, String activityDefinitionId) {
+
+		ProcessInstance processInstance = this.entityManager.loadProcessInstance(processInstanceId);
+		ProcessModel processModel =this.entityManager.loadProcessModelByModelId(processInstance.getProcessModelId());
+		
+		ActivityDefinition activityDefinition = processModel.getProcessDefinition().getActivity(activityDefinitionId);
+		if(activityDefinition instanceof UserTask) {
+			UserTask userTask = (UserTask)activityDefinition;
+			List<User> userList =ContainerTool.evalUserList(processInstance.getId(),userTask);
+			return userList; 
+		}else {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_addUser_Task_for_NOT_UserTask,"流程实例ID：["+processInstanceId+"];活动定义ID：["+activityDefinitionId+"]");
+		}
 	}
 
 

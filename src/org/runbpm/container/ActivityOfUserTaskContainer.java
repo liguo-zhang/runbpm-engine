@@ -1,5 +1,6 @@
 package org.runbpm.container;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,58 +26,8 @@ public class ActivityOfUserTaskContainer extends ActivityContainer{
 	public ActivityOfUserTaskContainer(ActivityDefinition activityDefinition,ActivityInstance activityInstance){
 		super(activityDefinition,activityInstance);
 	}
-
-	@Override
-	public void activityStart() {
-		activityInstance.setState(ACTIVITY_STATE.RUNNING);
-		
-		UserTask userTask = (UserTask)activityDefinition;
-		UserTaskResource userTaskResource = userTask.getUserTaskResource();
-		if(userTaskResource!=null){
-			UserTaskResourceAssignment resourceAssignment = userTaskResource.getUserTaskResourceAssignment();
-			if(resourceAssignment!=null){
-				if(userTask.isMulti()){
-					createUserTaskInstance(resourceAssignment,EntityConstants.TASK_STATE.RUNNING);
-				}else{
-					createUserTaskInstance(resourceAssignment,EntityConstants.TASK_STATE.NOT_STARTED);
-				}
-			}
-		}
-	}
 	
-	public void addUserTask(User user,EntityConstants.TASK_STATE state) {
-		UserTask userTask = (UserTask)activityDefinition;
-		TaskInstance taskInstance = this.newUserTaskInstance(activityDefinition,state,user);
-		new UserTaskContainer(this.activityInstance,userTask,taskInstance).start();
-	}
-	
-	
-	private void createUserTaskInstance(UserTaskResourceAssignment resourceAssignment,EntityConstants.TASK_STATE state){
-		UserTask userTask = (UserTask)activityDefinition;
-		Map<String,VariableInstance> userTaskContext = Configuration.getContext().getEntityManager().loadVariableMap(activityInstance.getProcessInstanceId());
-		
-		ProcessInstance processInstance = Configuration.getContext().getEntityManager().loadProcessInstance(activityInstance.getProcessInstanceId());
-		ProcessDefinition processDefinition= Configuration.getContext().getEntityManager().loadProcessModelByModelId(activityInstance.getProcessModelId()).getProcessDefinition();
-		
-		if(resourceAssignment!=null){
-				ProcessContextBean processContextBean = new ProcessContextBean();
-				processContextBean.setProcessInstance(processInstance);
-				processContextBean.setProcessDefinition(processDefinition);
-				processContextBean.setActivityInstance(activityInstance);
-				processContextBean.setActivityDefinition(activityDefinition);
-				processContextBean.setVariableMap(userTaskContext);
-				
-				ResourceEvalManager rem = new ResourceEvalManager();
-				List<User> userList =rem.getUserList(resourceAssignment, processContextBean);
-				//创建TaskInstance
-				for(User user:userList){
-					TaskInstance taskInstance = this.newUserTaskInstance(activityDefinition,state,user);
-					new UserTaskContainer(this.activityInstance,userTask,taskInstance).start();
-				}
-		}
-	}
-	
-	private TaskInstance newUserTaskInstance(ActivityDefinition activityDefinition,EntityConstants.TASK_STATE state,User user){
+	private TaskInstance newUserTaskInstance(EntityConstants.TASK_STATE state,User user){
 		TaskInstance taskInstance = Configuration.getContext().getEntityManager().produceTaskInstance(this.activityInstance.getId(),user.getId());
 		
 		taskInstance.setName(activityDefinition.getName());
@@ -93,6 +44,44 @@ public class ActivityOfUserTaskContainer extends ActivityContainer{
 		taskInstance.setUserId(user.getId());
 		
 		return taskInstance;
+	}
+
+	@Override
+	public void activityStart() {
+		activityInstance.setState(ACTIVITY_STATE.RUNNING);
+		
+		UserTask userTask = (UserTask)activityDefinition;
+		UserTaskResource userTaskResource = userTask.getUserTaskResource();
+		if(userTaskResource!=null){
+			UserTaskResourceAssignment resourceAssignment = userTaskResource.getUserTaskResourceAssignment();
+			if(resourceAssignment!=null){
+				if(userTask.isMulti()){
+					createUserTaskInstance(EntityConstants.TASK_STATE.RUNNING);
+				}else{
+					createUserTaskInstance(EntityConstants.TASK_STATE.NOT_STARTED);
+				}
+			}
+		}
+	}
+	
+	public void addUserTask(User user,EntityConstants.TASK_STATE state) {
+		UserTask userTask = (UserTask)activityDefinition;
+		TaskInstance taskInstance = this.newUserTaskInstance(state,user);
+		new UserTaskContainer(this.activityInstance,userTask,taskInstance).start();
+	}
+	
+	
+	
+	
+	private void createUserTaskInstance(EntityConstants.TASK_STATE state){
+		UserTask userTask = (UserTask)activityDefinition;
+		
+		List<User> userList =ContainerTool.evalUserList(activityInstance.getProcessInstanceId(),userTask);
+		//创建TaskInstance
+		for(User user:userList){
+			TaskInstance taskInstance = this.newUserTaskInstance(state,user);
+			new UserTaskContainer(this.activityInstance,userTask,taskInstance).start();
+		}
 	}
 	
 

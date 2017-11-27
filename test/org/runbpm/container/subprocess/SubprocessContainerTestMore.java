@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -54,7 +55,7 @@ public class SubprocessContainerTestMore extends RunBPMTestCase{
 		ActivityInstance subshipOrder_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder").iterator().next();
 		Assert.assertEquals("" , subshipOrder_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		ActivityContainer subshipOrderActivityContainer = ActivityContainer.getActivityContainer(subshipOrder_instance);
+		ActivityContainer subshipOrderActivityContainer = ContainerTool.getActivityContainer(subshipOrder_instance);
 		subshipOrderActivityContainer.complete();
 		
 		//theStart（完成状态） manualTask（receiveOrder 完成状态）

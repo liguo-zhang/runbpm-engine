@@ -31,13 +31,13 @@ public class SubProcessContainer extends FlowContainer {
 		ActivityDefinition activityDefinition = subProcessDefinition.getStartEvent();
 
 		ActivityInstance activityInstance = this.createNewActivityInstance(activityDefinition);
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
 		
 		activityContainer.start();
 	}
 
 	public void complete(){
-		ActivityContainer activityInstanceOfSubProcessContainer = ActivityContainer.getActivityContainer(activityInstanceOfSubProcess);;
+		ActivityContainer activityInstanceOfSubProcessContainer = ContainerTool.getActivityContainer(activityInstanceOfSubProcess);;
 		activityInstanceOfSubProcessContainer.complete();
 	}
 	

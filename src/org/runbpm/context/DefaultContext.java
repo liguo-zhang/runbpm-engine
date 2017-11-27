@@ -5,8 +5,8 @@ import org.runbpm.handler.resource.GlobalResourceHandlerSample;
 import org.runbpm.listener.GlobalListener;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
-import org.runbpm.service.RuntimeService;
-import org.runbpm.service.RuntimeServiceImpl;
+import org.runbpm.service.RunBPMService;
+import org.runbpm.service.RunBPMServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ public class DefaultContext implements ContextInterface {
 
 	private EntityManager entityManager;
 	private GlobalResourceHandler globalResourceHandler;
-	private RuntimeService runtimeService;
+	private RunBPMService runBPMService;
 
 	private GlobalListener globalInstanceListenerSet;
 
@@ -33,12 +33,12 @@ public class DefaultContext implements ContextInterface {
 		return entityManager;
 	}
 
-	public RuntimeService getRuntimeService() {
-		if (runtimeService == null) {
-			runtimeService = new RuntimeServiceImpl();
-			runtimeService.setEntityManager(entityManager);
+	public RunBPMService getRunBPMService() {
+		if (runBPMService == null) {
+			runBPMService = new RunBPMServiceImpl();
+			runBPMService.setEntityManager(entityManager);
 		}
-		return runtimeService;
+		return runBPMService;
 	}
 
 	public GlobalListener getGlobalListener() {

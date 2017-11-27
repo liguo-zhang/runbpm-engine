@@ -14,6 +14,7 @@ import org.runbpm.entity.EntityConstants;
 import org.runbpm.entity.ProcessHistory;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.TASK_STATE;
+import org.runbpm.handler.resource.User;
 import org.runbpm.entity.ProcessInstance;
 import org.runbpm.entity.ProcessModel;
 import org.runbpm.entity.TaskHistory;
@@ -22,7 +23,7 @@ import org.runbpm.entity.VariableInstance;
 import org.runbpm.persistence.EntityManager;
 
 
-public interface RuntimeService {
+public interface RunBPMService {
 	
 	/**
 	 * 工作流引擎内部方法
@@ -551,6 +552,12 @@ public interface RuntimeService {
 	Set<ActivityDefinition> listReachableActivitySet(long activityInstanceId);
 	
 	
-		
+	/**
+	 * 根据指定的流程实例，以及该流程实例的活动定义，通过上下文判断，该任务分配定义可以输出的执行人
+	 * @param processInstanceId 指定的流程实例
+	 * @param activityDefinitionId 该流程实例的活动定义
+	 * @return 通过上下文判断，该任务分配定义可以输出的执行人
+	 */
+	List<User> evalUserList(long processInstanceId,String activityDefinitionId);	
 	
 }

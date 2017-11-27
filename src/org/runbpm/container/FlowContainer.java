@@ -30,31 +30,6 @@ import org.runbpm.utils.RunBPMUtils;
 public abstract class FlowContainer{
 	
 	protected ProcessInstance processInstance;
-	//流程与快活动
-	public static FlowContainer getFlowContainer(ProcessInstance processInstance,ActivityInstance activityInstance){
-		EntityManager entityManager = Configuration.getContext().getEntityManager();
-		
-		if(activityInstance ==null||activityInstance.getParentActivityInstanceId()==0){
-			//普通流程
-			ProcessContainer processContainer=  new ProcessContainer();
-			processContainer.processInstance = processInstance;
-			processContainer.processDefinition =entityManager.loadProcessModelByModelId(processInstance.getProcessModelId()).getProcessDefinition();
-
-			return processContainer;
-		}else{
-			//XPDL块活动，BPMNSubProcess
-			ProcessDefinition processDefinition = entityManager.loadProcessModelByModelId(processInstance.getProcessModelId()).getProcessDefinition();
-			
-			ActivityInstance parentActivityInstance = entityManager.loadActivityInstance(activityInstance.getParentActivityInstanceId());
-			SubProcessDefinition subProcessDefinition = processDefinition.getSubProcessActivityDefinition(parentActivityInstance.getSequenceBlockId());
-			
-			ActivityInstance activityInstanceOfSubProcess = entityManager.loadActivityInstance(activityInstance.getParentActivityInstanceId());
-			
-			SubProcessContainer subProcessContainer = new SubProcessContainer(activityInstanceOfSubProcess,subProcessDefinition);
-			return subProcessContainer;
-		}
-	}
-	
 	protected ActivityInstance createNewActivityInstance(ActivityDefinition activityDefinition){
 		EntityManager entityManager = Configuration.getContext().getEntityManager();
 		
@@ -138,7 +113,7 @@ public abstract class FlowContainer{
 					
 					//TODO 如果UserTask是XOR类型，不需要判断，直接启动
 					if(outgoingActivity.getIncomingSequenceFlowList().size()==1){
-						ActivityContainer activityContainer = ActivityContainer.getActivityContainer(newActivityInstance);
+						ActivityContainer activityContainer = ContainerTool.getActivityContainer(newActivityInstance);
 						activityContainer.start();
 					}else{
 						//通过 将要创建的活动 + 已经运行的活动， 判断是否启动 输入流大于1的活动实例
@@ -213,7 +188,7 @@ public abstract class FlowContainer{
 					}
 				}
 				if(canStart){
-					ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstanceInProcess);
+					ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstanceInProcess);
 					activityContainer.start();
 					
 					//便于下一步不再创建它

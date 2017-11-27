@@ -23,7 +23,7 @@ import org.runbpm.exception.RunBPMException;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.hibernate.HibernateEntityManagerImpl;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
-import org.runbpm.service.RuntimeService;
+import org.runbpm.service.RunBPMService;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,37 +33,37 @@ public class ProcessComplete extends RunBPMTestCase{
 	
 	public static void test() throws Exception{
 		
-		RuntimeService runtimeService =  Configuration.getContext().getRuntimeService();
+		RunBPMService runBPMService =  Configuration.getContext().getRunBPMService();
 
 		String fileName = "ProcessCompleteTest.xml";
 		ClassPathResource classPathResource = new ClassPathResource(fileName,ProcessComplete.class);
 		ClassPathResource classPathResource1 = new ClassPathResource("ProcessCompleteTest_sub.xml",ProcessComplete.class);
 		ClassPathResource classPathResource2 = new ClassPathResource("ProcessCompleteTest_sub_sub.xml",ProcessComplete.class);
-		runtimeService.deployProcessDefinitionFromFile(classPathResource.getFile());
-		runtimeService.deployProcessDefinitionFromFile(classPathResource1.getFile());
-		runtimeService.deployProcessDefinitionFromFile(classPathResource2.getFile());
+		runBPMService.deployProcessDefinitionFromFile(classPathResource.getFile());
+		runBPMService.deployProcessDefinitionFromFile(classPathResource1.getFile());
+		runBPMService.deployProcessDefinitionFromFile(classPathResource2.getFile());
 		
-		ProcessInstance processInstance = runtimeService.createProcessInstance("ProcessComplete",null);
+		ProcessInstance processInstance = runBPMService.createProcessInstance("ProcessComplete",null);
 		
 		Long processInstanceId = processInstance.getId();
-		ProcessInstance newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
-		runtimeService.startProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance = runBPMService.loadProcessInstance(processInstanceId);
+		runBPMService.startProcessInstance(processInstanceId);
 		
-		newProcessInstance = runtimeService.loadProcessInstance(processInstanceId);
-		ActivityInstance activityInstance_Instance_2_0 = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "callCheckCreditProcess").iterator().next();
+		newProcessInstance = runBPMService.loadProcessInstance(processInstanceId);
+		ActivityInstance activityInstance_Instance_2_0 = runBPMService.listActivityInstanceByActivityDefId(processInstanceId, "callCheckCreditProcess").iterator().next();
 		long subProcessInstanceId = activityInstance_Instance_2_0.getCallActivityProcessInstanceId();
 		
-		ProcessInstance subProcessInstance = runtimeService.loadProcessInstance(subProcessInstanceId);
+		ProcessInstance subProcessInstance = runBPMService.loadProcessInstance(subProcessInstanceId);
 		
 		//提交子流程
-		ActivityInstance u1_instance = runtimeService.listActivityInstanceByActivityDefId(subProcessInstanceId, "u1").iterator().next();
-		runtimeService.completeActivityInstance(u1_instance.getId());
+		ActivityInstance u1_instance = runBPMService.listActivityInstanceByActivityDefId(subProcessInstanceId, "u1").iterator().next();
+		runBPMService.completeActivityInstance(u1_instance.getId());
 		
 		//提交父流程
-		ActivityInstance prepareAndShipTask_instance = runtimeService.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
-		runtimeService.completeActivityInstance(prepareAndShipTask_instance.getId());
+		ActivityInstance prepareAndShipTask_instance = runBPMService.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
+		runBPMService.completeActivityInstance(prepareAndShipTask_instance.getId());
 		
-		ProcessInstance newProcessInstance1 = runtimeService.loadProcessInstance(processInstanceId);
+		ProcessInstance newProcessInstance1 = runBPMService.loadProcessInstance(processInstanceId);
 		Assert.assertNull(newProcessInstance1);
 		
 	}

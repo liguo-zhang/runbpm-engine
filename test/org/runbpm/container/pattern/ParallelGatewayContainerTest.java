@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -63,7 +64,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点3 提交后 新建join活动，有 theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（运行状态） join（未开始状态）
 		
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance_Instance_3_0);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance_Instance_3_0);
 		activityContainer.complete();
 		  
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
@@ -80,7 +81,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点4 提交后 有 theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（运行状态）
 		
-		activityContainer = ActivityContainer.
+		activityContainer = ContainerTool.
 				getActivityContainer(activityInstance_Instance_4_1);
 		activityContainer.complete();
 		
@@ -104,7 +105,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		//theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（完成状态） theEnd（完成状态）
 		// 流程是结束状态
 		try{
-		activityContainer = ActivityContainer.
+		activityContainer = ContainerTool.
 				getActivityContainer(activityInstance_Instance_6_2);
 		activityContainer.complete();
 		}catch(RunBPMException e){
@@ -174,7 +175,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点3 提交后 新建join活动，有 theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（运行状态） join（未开始状态）
 		
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance_Instance_3_0);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance_Instance_3_0);
 		activityContainer.complete();
 		  
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
@@ -191,7 +192,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点4 提交后 有 theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（运行状态）
 		
-		activityContainer = ActivityContainer.
+		activityContainer = ContainerTool.
 				getActivityContainer(activityInstance_Instance_4_1);
 		activityContainer.complete();
 		
@@ -214,7 +215,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		// 节点6 退回到 4 shipOrder 后 将新建活动 4 shipOrder，  
 		//theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（完成状态） 新shipOrder（运行状态）
 		try{
-		activityContainer = ActivityContainer.
+		activityContainer = ContainerTool.
 				getActivityContainer(activityInstance_Instance_6_2);
 		activityContainer.terminate(
 				processDefinition.getActivity(activityInstance_Instance_4_2.getActivityDefinitionId()));
@@ -247,7 +248,7 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		//theStart（完成状态） fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（完成状态）
 		//新shipOrder（完成状态）新join（完成状态）archiveOrder（运行状态） 
 		
-		activityContainer = ActivityContainer.
+		activityContainer = ContainerTool.
 				getActivityContainer(activityInstance_Instance_4_3_2);
 		activityContainer.complete();
 		

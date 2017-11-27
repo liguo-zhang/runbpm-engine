@@ -3,7 +3,7 @@ package org.runbpm.context;
 import org.runbpm.handler.resource.GlobalResourceHandler;
 import org.runbpm.listener.GlobalListener;
 import org.runbpm.persistence.EntityManager;
-import org.runbpm.service.RuntimeService;
+import org.runbpm.service.RunBPMService;
 
 /**
  * 上下文接口
@@ -19,10 +19,10 @@ public interface ContextInterface {
 	EntityManager getEntityManager();
 
 	/**
-	 * 获取RuntimeService，
+	 * 获取RunBPMService
 	 * @return
 	 */
-	RuntimeService getRuntimeService() ;
+	RunBPMService getRunBPMService() ;
 
 	/**
 	 * 获取全局事件监听，获取此对象后，可以增加全局的流程、活动和工作项等全局监听事件。

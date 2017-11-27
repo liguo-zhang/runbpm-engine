@@ -14,7 +14,7 @@
     <bean id="entityManager" class="org.runbpm.persistence.memory.MemoryEntityManagerImpl">
 	</bean>
 	
-	<bean id="runtimeService" class="org.runbpm.service.RuntimeServiceImpl">
+	<bean id="runBPMService" class="org.runbpm.service.RunBPMServiceImpl">
 		<property name="entityManager" ref="entityManager" />
 	</bean>
 	

@@ -2,7 +2,7 @@ package org.runbpm.service;
 
 import org.runbpm.persistence.EntityManager;
 
-public abstract class AbstractRuntimeService implements RuntimeService{
+public abstract class AbstractRunBPMService implements RunBPMService{
 	
 	protected EntityManager entityManager;
 	

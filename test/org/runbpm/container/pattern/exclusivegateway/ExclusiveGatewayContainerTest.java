@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -66,7 +67,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点3 提交后 流程结束，有 theStart（完成状态）exclusiveGw（完成状态） theTask1（完成状态） exclusiveGw_end（完成状态） theEnd（完成状态）
 		
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance_Instance_3_0);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance_Instance_3_0);
 		activityContainer.complete();
 		  
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
@@ -136,7 +137,7 @@ public class ExclusiveGatewayContainerTest extends RunBPMTestCase{
 		
 		// 节点3 提交后 流程结束，有 theStart（完成状态）exclusiveGw（完成状态） theTask1（完成状态） exclusiveGw_end（完成状态） theEnd（完成状态）
 		
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(activityInstance_Instance_3_0);
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance_Instance_3_0);
 		activityContainer.complete();
 		  
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);

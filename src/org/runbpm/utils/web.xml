@@ -6,7 +6,7 @@
   
     <display-name>Spring-Rest</display-name> 
     
-    <!--先初始化内部类，再进行REST注释扫描，这样能够明确加载runtimeService成功 -->
+    <!--先初始化内部类，再进行REST注释扫描，这样能够明确加载RunBPMService成功 -->
       <servlet>
 	    <servlet-name>InitRunBPMSpringContextServlet</servlet-name>
 	    <servlet-class>org.runbpm.utils.InitRunBPMSpringContextServlet</servlet-class>

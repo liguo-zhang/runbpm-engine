@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -48,14 +49,14 @@ public class SubprocessContainerTest extends RunBPMTestCase{
 		Assert.assertEquals("",userTaskList.size(),1);
 		
 		for(ActivityInstance a : userTaskList){
-			ActivityContainer activityContainer = ActivityContainer.getActivityContainer(a);
+			ActivityContainer activityContainer = ContainerTool.getActivityContainer(a);
 			activityContainer.complete();
 		}
 		
 		List<ActivityInstance> userTaskList2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
 		Assert.assertEquals("",userTaskList2.size(),1);
 		
-		ActivityContainer activityContainer = ActivityContainer.getActivityContainer(userTaskList2.get(0));
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(userTaskList2.get(0));
 		activityContainer.complete();
 		
 		List<ActivityInstance> userTaskList3 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -53,22 +54,22 @@ public class SubprocessNestedContainerTest extends RunBPMTestCase{
 		Assert.assertEquals("",userTaskList2.size(),1);
 		
 		
-		ActivityContainer activityContainer1 = ActivityContainer.getActivityContainer(userTaskList1.get(0));
+		ActivityContainer activityContainer1 = ContainerTool.getActivityContainer(userTaskList1.get(0));
 		activityContainer1.complete();
 		
-		ActivityContainer activityContainer2 = ActivityContainer.getActivityContainer(userTaskList2.get(0));
+		ActivityContainer activityContainer2 = ContainerTool.getActivityContainer(userTaskList2.get(0));
 		activityContainer2.complete();
 		
 		
 		List<ActivityInstance> userTaskList3 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "subshipOrder11");
 		Assert.assertEquals("",userTaskList3.size(),1);
-		ActivityContainer.getActivityContainer(userTaskList3.get(0)).complete();
+		ContainerTool.getActivityContainer(userTaskList3.get(0)).complete();
 		
 		
 		List<ActivityInstance> userTaskList4 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask");
 		Assert.assertEquals("",userTaskList4.size(),1);
 		
-		ActivityContainer.getActivityContainer(userTaskList4.get(0)).complete();
+		ContainerTool.getActivityContainer(userTaskList4.get(0)).complete();
 		
 		Assert.assertEquals("",processInstance.getState(),PROCESS_STATE.COMPLETED);
 	}

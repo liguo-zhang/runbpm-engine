@@ -12,6 +12,7 @@ import org.runbpm.bpmn.definition.ActivityDefinition;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
 import org.runbpm.container.ActivityOfUserTaskContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.container.UserTaskContainer;
 import org.runbpm.context.Configuration;
@@ -97,7 +98,7 @@ public class SimpleUserTaskContainerTest3 extends RunBPMTestCase{
 		userTaskContainer2_0.claim();
 		Assert.assertEquals("" , u2_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		ActivityContainer u2_instance_activityContainer = ActivityContainer.getActivityContainer(u2_instance);
+		ActivityContainer u2_instance_activityContainer = ContainerTool.getActivityContainer(u2_instance);
 		u2_instance_activityContainer.terminate(u1_definition);
 		//u2节点退回到u1定义后，有 theStart（完成状态） u1（完成状态）u2（终止状态）u1（开始状态） 4个节点
 		//工作项的状态为终止
@@ -123,7 +124,7 @@ public class SimpleUserTaskContainerTest3 extends RunBPMTestCase{
 		Assert.assertEquals("" , taskInstance_u1_afterback.get(2).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
 		//------不接收任务，直接提交到u3节点
-		ActivityContainer activityInstance_u1_from_back_container = ActivityContainer.getActivityContainer(activityInstance_u1_from_back.get(0));
+		ActivityContainer activityInstance_u1_from_back_container = ContainerTool.getActivityContainer(activityInstance_u1_from_back.get(0));
 		ActivityDefinition u3_definition =  processDefinition.getActivityMap().get("u3");
 		activityInstance_u1_from_back_container.terminate(u3_definition);
 		
@@ -187,7 +188,7 @@ public class SimpleUserTaskContainerTest3 extends RunBPMTestCase{
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
 		//终止活动
-		ActivityContainer u1_container = ActivityContainer.getActivityContainer(u1_instance);
+		ActivityContainer u1_container = ContainerTool.getActivityContainer(u1_instance);
 		u1_container.terminate();
 		
 		//开始节点1终止后，有 theStart（完成状态） u1（终止状态）u2（运行状态）
@@ -253,7 +254,7 @@ public class SimpleUserTaskContainerTest3 extends RunBPMTestCase{
 		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstanceId).size(),2);
 		
 		//终止活动
-		ActivityContainer u1_container = ActivityContainer.getActivityContainer(u1_instance);
+		ActivityContainer u1_container = ContainerTool.getActivityContainer(u1_instance);
 		u1_container.terminate();
 		
 		//开始节点1终止后，有 theStart（完成状态） u1（终止状态）u2（运行状态）
@@ -471,7 +472,7 @@ public class SimpleUserTaskContainerTest3 extends RunBPMTestCase{
 		Assert.assertEquals("" , taskInstance_user1.size(),1);
 		Assert.assertEquals("" , taskInstance_user1.get(0).getState(),EntityConstants.TASK_STATE.NOT_STARTED);
 		
-		ActivityOfUserTaskContainer u2_instance_activityContainer = (ActivityOfUserTaskContainer)ActivityContainer.getActivityContainer(u1_instance);
+		ActivityOfUserTaskContainer u2_instance_activityContainer = (ActivityOfUserTaskContainer)ContainerTool.getActivityContainer(u1_instance);
 		u2_instance_activityContainer.addUserTask(new User("user4"), TASK_STATE.NOT_STARTED);
 		
 		//增加后

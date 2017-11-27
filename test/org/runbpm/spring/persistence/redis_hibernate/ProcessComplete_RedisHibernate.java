@@ -24,7 +24,7 @@ import org.runbpm.exception.RunBPMException;
 import org.runbpm.persistence.EntityManager;
 import org.runbpm.persistence.hibernate.HibernateEntityManagerImpl;
 import org.runbpm.persistence.memory.MemoryEntityManagerImpl;
-import org.runbpm.service.RuntimeService;
+import org.runbpm.service.RunBPMService;
 import org.runbpm.spring.persistence.ProcessComplete;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;

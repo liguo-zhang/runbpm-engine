@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -60,7 +61,7 @@ public class CallActivityTest extends RunBPMTestCase{
 		ActivityInstance u1_instance = entityManager.listActivityInstanceByActivityDefId(subProcessInstance.getId(), "u1").iterator().next();
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.RUNNING);
 		
-		ActivityContainer u1Container = ActivityContainer.getActivityContainer(u1_instance);
+		ActivityContainer u1Container = ContainerTool.getActivityContainer(u1_instance);
 		u1Container.complete();
 		Assert.assertEquals("" , u1_instance.getState(),ACTIVITY_STATE.COMPLETED);
 		
@@ -69,7 +70,7 @@ public class CallActivityTest extends RunBPMTestCase{
 		
 		ActivityInstance prepareAndShipTask_instance = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "prepareAndShipTask").iterator().next();
 		Assert.assertEquals("" , prepareAndShipTask_instance.getState(),ACTIVITY_STATE.RUNNING);
-		ActivityContainer.getActivityContainer(prepareAndShipTask_instance).complete();;
+		ContainerTool.getActivityContainer(prepareAndShipTask_instance).complete();;
 		
 		Assert.assertEquals("" , processInstance.getState(),PROCESS_STATE.COMPLETED);
 		

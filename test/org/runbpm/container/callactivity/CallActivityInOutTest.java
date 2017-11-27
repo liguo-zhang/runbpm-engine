@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.runbpm.RunBPMTestCase;
 import org.runbpm.bpmn.definition.ProcessDefinition;
 import org.runbpm.container.ActivityContainer;
+import org.runbpm.container.ContainerTool;
 import org.runbpm.container.ProcessContainer;
 import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
@@ -61,7 +62,7 @@ public class CallActivityInOutTest extends RunBPMTestCase{
 		
 		entityManager.setProcessVariable(subProcessInstance.getId(), "y", "2");
 		
-		ActivityContainer u1Container = ActivityContainer.getActivityContainer(u1_instance);
+		ActivityContainer u1Container = ContainerTool.getActivityContainer(u1_instance);
 		u1Container.complete();
 		
 		
