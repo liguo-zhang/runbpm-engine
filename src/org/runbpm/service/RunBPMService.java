@@ -281,6 +281,7 @@ public interface RunBPMService {
 	 */
 	void removeUserTask(long userTaskId);
 	
+	
 	/**
 	 * 将此任务重新分配一个执行人。该方法会将任务直接执行人。<br>
 	 * 如果需要保留原执行人的任务，可综合 {@ link #cancelUserTask(long)} 和{@ link #addUserTask(long, long)}两个方法实现。 
@@ -293,10 +294,11 @@ public interface RunBPMService {
 	 * 动态增加一个任务
 	 * @param activityInstanceID 对应的活动实例。该活动定义必须是人工活动，否则会抛出异常。
 	 * @param userId 执行人ID
-	 * @param state 添加任务后的状态，如果是会签模式，则应该是{@link EntityConstants.TASK_STATE#RUNNING};如果是竞争(抢任务）模式，则应该是{@link EntityConstants.TASK_STATE#NOT_STARTED}
+	 * @param state 添加任务后的状态，如果是会签模式，应该选择{@link EntityConstants.TASK_STATE#RUNNING};如果是竞争(抢任务）模式，则应该选择{@link EntityConstants.TASK_STATE#NOT_STARTED}
+	 * @return 所创建的活动实例
 	 * 
 	 */
-	void addUserTask(long activityInstanceId,String userId,EntityConstants.TASK_STATE state);
+	TaskInstance addUserTask(long activityInstanceId,String userId,EntityConstants.TASK_STATE state);
 	
 	/**
 	 * 如果一个用户活动，也就是UerTask为抢任务模式（或者成为单一执行模式），在通过 {@link #claimUserTask(long)}获取任务的执行权后，可以通过此方法将任务重新放回，所有的人可以重新抢任务。<br>

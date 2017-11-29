@@ -561,7 +561,7 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 
 
 	@Override
-	public void addUserTask(long activityInstanceId, String userId,EntityConstants.TASK_STATE state) {
+	public TaskInstance addUserTask(long activityInstanceId, String userId,EntityConstants.TASK_STATE state) {
 		ActivityInstance activityInstance = this.entityManager.loadActivityInstance(activityInstanceId);
 		if(activityInstance==null) {
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020022_NON_ACTIVITYINSTANCE,"活动实例ID：["+activityInstanceId+"]");
@@ -569,7 +569,8 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 		ActivityContainer activityContainer= ContainerTool.getActivityContainer(activityInstance);
 		if(activityContainer instanceof ActivityOfUserTaskContainer) {
 			ActivityOfUserTaskContainer activityOfUserTaskContainer = (ActivityOfUserTaskContainer)activityContainer;
-			activityOfUserTaskContainer.addUserTask(new User(userId), state);
+			TaskInstance taskInstance = activityOfUserTaskContainer.addUserTask(new User(userId), state);
+			return taskInstance;
 		}else {
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_addUser_Task_for_NOT_UserTask,"活动实例ID："+activityInstanceId);
 		}
@@ -595,6 +596,7 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020007_Cannot_addUser_Task_for_NOT_UserTask,"流程实例ID：["+processInstanceId+"];活动定义ID：["+activityDefinitionId+"]");
 		}
 	}
+
 
 
 }

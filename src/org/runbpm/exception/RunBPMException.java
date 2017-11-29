@@ -64,6 +64,8 @@ public class RunBPMException extends RuntimeException {
 		Code_020021_NON_PROCESSINSTANCE("所涉及的流程实例为空对象，请检查流程ID是否存在"),
 		Code_020022_NON_ACTIVITYINSTANCE("所涉及的活动实例为空对象，请检查活动ID是否存在"),
 		Code_020023_NON_USERTASK("所涉及的任务实例为空对象，请检查任务ID是否存在"),
+		Code_020024_INVALID_ACTIVITYINSTANCE_TO_ADDUSERTASK("活动不是处于未启动或者运行状态，所以不能增加工作项"),
+		Code_020025_INVALID_ACTIVITYINSTANCE_TO_ADDUSERTASK("活动已经被人claimed，所以不能增加工作项"),
 		
 		
 		Code_020100_NO_ResourceAssignmentHandler_Impl("根据spring bean id获取的类没有实现资源接口"),

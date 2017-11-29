@@ -495,9 +495,9 @@ public class RunBPMServiceRestImpl extends  AbstractRunBPMService{
 
 
 	@Override
-	public void addUserTask(long activityInstanceId, String userId, TASK_STATE state) {
+	public TaskInstance addUserTask(long activityInstanceId, String userId, TASK_STATE state) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 
