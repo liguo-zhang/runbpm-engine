@@ -31,10 +31,7 @@ import org.runbpm.persistence.EntityManager;
 
 public class ContainerTool {
 
-	// 根据当前的活动状态，判断指定任务分配定义可以输出的执行人
-	// p7 2部分：现金 股票 ： 13个月+3个月6个月 16个月 3万*16=48 现金
-	// 1100 130万 4年 550 500 30万
-	// 电子流程 体检 offer审批 
+	
 	
 		public static List<User> evalUserList(long processInstanceId,UserTask userTask){
 			
