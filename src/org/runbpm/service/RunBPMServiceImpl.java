@@ -598,5 +598,13 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	}
 
 
+	@Override
+	public List<ProcessModel> loadProcessModelsByProcessDefinitionId(String processDefinitionId) {
+		
+		return this.entityManager.loadProcessModelsByProcessDefinitionId(processDefinitionId);
+		
+	}
+
+
 
 }

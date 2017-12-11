@@ -51,6 +51,13 @@ public interface RunBPMService {
 	
 	
 	/**
+	 * 通过指定的流程定义ID，获取该流程定义ID所部署的流程模板列表
+	 * @param processDefinitionId 流程定义ID
+	 * @return 流程模板列表
+	 */
+	List<ProcessModel> loadProcessModelsByProcessDefinitionId(String processDefinitionId);
+	
+	/**
 	 * 根据文件对象导入流程定义。<br>
 	 * 例如：<br>
 	 * <pre>

@@ -91,6 +91,8 @@ public interface EntityManager {
 	void setProcessVariableMap(long processInstanceId, Map<String, Object>dataFieldMap);
 	
 	void archiveProcess(ProcessInstance processInstance);
+
+	List<ProcessModel> loadProcessModelsByProcessDefinitionId(String processDefinitionId);
 	
 	 
 }

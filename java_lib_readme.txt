@@ -57,3 +57,6 @@ commons-pool2-2.4.2.jar
 
 jfinal:
 jfinal-1.9-bin-with-src.jar
+
+fastjson:workspaceĞèÒª
+fastjson-1.2.41.jar

@@ -425,4 +425,14 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return taskHistoryList;
 	}
 	
+	public List<ProcessModel> loadProcessModelsByProcessDefinitionId(String processDefinitionId){
+		List<ProcessModel> resultList = new ArrayList<ProcessModel>();
+		List<ProcessModel> processModellist = this.loadProcessModels(false);
+		for (ProcessModel processModel : processModellist) {
+			if(processModel.getProcessDefinitionId().equalsIgnoreCase(processDefinitionId)) {
+				resultList.add(processModel);
+			}
+		}
+		return resultList;
+	}
 }
