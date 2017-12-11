@@ -279,7 +279,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 			}
 		}
 		if(processModel == null){
-			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_100002_Invalid_ProcessModel,processDefinitionId);
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_100002_Invalid_ProcessModel,"所需要的流程定义ID为："+processDefinitionId);
 		}
 		
 		return processModel; 
