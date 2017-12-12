@@ -180,7 +180,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 		processModel.setName(process.getName());
 		processModel.setProcessDefinition(process);
 		processModel.setProcessDefinitionId(process.getId());
-		processModel.setXmlcontent(xmlString);
+		processModel.setXmlContent(xmlString);
 		//set version
 		ProcessModel savedModel = null;
 		for(Map.Entry<Long, ProcessModel> entry:processModelMap.entrySet()){

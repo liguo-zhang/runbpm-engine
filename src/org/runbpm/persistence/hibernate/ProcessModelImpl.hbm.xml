@@ -16,7 +16,7 @@
         
         <property name="processDefinitionId" type="string"/>
         
-        <property name="xmlcontent" type="materialized_clob"/>
+        <property name="xmlContent" type="materialized_clob"/>
         
     </class>
 

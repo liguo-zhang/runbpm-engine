@@ -25,7 +25,7 @@ public class ParallelGatewayTest extends RunBPMTestCase{
 		
 		Assert.assertNotNull("",processModel.getProcessDefinition());
 		
-		Assert.assertNotNull("",processModel.getXmlcontent());
+		Assert.assertNotNull("",processModel.getXmlContent());
 		
 		Assert.assertNotNull(processModel.getProcessDefinition().getId());
 		

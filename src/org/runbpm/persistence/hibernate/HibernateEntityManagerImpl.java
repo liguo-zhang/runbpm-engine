@@ -60,7 +60,7 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	}
 	
 	private ProcessDefinition assignProcessDefinition(ProcessModel processModel){
-		String xmlContent = processModel.getXmlcontent();
+		String xmlContent = processModel.getXmlContent();
 		Unmarshaller jaxbUnmarshaller;
 		try {
 			jaxbUnmarshaller = getJaxbContext().createUnmarshaller();

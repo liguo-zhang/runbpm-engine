@@ -178,7 +178,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		
 		Map<String, String> valueMap = new HashMap<String,String>();
 		valueMap.put(procmodel_proddefid, processModel.getId()+"");
-		valueMap.put(procmodel_xmlcontent, processModel.getXmlcontent());
+		valueMap.put(procmodel_xmlcontent, processModel.getXmlContent());
 		valueMap.put(procmodel_crdate, processModel.getCreateDate().getTime()+"");
 		valueMap.put(procmodel_mddate, processModel.getModifyDate().getTime()+"");
 		
@@ -761,7 +761,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		processModel_.setModifyDate(RunBPMUtils.convertLongToDate(valueMap.get(procmodel_mddate)));
 		
 		processModel_.setProcessDefinitionId(valueMap.get(procmodel_proddefid));
-		processModel_.setXmlcontent(valueMap.get(procmodel_xmlcontent));
+		processModel_.setXmlContent(valueMap.get(procmodel_xmlcontent));
 		return processModel_;
 	}
 	

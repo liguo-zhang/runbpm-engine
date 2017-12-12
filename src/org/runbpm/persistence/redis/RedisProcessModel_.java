@@ -32,8 +32,8 @@ public class RedisProcessModel_ extends ProcessModel_ {
 		shardedJedis.hset(domain, RedisEntityManagerImpl.procmodel_mddate, modifyDate.getTime()+"");
 	}
 
-	public void setXmlcontent(String xmlcontent) {
-		super.setXmlcontent(xmlcontent);
+	public void setXmlContent(String xmlcontent) {
+		super.setXmlContent(xmlcontent);
 		ShardedJedis shardedJedis = TransactionObjectHolder.get().getShardedJedis();
 		shardedJedis.hset(domain, RedisEntityManagerImpl.procmodel_xmlcontent, xmlcontent);
 	}

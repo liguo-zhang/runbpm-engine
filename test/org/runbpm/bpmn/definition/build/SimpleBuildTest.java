@@ -47,7 +47,7 @@ public class SimpleBuildTest {
 		ActivityDefinition activityDefinition = getProcessDefinition.getActivity("s");
 		ProcessDefinition  getProcessDefinitionFromA = activityDefinition.getProcessDefinition();
 		Assert.assertEquals(getProcessDefinitionFromA.getId(),"simple_process");
-		Assert.assertTrue(processModel.getXmlcontent().trim().length()>20);
+		Assert.assertTrue(processModel.getXmlContent().trim().length()>20);
 		
 	}
 	
@@ -70,7 +70,7 @@ public class SimpleBuildTest {
 		
 		ProcessModel processModel = entityManager.loadLatestProcessModel("simple_process");
 		
-		String xmlContent = processModel.getXmlcontent();
+		String xmlContent = processModel.getXmlContent();
 		entityManager.deployProcessDefinitionFromString(xmlContent);
 		
 		List<ProcessModel> pmList = entityManager.loadProcessModels(true);

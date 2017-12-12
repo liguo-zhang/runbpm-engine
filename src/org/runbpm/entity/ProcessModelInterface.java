@@ -8,13 +8,13 @@ public interface ProcessModelInterface extends EntityInterface {
 	 * 获取流程模板对应流程定义的XML文本
 	 * @return
 	 */
-	public String getXmlcontent() ;
+	public String getXmlContent() ;
 
 	/**
 	 * 该方法为流程引擎内部使用的方法
 	 * @param 
 	 */
-	public void setXmlcontent(String xmlcontent) ;
+	public void setXmlContent(String xmlcontent) ;
 
 	/**
 	 * 获取流程模板对应流程定义对象

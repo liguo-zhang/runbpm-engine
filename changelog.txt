@@ -50,22 +50,25 @@
 
 2017年11月28日
 * [教程示例]完成初版，基于bootstrap的流程运行与演示框架
+* [流程引擎]从指定节点发起流程
 
 //TODO
-* [流程引擎]查询接口 
-* [流程引擎]追回任务
-* [流程引擎]从指定节点发起流程
+1.1
+* [流程引擎]查询接口
+* [流程引擎]dubbo支持
+* [流程引擎]Swagger REST API
+
+1.2
 * [教程示例]简单的演示demo
+* [流程引擎]追回任务
 * [PaaS]PaaS平台发布 AppDirect Cloudfoundry OpenShift
 * [整体架构]自定义节点设计、自定义节点引擎
 * [流程引擎]多租户引擎
-* [流程引擎]dubbo支持
 * [流程引擎]统一类加载机制的模型与视图：连接弧判断、人员判断、servicetask、事件监听
 * [流程引擎]send task 与 receive task
 * [流程引擎]MongoDB支持
 * [流程引擎]nutz支持 
-* [流程引擎]jfinal支持  
-* [流程引擎]Swagger REST API 
+* [流程引擎]jfinal支持   
 * [流程引擎]JTA支持
 * [流程引擎]JPA支持
 * [流程引擎]mybatis支持\dbutils支持\spring jdbc支持
@@ -79,7 +82,7 @@
 * [流程引擎]事件、异常等众多BPMN2.0模型
 * [流程引擎]定时任务、调度支持
 * [设计器]Node.js离线版，需要配置electron工具进行编译
-* [教程示例]着手流程监控工具ß
+* [教程示例]着手流程监控工具
 * [设计器]离线版，需要配置electron工具进行编译
 *.[设计器]研究Eclipse Che
 * [流程引擎] WebService 引擎API

@@ -13,11 +13,11 @@ public class ProcessModel_ extends EntityBase {
 	
 	private int version;
 	
-	public String getXmlcontent() {
+	public String getXmlContent() {
 		return xmlcontent;
 	}
 
-	public void setXmlcontent(String xmlcontent) {
+	public void setXmlContent(String xmlcontent) {
 		this.xmlcontent = xmlcontent;
 	}
 
