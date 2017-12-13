@@ -33,10 +33,9 @@ public interface RunBPMService {
 	
 	
 	/**
-	 * 从持久库中加载“流程模板”到“流程引擎”。
-	 * @param onlyLatestVersion 是否只返回最新版本的流程模板，如果只需要做初始化加载无需返回值，则该参数设置为true或者false均可。<br>
-	 * 使用部署流程API会自动将“流程模板”同步到“流程引擎内存”。
-	 * <ul>
+	 * 获得流程引擎的流程模板列表，如果一个流程定义被导入多次，则只返回最新版本的流程模板。<br>
+	 * 如果需要获取所有版本的流程模板,则使用{@linke #loadProcessModelsWithAllVersions()}
+	 * * <ul>
 	 * 		<li>
 	 * 		如果是第一次调用此方法（例如当初始化流程引擎时），而且流程引擎使用的是持久化存储，例如数据库或者NoSQL,使用该方法会读取存放在持久化存储中的XML字段，通过JAXB序列化为流程定义对象。<br>
 	 * 		初始化流程引擎的Web方式启动插件参照：{@link org.runbpm.utils.InitRunBPMSpringContextServlet()}
@@ -47,7 +46,7 @@ public interface RunBPMService {
 	 * </ul>
 	 * @return 流程模板列表
 	 */
-	List<ProcessModel> loadProcessModels(boolean onlyLatestVersion);
+	List<ProcessModel> loadProcessModels();
 	
 	
 	/**
@@ -567,6 +566,21 @@ public interface RunBPMService {
 	 * @param activityDefinitionId 该流程实例的活动定义
 	 * @return 通过上下文判断，该任务分配定义可以输出的执行人
 	 */
-	List<User> evalUserList(long processInstanceId,String activityDefinitionId);	
+	List<User> evalUserList(long processInstanceId,String activityDefinitionId);
+
+	/**
+	 * 获得流程引擎的流程模板列表，如果一个流程定义被导入多次，则会返回多条记录。
+	 * * <ul>
+	 * 		<li>
+	 * 		如果是第一次调用此方法（例如当初始化流程引擎时），而且流程引擎使用的是持久化存储，例如数据库或者NoSQL,使用该方法会读取存放在持久化存储中的XML字段，通过JAXB序列化为流程定义对象。<br>
+	 * 		初始化流程引擎的Web方式启动插件参照：{@link org.runbpm.utils.InitRunBPMSpringContextServlet()}
+	 * 		</li>
+	 * 		<li>
+	 * 		初始化完毕后，每一次流程导入都会同步流程引擎的模板内存。每次此方法只会读取流程引擎内存的模板。
+	 * 		</li>
+	 * </ul>
+	 * @return 流程模板列表
+	 */
+	List<ProcessModel> loadProcessModelsWithAllVersions();	
 	
 }

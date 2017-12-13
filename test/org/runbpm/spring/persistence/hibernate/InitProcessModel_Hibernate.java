@@ -36,10 +36,10 @@ public class InitProcessModel_Hibernate extends RunBPMTestCase{
 		runBPMService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		runBPMService.deployProcessDefinitionFromFile(classPathResource.getFile());
 		
-		List<ProcessModel> onlyNewList = runBPMService.loadProcessModels(true);
+		List<ProcessModel> onlyNewList = runBPMService.loadProcessModels();
 		Assert.assertEquals(onlyNewList.size(), 1);
 		
-		List<ProcessModel> allList = runBPMService.loadProcessModels(false);
+		List<ProcessModel> allList = runBPMService.loadProcessModels();
 		Assert.assertEquals(allList.size(), 2);
 		
 		ProcessModel processModel = runBPMService.loadLatestProcessModel("PersistenceTest.xml");

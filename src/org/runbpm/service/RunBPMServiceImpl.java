@@ -397,8 +397,14 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 
 
 	@Override
-	public List<ProcessModel> loadProcessModels(boolean onlyLatestVersion) {
-		return this.entityManager.loadProcessModels(onlyLatestVersion);
+	public List<ProcessModel> loadProcessModels() {
+		return this.entityManager.loadProcessModels(true);
+		
+	}
+	
+	@Override
+	public List<ProcessModel> loadProcessModelsWithAllVersions() {
+		return this.entityManager.loadProcessModels(false);
 		
 	}
 

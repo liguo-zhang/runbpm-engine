@@ -351,7 +351,7 @@ public class RunBPMServiceRestImpl extends  AbstractRunBPMService{
 
 
 	@Override
-	public List<ProcessModel> loadProcessModels(boolean reload){
+	public List<ProcessModel> loadProcessModels(){
 		return null;
 		
 	}
@@ -510,6 +510,13 @@ public class RunBPMServiceRestImpl extends  AbstractRunBPMService{
 
 	@Override
 	public List<ProcessModel> loadProcessModelsByProcessDefinitionId(String processDefinitionId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<ProcessModel> loadProcessModelsWithAllVersions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
