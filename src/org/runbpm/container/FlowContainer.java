@@ -279,4 +279,6 @@ public abstract class FlowContainer{
 	}
 
 	public abstract void complete_internal(PROCESS_STATE terminated) ;
+	
+	public abstract void start(String activityDefinitionId);
 }

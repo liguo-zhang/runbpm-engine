@@ -87,9 +87,8 @@ public class ProcessContainer extends FlowContainer {
 		this.start();
 	}
 	
-	
-	public void start(){
-		
+	public void start(String activityDefinitionId) {
+
 		PROCESS_STATE currentState = this.processInstance.getState();
 		if(!currentState.equals(PROCESS_STATE.NOT_STARTED)){
 			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020010_INVALID_PROCESSINSTANCE_TO_START);
@@ -106,7 +105,15 @@ public class ProcessContainer extends FlowContainer {
 		ProcessModel processModel= entityManager.loadProcessModelByModelId(processModelId);
 		
 		ProcessDefinition processDefinition= processModel.getProcessDefinition();
-		ActivityDefinition activityDefinition = processDefinition.getStartEvent();
+		ActivityDefinition activityDefinition = null;
+		if(activityDefinitionId==null) {
+			activityDefinition = processDefinition.getStartEvent();
+		}else {
+			activityDefinition = processModel.getProcessDefinition().getActivity(activityDefinitionId);
+			if(activityDefinition==null) {
+				throw  new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020010_CANNOT_FIND_ACTIVITY_BY_DEFINITIONID,",输入的活动定义ID有误:["+activityDefinitionId+"]");
+			}
+		}
 		
 		//create new ActivityInstance 
 		ActivityInstance activityInstance = createNewActivityInstance(activityDefinition);
@@ -117,6 +124,10 @@ public class ProcessContainer extends FlowContainer {
 		//event begin
 		invokelistener(ListenerManager.Event_Type.afterProcessInstanceStarted);
 		//event end
+	}
+	
+	public void start(){
+		start(null);
 	}
 	
 	

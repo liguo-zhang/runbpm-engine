@@ -522,6 +522,14 @@ public class RunBPMServiceRestImpl extends  AbstractRunBPMService{
 	}
 
 
+	@Override
+	public ProcessInstance startProcessInstanceByActivityDefinitionId(long processInstanceId,
+			String activityDefinitionId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 
 }

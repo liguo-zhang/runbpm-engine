@@ -43,6 +43,7 @@ public class RunBPMException extends RuntimeException {
 		Code_020007_Cannot_Claim_Task_for_Invalid_State("不能够Claim任务，因为状态不对。"),
 		Code_020008_Cannot_Complete_Task_for_Invalid_State("不能够Complete任务，因为状态不对。"),
 		Code_020009_GOT_NULL_VAR_FOR_Variable("创建工作时，根据获取的流程变量为空，无法找到执行人"),
+		Code_020010_CANNOT_FIND_ACTIVITY_BY_DEFINITIONID("根据指定的活动定义ID无法找到活动定义，流程无法启动"),
 		Code_020007_Cannot_setAssignee_Task_for_Invalid_State("不能够重新设置执行人，因为状态不是运行状态"),
 		Code_020007_Cannot_putback_Task_for_Invalid_State("不能够放回任务，因为状态不是运行状态"),
 		Code_020007_Cannot_putback_Task_for_Multi_UserTask("不能够放回任务，因为活动是会签活动"),

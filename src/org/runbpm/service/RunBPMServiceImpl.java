@@ -612,5 +612,18 @@ public class RunBPMServiceImpl extends  AbstractRunBPMService{
 	}
 
 
+	@Override
+	public ProcessInstance startProcessInstanceByActivityDefinitionId(long processInstanceId,
+			String activityDefinitionId) {
+		ProcessInstance processInstance = entityManager.loadProcessInstance(processInstanceId);
+		if(processInstance==null) {
+			throw new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020021_NON_PROCESSINSTANCE,"Á÷³ÌÊµÀýID£º["+processInstanceId+"]");
+		}
+		FlowContainer processInstanceContainer = ContainerTool.getFlowContainer(processInstance, null);
+		processInstanceContainer.start(activityDefinitionId);
+		return processInstance;
+	}
+
+
 
 }

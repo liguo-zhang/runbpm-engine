@@ -10,6 +10,7 @@ import org.runbpm.context.Configuration;
 import org.runbpm.entity.ActivityInstance;
 import org.runbpm.entity.EntityConstants.ACTIVITY_STATE;
 import org.runbpm.entity.EntityConstants.PROCESS_STATE;
+import org.runbpm.exception.RunBPMException;
 import org.runbpm.persistence.EntityManager;
 
 //XPDL块活动，BPMNSubProcess
@@ -27,8 +28,17 @@ public class SubProcessContainer extends FlowContainer {
 		this.processInstance = entityManager.loadProcessInstance(activityInstanceOfSubProcess.getProcessInstanceId());
 	}
 
-	public void start(){
-		ActivityDefinition activityDefinition = subProcessDefinition.getStartEvent();
+	public void start(String activityDefinitionId){
+		ActivityDefinition activityDefinition; 
+		if(activityDefinitionId==null) {
+			activityDefinition = subProcessDefinition.getStartEvent();
+		}else {
+			activityDefinition = subProcessDefinition.getActivity(activityDefinitionId);
+			if(activityDefinition==null) {
+				throw  new RunBPMException(RunBPMException.EXCEPTION_MESSAGE.Code_020010_CANNOT_FIND_ACTIVITY_BY_DEFINITIONID,",输入的活动定义ID有误:["+activityDefinitionId+"]");
+			}
+		}
+		
 
 		ActivityInstance activityInstance = this.createNewActivityInstance(activityDefinition);
 		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance);
@@ -36,6 +46,10 @@ public class SubProcessContainer extends FlowContainer {
 		activityContainer.start();
 	}
 
+	public void start(){
+		start(null);
+	}
+	
 	public void complete(){
 		ActivityContainer activityInstanceOfSubProcessContainer = ContainerTool.getActivityContainer(activityInstanceOfSubProcess);;
 		activityInstanceOfSubProcessContainer.complete();

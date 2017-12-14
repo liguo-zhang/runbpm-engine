@@ -136,6 +136,18 @@ public interface RunBPMService {
 	ProcessInstance startProcessInstance(long processInstanceId);
 	
 	/**
+	 * 根据指定的流程实例ID，以指定的活动定义ID（不必是开始节点）启动流程实例。<br>
+	 * 流程实例启动后的状态为运行状态,状态常量为：{@link org.runbpm.entity.EntityConstants.PROCESS_STATE#RUNNING}。<br>
+	 * 但是，如果流程实例中间不包含UserTask(人工任务),流程将自动运行至结束状态。<br>
+	 * 
+	 * 流程在启动前，可以先设置流程变量,参照接口: {@link #setProcessVariable(long, String, Object)} 和 {@link #setProcessVariableMap(long, Map)}
+	 * @param processInstanceId 流程实例ID。
+	 * @param activityDefinitionId 指定的活动定义ID。
+	 * @return 流程实例对象
+	 */
+	ProcessInstance startProcessInstanceByActivityDefinitionId(long processInstanceId,String activityDefinitionId);
+	
+	/**
 	 * 该方法是结合了 {@link #createProcessInstance(String)} 和 {@link #startProcessInstance(long)}，<br>
 	 * 是比较常见的场景，即运行后立即启动。<br>
 	 * 流程实例启动后的状态为运行状态,状态常量为：{@link org.runbpm.entity.EntityConstants.PROCESS_STATE#RUNNING}。<br>

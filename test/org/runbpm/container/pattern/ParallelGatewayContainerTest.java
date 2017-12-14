@@ -256,4 +256,85 @@ public class ParallelGatewayContainerTest extends RunBPMTestCase{
 		Assert.assertEquals("" ,entityManager.loadActivityInstance(new Long(9)).getState(),ACTIVITY_STATE.RUNNING);
 		
 	}
+	
+	@Test
+	public void testStartByActivityDefinitionId() throws Exception{
+		MemoryEntityManagerImpl entityManager = (MemoryEntityManagerImpl) Configuration.getContext().getEntityManager();
+		entityManager.clearMemory();
+
+		String fileName = this.getBPMNXMLName();
+		
+		ClassPathResource classPathResource = new ClassPathResource(fileName,this.getClass());
+		entityManager.deployProcessDefinitionFromFile(classPathResource.getFile());
+		
+		
+		ProcessContainer processInstanceContainer = ProcessContainer.getProcessContainerForNewInstance();
+		ProcessInstance processInstance = processInstanceContainer.createInstance(fileName);
+		
+		// 内存形式总是1
+		Long processInstanceId = processInstance.getId();
+		ProcessInstance newProcessInstance = entityManager.loadProcessInstance(processInstanceId);
+		Assert.assertEquals("" , newProcessInstance.getId(),1);
+		Assert.assertEquals("" , newProcessInstance.getProcessModelId(),1);
+		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.NOT_STARTED);
+		
+		// 指定fork节点即启动，   有 fork（完成状态） receivePayment(运行状态) shipOrder（运行状态）；但没有theStart（完成状态） 
+		processInstanceContainer.start("fork");
+		Assert.assertEquals("" , newProcessInstance.getState(),PROCESS_STATE.RUNNING);
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),3);
+		//ActivityInstance activityInstance_Instance_1_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_0 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		
+		//Assert.assertEquals("" , activityInstance_Instance_1_0.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_2_0.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_3_0.getState(),ACTIVITY_STATE.RUNNING);
+		Assert.assertEquals("" , activityInstance_Instance_4_0.getState(),ACTIVITY_STATE.RUNNING);
+		
+		// 节点3 提交后 新建join活动，有 fork（完成状态） receivePayment(完成状态) shipOrder（运行状态） join（未开始状态）;没有theStart
+		
+		ActivityContainer activityContainer = ContainerTool.getActivityContainer(activityInstance_Instance_3_0);
+		activityContainer.complete();
+		  
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),4);
+		//ActivityInstance activityInstance_Instance_1_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_5_1 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
+		//Assert.assertEquals("" , activityInstance_Instance_1_1.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_2_1.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_3_1.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_4_1.getState(),ACTIVITY_STATE.RUNNING);
+		Assert.assertEquals("" , activityInstance_Instance_5_1.getState(),ACTIVITY_STATE.NOT_STARTED);
+		
+		// 节点4 提交后 有 fork（完成状态） receivePayment(完成状态) shipOrder（完成状态） join（完成状态）archiveOrder（运行状态）;没有theStart
+		
+		activityContainer = ContainerTool.
+				getActivityContainer(activityInstance_Instance_4_1);
+		activityContainer.complete();
+		
+		
+		//ActivityInstance activityInstance_Instance_1_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "theStart").iterator().next();
+		ActivityInstance activityInstance_Instance_2_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "fork").iterator().next();
+		ActivityInstance activityInstance_Instance_3_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "receivePayment").iterator().next();
+		ActivityInstance activityInstance_Instance_4_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "shipOrder").iterator().next();
+		ActivityInstance activityInstance_Instance_5_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "join").iterator().next();
+		ActivityInstance activityInstance_Instance_6_2 = entityManager.listActivityInstanceByActivityDefId(processInstanceId, "archiveOrder").iterator().next();
+		
+		Assert.assertEquals("" , entityManager.listActivityInstanceByProcessInstId(processInstance.getId()).size(),5);
+		//Assert.assertEquals("" , activityInstance_Instance_1_2.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_2_2.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_3_2.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_4_2.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_5_2.getState(),ACTIVITY_STATE.COMPLETED);
+		Assert.assertEquals("" , activityInstance_Instance_6_2.getState(),ACTIVITY_STATE.RUNNING);
+	
+		
+		
+		
+	}
+	
+	
 }
