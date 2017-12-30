@@ -3,7 +3,7 @@
 
     <class name="VariableInstanceImpl" table="RUNBPM_VARIABLE_INSTANCE">
         <id name="id" type="long">
-            <generator class="native" />
+            <generator class="assigned"/>
         </id>
         
         <property name="createDate" type="timestamp"/>

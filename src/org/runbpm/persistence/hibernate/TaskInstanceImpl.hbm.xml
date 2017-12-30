@@ -3,7 +3,7 @@
 
     <class name="TaskInstanceImpl" table="RUNBPM_TASK_INSTANCE">
         <id name="id" type="long">
-            <generator class="native" />
+            <generator class="assigned"/>
         </id>
         
         <property name="createDate" type="timestamp"/>

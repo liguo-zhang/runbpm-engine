@@ -16,7 +16,7 @@
 			  		</runbpm:resourceAssignment>
 			  	</runbpm:resource>
 			  	<runbpm:extensionProps>
-			  		<runbpm:extensionProp name="application" value="taskRequest.jsp"></runbpm:extensionProp>
+			  		<runbpm:extensionProp name="runBPM_Form_Key" value="taskRequest.jsp"></runbpm:extensionProp>
 		         </runbpm:extensionProps>
 		  	</extensionElements>
 	  </userTask>
@@ -33,7 +33,7 @@
 		  		</runbpm:resourceAssignment>
 		  	</runbpm:resource>
 		  	<runbpm:extensionProps>
-		  		<runbpm:extensionProp name="application" value="taskApproval.jsp"></runbpm:extensionProp>
+		  		<runbpm:extensionProp name="runBPM_Application_Single_Form" value="taskApproval.jsp"></runbpm:extensionProp>
 	         </runbpm:extensionProps>
 	  	</extensionElements>
 	  </userTask>

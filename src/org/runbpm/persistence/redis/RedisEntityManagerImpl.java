@@ -167,7 +167,7 @@ public class RedisEntityManagerImpl extends AbstractEntityManager{
 		return shardedJedis; 
 	}
 	
-	protected ProcessModel saveProcessModel(ProcessModel processModel) {
+	protected ProcessModel produceProcessModel(ProcessModel processModel) {
 		ShardedJedis shardedJedis = getSharedJedis();
 		Long processModelId = shardedJedis.incr(domain_procmodel);
 		

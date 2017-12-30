@@ -38,6 +38,7 @@ import org.runbpm.entity.VariableInstance;
 import org.runbpm.entity.VariableInstanceImpl;
 import org.runbpm.persistence.AbstractEntityManager;
 import org.runbpm.persistence.TransactionObjectHolder;
+import org.runbpm.utils.SnowflakeIdWorker;
 import org.springframework.beans.BeanUtils;
 
 public class HibernateEntityManagerImpl extends AbstractEntityManager{
@@ -134,11 +135,13 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	
 	
 	
-	protected ProcessModel saveProcessModel(ProcessModel processModel) {
+	protected ProcessModel produceProcessModel(ProcessModel processModel) {
 		Session session = TransactionObjectHolder.get().getSession();
-	    
-	    long processModelId =  (Long) session.save(processModel);
-	    processModelMap.put(processModelId, processModel);
+		SnowflakeIdWorker idWorker = SnowflakeIdWorker.getSnowflakeIdWorker(0, 0);
+        long id = idWorker.nextId();
+        processModel.setId(id);
+	    session.save(processModel);
+	    processModelMap.put(id, processModel);
 	    return processModel;
 	}
 
@@ -286,12 +289,13 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	public ProcessInstance produceProcessInstance(long processModelId) {
 		ProcessInstance processInstance= new ProcessInstanceImpl();
 		
-		//long id = (Long) session.save(processInstance);
+		SnowflakeIdWorker idWorker = SnowflakeIdWorker.getSnowflakeIdWorker(0, 0);
+        long id = idWorker.nextId();
+        processInstance.setId(id);
 		
 		Session session = TransactionObjectHolder.get().getSession();
-		long id = (Long) session.save(processInstance);
+		session.save(processInstance);
 		
-		processInstance.setId(id);
 		processInstance.setProcessModelId(processModelId);
 		return processInstance;
 	}
@@ -301,8 +305,11 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 		ActivityInstance activityInstance= new ActivityInstanceImpl();
 		
 		Session session = TransactionObjectHolder.get().getSession();
-		long id = (Long) session.save(activityInstance);
+		SnowflakeIdWorker idWorker = SnowflakeIdWorker.getSnowflakeIdWorker(0, 0);
+        long id = idWorker.nextId();
 		activityInstance.setId(id);
+		session.save(activityInstance);
+		
 		activityInstance.setProcessInstanceId(processInstanceId);
 		return activityInstance;
 	}
@@ -310,10 +317,13 @@ public class HibernateEntityManagerImpl extends AbstractEntityManager{
 	@Override
 	public TaskInstance produceTaskInstance(long activityInstanceId,String userId) {
 		TaskInstance taskInstance= new TaskInstanceImpl();
+		SnowflakeIdWorker idWorker = SnowflakeIdWorker.getSnowflakeIdWorker(0, 0);
+        long id = idWorker.nextId();
+        taskInstance.setId(id);
 		
 		Session session = TransactionObjectHolder.get().getSession();
-		long id = (Long) session.save(taskInstance);
-		taskInstance.setId(id);
+		 session.save(taskInstance);
+		
 		taskInstance.setActivityInstanceId(activityInstanceId);
 		return taskInstance;
 	}

@@ -16,7 +16,7 @@
 			  		</runbpm:resourceAssignment>
 			  	</runbpm:resource>
 			  	<runbpm:extensionProps>
-		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  			<runbpm:extensionProp name="runBPM_Application_Multiple_Form">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
 			              <runbpm:entry key="applicationList">runBPM_Application_list</runbpm:entry>
@@ -50,7 +50,7 @@
 		  		</runbpm:resourceAssignment>
 		  	</runbpm:resource>
 		  	<runbpm:extensionProps>
-		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  			<runbpm:extensionProp name="runBPM_Application_Multiple_Form">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
 			              <runbpm:entry key="applicationList">runBPM_Application_list_1,runBPM_Application_list_2</runbpm:entry>
@@ -92,7 +92,7 @@
 		  		</runbpm:resourceAssignment>
 		  	</runbpm:resource>
 		  	<runbpm:extensionProps>
-		  			<runbpm:extensionProp name="runBPM_ApplicationTemplate_Definition">
+		  			<runbpm:extensionProp name="runBPM_Application_Multiple_Form">
 		  				<runbpm:map>
 			              <runbpm:entry key="type">appliation_operation</runbpm:entry>
 			              <runbpm:entry key="applicationList">runBPM_Application_list</runbpm:entry>

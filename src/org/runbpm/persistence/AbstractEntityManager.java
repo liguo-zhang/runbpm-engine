@@ -48,7 +48,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	public ProcessModel deployProcessDefinitionFromFile(File file) {
 		ProcessModel processModel = this.deployProcessDefinitionFromFile_(file);
 		
-		saveProcessModel(processModel);
+		produceProcessModel(processModel);
 		//解析流程监听器
 		parseProcessListener(processModel);
 		return processModel;
@@ -59,7 +59,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	public ProcessModel deployProcessDefinitionFromString(String string) {
 		ProcessModel processModel = this.deployProcessDefinitionFromString_(string);
 		
-		saveProcessModel(processModel);
+		produceProcessModel(processModel);
 		//解析流程监听器
 		parseProcessListener(processModel);
 		return processModel;
@@ -69,7 +69,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 	public ProcessModel deployProcessDefinition(ProcessDefinition processDefinition){
 		ProcessModel processModel = this.deployProcessDefinition_(processDefinition);
 		
-		saveProcessModel(processModel);
+		produceProcessModel(processModel);
 		//解析流程监听器
 		parseProcessListener(processModel);
 		return processModel;
@@ -201,7 +201,7 @@ public abstract class AbstractEntityManager implements EntityManager{
 		return processModel;
 	}
 	
-	protected abstract ProcessModel saveProcessModel(ProcessModel processModel);
+	protected abstract ProcessModel produceProcessModel(ProcessModel processModel);
 	
 	protected void parseProcessListener(ProcessModel processModel) {
 		//---listener

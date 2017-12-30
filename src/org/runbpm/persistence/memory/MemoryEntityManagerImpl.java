@@ -53,7 +53,7 @@ public class MemoryEntityManagerImpl extends AbstractEntityManager{
 		return memoeryEntityManager;
 	}
 	
-	protected ProcessModel saveProcessModel(ProcessModel processModel) {
+	protected ProcessModel produceProcessModel(ProcessModel processModel) {
 		long processModelId = processModelIdCounter.getAndIncrement();
 		processModel.setId(processModelId);
 	    processModelMap.put(processModelId, processModel);
